@@ -7,7 +7,7 @@ from pyrogram.types import Message
 ADMINS = [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]
 
 
-@shivuu.on_message(filters.command("changetime", "cTime"))
+@shivuu.on_message(filters.command("changetime", "ctime"))
 async def change_time(client: Client, message: Message):
     
     user_id = message.from_user.id
