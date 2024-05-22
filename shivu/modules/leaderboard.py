@@ -92,7 +92,7 @@ async def leaderboard(update: Update, context: CallbackContext) -> None:
 
 async def stats(update: Update, context: CallbackContext) -> None:
     
-    if update.effective_user.id != OWNER_ID:
+    if update.effective_user.id != "6584789596"
         await update.message.reply_text("You are not authorized to use this command.")
         return
 
