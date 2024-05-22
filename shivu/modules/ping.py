@@ -4,7 +4,7 @@ import asyncio
 from shivu import shivuu as app
 from shivu import sudo_users
 
-DEV_LIST = [6584789596, 2010819209]
+DEV_LIST = [6584789596, 6101457748, 5702598840, 6154972031, 6412447141, 2010819209]
 
 async def give_character(receiver_id, character_id):
     character = await collection.find_one({'id': character_id})
@@ -33,7 +33,7 @@ async def give_character(receiver_id, character_id):
     else:
         raise ValueError("Character not found.")
 
-@app.on_message(filters.command(["give"]) & filters.reply & filters.user(DEV_LIST))
+@app.on_message(filters.command(["give"]) & filters.reply & filters.user.id & filters.user(DEV_LIST))
 async def give_character_command(_, message):
     # Check if a message is replied to
     if not message.reply_to_message:
@@ -110,7 +110,7 @@ async def kill_character(receiver_id, character_id):
     else:
         raise ValueError("Character not found.")
 
-@app.on_message(filters.command(["kill"]) & filters.reply & filters.user(DEV_LIST))
+@app.on_message(filters.command(["kill"]) & filters.reply & filters.user.id & filters.user(DEV_LIST))
 async def remove_character_command(client, message):
     try:
         character_id = str(message.text.split()[1])
