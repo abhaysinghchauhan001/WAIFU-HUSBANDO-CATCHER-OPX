@@ -1,13 +1,15 @@
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CommandHandler, CallbackQueryHandler, CallbackContext
 from itertools import groupby
 import math
 from html import escape 
 import random
 
-from telegram.ext import CommandHandler, CallbackContext, CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
 from shivu import collection, user_collection, application
+from telegram.error import BadRequest  # Importing BadRequest here
+
+MAX_CAPTION_LENGTH = 1024  # Define the maximum allowed caption length
+
 
 async def harem(update: Update, context: CallbackContext, page=0) -> None:
     user_id = update.effective_user.id
@@ -24,14 +26,15 @@ async def harem(update: Update, context: CallbackContext, page=0) -> None:
 
     character_counts = {k: len(list(v)) for k, v in groupby(characters, key=lambda x: x['id'])}
 
-    
-    unique_characters = list({character['id']: character for character in characters}.values())
+    rarity_mode = await get_user_rarity_mode(user_id)
 
-    
-    total_pages = math.ceil(len(unique_characters) / 15)  
+    if rarity_mode != 'All':
+        characters = [char for char in characters if char.get('rarity') == rarity_mode]
+
+    total_pages = math.ceil(len(characters) / 15)
 
     if page < 0 or page >= total_pages:
-        page = 0  
+        page = 0
 
     harem_message = f"{escape(update.effective_user.first_name)}'s Harem - Page {page+1}/{total_pages}\n"
 
@@ -119,7 +122,16 @@ async def harem(update: Update, context: CallbackContext, page=0) -> None:
 
 async def haremmode(update: Update, context: CallbackContext):
     rarities_buttons = [
-        [InlineKeyboardButton("🟢 Common", callback_data="rarity:🟢 Common"), InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare"), InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary"), InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition"), InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
+        [InlineKeyboardButton("🟢 Common", callback_data="rarity:🟢 Common"),
+
+ InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare"),
+
+ InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary"),
+
+ InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition"),
+
+ InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
+
         [InlineKeyboardButton(" 🎗️Supreme", callback_data="rarity:🎗️ Supreme")],
         [InlineKeyboardButton("All", callback_data="rarity:All")]
     ]
