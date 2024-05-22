@@ -132,7 +132,7 @@ async def haremmode(update: Update, context: CallbackContext):
 
  InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
 
-        [InlineKeyboardButton(" 🎗️Supreme", callback_data="rarity:🎗️ Supreme")],
+        [InlineKeyboardButton("🎗️Supreme", callback_data="rarity:🎗️ Supreme")],
         [InlineKeyboardButton("All", callback_data="rarity:All")]
     ]
 
