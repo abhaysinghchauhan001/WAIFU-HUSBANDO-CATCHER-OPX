@@ -195,8 +195,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
         keyboard = [[InlineKeyboardButton(f"Sᴇᴇ Hᴀʀᴇᴍ", switch_inline_query_current_chat=f"collection.{user_id}")]]
 
 
-        await update.message.reply_text(f'<b><a href="tg://user?id={user_id}">{escape(update.effective_user.first_name)}</a></b> Congratulations 🎊 You grabbed a new waifu !! ✅️ \n\n🎀 𝙉𝙖𝙢𝙚: <b>{last_characters[chat_id]["name"]}</b> \n⚡𝘼𝙣𝙞𝙢𝙚: <b>{last_characters[chat_id]["anime"]}</b> \n𝙍𝙖𝙧𝙞𝙩𝙮: <b>{last_characters[chat_id]["rarity"]}</b>\n\n
-✧⁠ Character successfully added in your harem., parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
+        await update.message.reply_text(f'<b><a href="tg://user?id={user_id}">{escape(update.effective_user.first_name)}</a></b> Congratulations 🎊 You grabbed a new waifu !! ✅️ \n\n🎀 𝙉𝙖𝙢𝙚: <b>{last_characters[chat_id]["name"]}</b> \n⚡𝘼𝙣𝙞𝙢𝙚: <b>{last_characters[chat_id]["anime"]}</b> \n𝙍𝙖𝙧𝙞𝙩𝙮: <b>{last_characters[chat_id]["rarity"]}</b>\n\n✧⁠ Character successfully added in your harem.', parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
 
     else:
         await update.message.reply_text('**Pʟᴇᴀsᴇ Wʀɪᴛᴇ Cᴏʀʀᴇᴄᴛ Cʜᴀʀᴀᴄᴛᴇʀ Nᴀᴍᴇ... ❌️**')
