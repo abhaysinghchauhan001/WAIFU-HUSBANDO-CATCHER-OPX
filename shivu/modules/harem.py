@@ -60,7 +60,6 @@ async def harem(update: Update, context: CallbackContext, page=0) -> None:
 
     keyboard = [
         [InlineKeyboardButton(f"See Collection ({total_count})", switch_inline_query_current_chat=f"collection.{user_id}")],
-        [InlineKeyboardButton("Change Rarity Mode", callback_data="haremmode")]
     ]
 
     if total_pages > 1:
@@ -124,13 +123,13 @@ async def haremmode(update: Update, context: CallbackContext):
     rarities_buttons = [
         [InlineKeyboardButton("🟢 Common", callback_data="rarity:🟢 Common"),
 
- InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare"),
+         InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare"),
 
- InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary"),
+         InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary"),
 
- InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition"),
+         InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition"),
 
- InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
+         InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
 
         [InlineKeyboardButton("🎗️Supreme", callback_data="rarity:🎗️ Supreme")],
         [InlineKeyboardButton("All", callback_data="rarity:All")]
