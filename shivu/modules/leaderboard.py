@@ -47,7 +47,7 @@ async def ctop(update: Update, context: CallbackContext) -> None:
     ])
     leaderboard_data = await cursor.to_list(length=10)
 
-    leaderboard_message = "<b>TOP 10 USERS WHO GUESSED CHARACTERS MOST TIME IN THIS GROUP..</b>\n\n"
+    leaderboard_message = "<b>ᴛᴏᴘ 𝟷𝟶 ᴜsᴇʀs ᴡʜᴏ ɢʀᴀʙʙᴇᴅ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴍᴏsᴛ ᴛɪᴍᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ....</b>\n\n"
 
     for i, user in enumerate(leaderboard_data, start=1):
         username = user.get('username', 'Unknown')
@@ -72,7 +72,7 @@ async def leaderboard(update: Update, context: CallbackContext) -> None:
     ])
     leaderboard_data = await cursor.to_list(length=10)
 
-    leaderboard_message = "<b>TOP 𝟷𝟶 USERS WITH MOST CHARACTERS</b>\n\n"
+    leaderboard_message = "<b>ᴛᴏᴘ 𝟷𝟶 ᴜsᴇʀs ᴡɪᴛʜ ᴍᴏsᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs</b>\n\n"
 
     for i, user in enumerate(leaderboard_data, start=1):
         username = user.get('username', 'Unknown')
@@ -92,7 +92,7 @@ async def leaderboard(update: Update, context: CallbackContext) -> None:
 
 async def stats(update: Update, context: CallbackContext) -> None:
     
-    if update.effective_user.id != OWNER_ID:
+    if update.effective_user.id != 6584789596:
         await update.message.reply_text("You are not authorized to use this command.")
         return
 
