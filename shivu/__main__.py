@@ -60,7 +60,7 @@ async def message_counter(update: Update, context: CallbackContext) -> None:
                     return
                 else:
                     
-                    await update.message.reply_text(f"***⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ***{update.effective_user.first_name}...\ɴ***Yᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...***")
+                    await update.message.reply_text(f"<b>⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ***{update.effective_user.first_name}...\ɴ***Yᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...</b>")
                     warned_users[user_id] = time.time()
                     return
         else:
@@ -112,13 +112,13 @@ async def guess(update: Update, context: CallbackContext) -> None:
         return
 
     if chat_id in first_correct_guesses:
-        await update.message.reply_text(f'***🚫 Wᴀɪғᴜ ᴀʟʀᴇᴀᴅʏ ɢʀᴀʙʙᴇᴅ ʙʏ sᴏᴍᴇᴏɴᴇ ᴇʟsᴇ ⚡, Bᴇᴛᴛᴇʀ Lᴜᴄᴋ Nᴇxᴛ Tɪᴍᴇ***')
+        await update.message.reply_text(f'<b>🚫 Wᴀɪғᴜ ᴀʟʀᴇᴀᴅʏ ɢʀᴀʙʙᴇᴅ ʙʏ sᴏᴍᴇᴏɴᴇ ᴇʟsᴇ ⚡, Bᴇᴛᴛᴇʀ Lᴜᴄᴋ Nᴇxᴛ Tɪᴍᴇ</b>')
         return
 
     guess = ' '.join(context.args).lower() if context.args else ''
     
     if "()" in guess or "&" in guess.lower():
-        await update.message.reply_text("***Nᴀʜʜ Yᴏᴜ Cᴀɴ'ᴛ ᴜsᴇ Tʜɪs Tʏᴘᴇs ᴏғ ᴡᴏʀᴅs ɪɴ ʏᴏᴜʀ ɢᴜᴇss..❌️***")
+        await update.message.reply_text("<b>Nᴀʜʜ Yᴏᴜ Cᴀɴ'ᴛ ᴜsᴇ Tʜɪs Tʏᴘᴇs ᴏғ ᴡᴏʀᴅs ɪɴ ʏᴏᴜʀ ɢᴜᴇss..❌️</b>")
         return
 
 
