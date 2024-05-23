@@ -21,7 +21,13 @@ class Config(object):
     DEL_CMDS = True
     INFOPIC = True
 
-    
+
+class Production(Config):
+    LOGGER = True
+
+
+class Development(Config):
+    LOGGER = True
 class Production(Config):
     LOGGER = True
 
