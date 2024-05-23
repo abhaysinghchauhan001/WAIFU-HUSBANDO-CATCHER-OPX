@@ -15,6 +15,12 @@ class Config(object):
     api_id = 24089031
     api_hash = "0615e3afe13ddaaf8e9ddbd3977d35ff"
 
+    STRICT_GBAN = True
+    ALLOW_CHATS = True
+    ALLOW_EXCL = True
+    DEL_CMDS = True
+    INFOPIC = True
+
     
 class Production(Config):
     LOGGER = True
