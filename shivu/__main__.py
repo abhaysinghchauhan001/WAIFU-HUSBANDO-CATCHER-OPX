@@ -60,7 +60,7 @@ async def message_counter(update: Update, context: CallbackContext) -> None:
                     return
                 else:
                     
-                    await update.message.reply_text(f"**⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ {update.effective_user.first_name}...\ɴYᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...**")
+                    await update.message.reply_text(f"***<b>⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ {update.effective_user.first_name}...\ɴYᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...<b>***")
                     warned_users[user_id] = time.time()
                     return
         else:
