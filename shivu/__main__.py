@@ -60,7 +60,7 @@ async def message_counter(update: Update, context: CallbackContext) -> None:
                     return
                 else:
                     
-                    await update.message.reply_text(f"***<b>⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ {update.effective_user.first_name}...\ɴYᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...<b>***")
+                    await update.message.reply_text(f"***⚠️ Dᴏɴ'ᴛ Sᴘᴀᴍ***{update.effective_user.first_name}...\ɴ***Yᴏᴜʀ Mᴇssᴀɢᴇs Wɪʟʟ ʙᴇ ɪɢɴᴏʀᴇᴅ ғᴏʀ 𝟷𝟶 Mɪɴᴜᴛᴇs...***")
                     warned_users[user_id] = time.time()
                     return
         else:
@@ -112,13 +112,13 @@ async def guess(update: Update, context: CallbackContext) -> None:
         return
 
     if chat_id in first_correct_guesses:
-        await update.message.reply_text(f'**🚫 Wᴀɪғᴜ ᴀʟʀᴇᴀᴅʏ ɢʀᴀʙʙᴇᴅ ʙʏ sᴏᴍᴇᴏɴᴇ ᴇʟsᴇ ⚡, Bᴇᴛᴛᴇʀ Lᴜᴄᴋ Nᴇxᴛ Tɪᴍᴇ**')
+        await update.message.reply_text(f'***🚫 Wᴀɪғᴜ ᴀʟʀᴇᴀᴅʏ ɢʀᴀʙʙᴇᴅ ʙʏ sᴏᴍᴇᴏɴᴇ ᴇʟsᴇ ⚡, Bᴇᴛᴛᴇʀ Lᴜᴄᴋ Nᴇxᴛ Tɪᴍᴇ***')
         return
 
     guess = ' '.join(context.args).lower() if context.args else ''
     
     if "()" in guess or "&" in guess.lower():
-        await update.message.reply_text("**Nᴀʜʜ Yᴏᴜ Cᴀɴ'ᴛ ᴜsᴇ Tʜɪs Tʏᴘᴇs ᴏғ ᴡᴏʀᴅs ɪɴ ʏᴏᴜʀ ɢᴜᴇss..❌️**")
+        await update.message.reply_text("***Nᴀʜʜ Yᴏᴜ Cᴀɴ'ᴛ ᴜsᴇ Tʜɪs Tʏᴘᴇs ᴏғ ᴡᴏʀᴅs ɪɴ ʏᴏᴜʀ ɢᴜᴇss..❌️***")
         return
 
 
@@ -198,7 +198,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(f'<b><a href="tg://user?id={user_id}">{escape(update.effective_user.first_name)}</a></b> Congratulations 🎊 You grabbed a new waifu !! ✅️ \n\n🎀 𝙉𝙖𝙢𝙚: <b>{last_characters[chat_id]["name"]}</b> \n⚡𝘼𝙣𝙞𝙢𝙚: <b>{last_characters[chat_id]["anime"]}</b> \n𝙍𝙖𝙧𝙞𝙩𝙮: <b>{last_characters[chat_id]["rarity"]}</b>\n\n✧⁠ Character successfully added in your harem.', parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
 
     else:
-        await update.message.reply_text('**Pʟᴇᴀsᴇ Wʀɪᴛᴇ Cᴏʀʀᴇᴄᴛ Cʜᴀʀᴀᴄᴛᴇʀ Nᴀᴍᴇ... ❌️**')
+        await update.message.reply_text('***<b>Pʟᴇᴀsᴇ Wʀɪᴛᴇ Cᴏʀʀᴇᴄᴛ Cʜᴀʀᴀᴄᴛᴇʀ Nᴀᴍᴇ... ❌️</b>***')
    
 
 async def fav(update: Update, context: CallbackContext) -> None:
@@ -206,7 +206,7 @@ async def fav(update: Update, context: CallbackContext) -> None:
 
     
     if not context.args:
-        await update.message.reply_text('**Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ Cʜᴀʀᴀᴄᴛᴇʀ ɪᴅ...**')
+        await update.message.reply_text('***</b>Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ Cʜᴀʀᴀᴄᴛᴇʀ ɪᴅ...</b>***')
         return
 
     character_id = context.args[0]
@@ -220,7 +220,7 @@ async def fav(update: Update, context: CallbackContext) -> None:
 
     character = next((c for c in user['characters'] if c['id'] == character_id), None)
     if not character:
-        await update.message.reply_text('**Tʜɪs Cʜᴀʀᴀᴄᴛᴇʀ ɪs Nᴏᴛ Iɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ**')
+        await update.message.reply_text('***<b>Tʜɪs Cʜᴀʀᴀᴄᴛᴇʀ ɪs Nᴏᴛ Iɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ</b>***')
         return
 
     
