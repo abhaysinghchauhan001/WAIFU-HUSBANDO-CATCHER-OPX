@@ -121,16 +121,15 @@ async def harem(update: Update, context: CallbackContext, page=0) -> None:
 
 async def haremmode(update: Update, context: CallbackContext):
     rarities_buttons = [
-        [InlineKeyboardButton("🟢 Common", callback_data="rarity:🟢 Common"),
+        [InlineKeyboardButton("🟢 Common", callback_data="rarity:🟢 Common")],
 
-         InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare"),
+         [InlineKeyboardButton("🟣 Rare", callback_data="rarity:🟣 Rare")],
 
-         InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary"),
+         [InlineKeyboardButton("🟡 Legendary", callback_data="rarity:🟡 Legendary")],
 
-         InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition"),
+         [InlineKeyboardButton("💮 Special Edition", callback_data="rarity:💮 Special Edition")],
 
-         InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
-
+         [InlineKeyboardButton("🔮 Premium Edition", callback_data="rarity:🔮 Premium Edition")],
         [InlineKeyboardButton("🎗️Supreme", callback_data="rarity:🎗️ Supreme")],
         [InlineKeyboardButton("All", callback_data="rarity:All")]
     ]
