@@ -7,9 +7,6 @@ from datetime import datetime, timedelta
 
 DEVS = (6584789596)
 
-GROUP_ID = -1002000314620  # Replace with your group's ID
-CHANNEL_ID = -1002050050431  # Replace with your channel's ID
-
 async def get_unique_characters(receiver_id, target_rarities=['🟢 Common', '🟣 Rare', '🟡 Legendary']):
     try:
         pipeline = [
@@ -26,15 +23,8 @@ async def get_unique_characters(receiver_id, target_rarities=['🟢 Common', '�
 # Dictionary to store last claim time for each user
 last_claim_time = {}
 
-async def is_member(chat_id, user_id):
-    try:
-        member = await bot.get_chat_member(chat_id, user_id)
-        return member.status in ['member', 'administrator', 'creator']
-    except Exception:
-        return False
-
 @bot.on_message(filters.command(["claimwaifu"]))
-async def claim_waifu(_, message: t.Message):
+async def claim_waifu(_: bot, message: t.Message):
     chat_id = message.chat.id
     mention = message.from_user.mention
     user_id = message.from_user.id
@@ -42,17 +32,6 @@ async def claim_waifu(_, message: t.Message):
     # Check if the user is banned
     if user_id == 7162166061:
         return await message.reply_text(f"Sorry {mention}, you are banned from using this command.")
-
-    # Check if the user is a member of the required group and channel
-    is_group_member = await is_member(GROUP_ID, user_id)
-    is_channel_member = await is_member(CHANNEL_ID, user_id)
-
-    if not is_group_member or not is_channel_member:
-        return await message.reply_text(
-            f"To use this command, please join our Group(https://t.me/Grabbing_Your_WH_Group) and Channel(https://t.me/FLEX_Bots_News).",
-            quote=True,
-            disable_web_page_preview=True
-        )
 
     # Check if the user has already claimed a waifu today
     now = datetime.now()
