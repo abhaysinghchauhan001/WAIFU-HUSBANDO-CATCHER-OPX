@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 
 DEVS = (6584789596)
 
-GROUP_ID = -1001234567890  # Replace with your group's ID
-CHANNEL_ID = -1009876543210  # Replace with your channel's ID
+GROUP_ID = -1002000314620  # Replace with your group's ID
+CHANNEL_ID = -1002050050431  # Replace with your channel's ID
 
-async def get_unique_characters(receiver_id, target_rarities=['🟢 Common' , '🔵 Medium' , '🟠 Rare' , '🟡 Legendary']):
+async def get_unique_characters(receiver_id, target_rarities=['🟢 Common', '🔵 Medium', '🟠 Rare', '🟡 Legendary']):
     try:
         pipeline = [
             {'$match': {'rarity': {'$in': target_rarities}, 'id': {'$nin': [char['id'] for char in (await user_collection.find_one({'id': receiver_id}, {'characters': 1}))['characters']]}}},
