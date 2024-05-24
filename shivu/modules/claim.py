@@ -49,7 +49,7 @@ async def claim_waifu(_, message: t.Message):
 
     if not is_group_member or not is_channel_member:
         return await message.reply_text(
-            f"To use this command, please join our [Group](https://t.me/Grabbing_Your_WH_Group) and [Channel](https://t.me/FLEX_Bots_News).",
+            f"To use this command, please join our Group(https://t.me/Grabbing_Your_WH_Group) and Channel(https://t.me/FLEX_Bots_News).",
             quote=True,
             disable_web_page_preview=True
         )
