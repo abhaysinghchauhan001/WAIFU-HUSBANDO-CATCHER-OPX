@@ -5,7 +5,7 @@ from shivu import user_collection, collection
 import time
 from datetime import datetime, timedelta
 
-@bot.on_message(filters.command(["p"]))
+@bot.on_message(filters.command(["hfind"]))
 async def p(_, message: t.Message):
     if len(message.command) < 2:
         return await message.reply_text("Please provide the waifu ID.", quote=True)
