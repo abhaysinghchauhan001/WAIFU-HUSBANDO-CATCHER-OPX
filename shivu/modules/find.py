@@ -32,10 +32,10 @@ async def p(_, message: t.Message):
         user_id = user_info['_id']
         try:
             user = await bot.get_users(user_id)
-            usernames.append(user.username if user.username else f"User {first_name}")
+            usernames.append(user.username if user.username else f"User {i}. <a href="https://t.me/{username}"><b>{first_name}")
         except Exception as e:
             print(e)
-            usernames.append(f"User {first_name}")
+            usernames.append(f"User {i}. <a href="https://t.me/{username}"><b>{first_name}")
     
     # Construct the caption
     caption = (
