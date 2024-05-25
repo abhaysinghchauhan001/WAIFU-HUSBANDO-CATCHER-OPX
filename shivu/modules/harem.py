@@ -148,7 +148,7 @@ async def add_rarity(update: Update, context: CallbackContext) -> None:
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    image_url = "https://telegra.ph/file/202774af0d3e0544029ba.png"
+    image_url = "https://graph.org/file/3ca04851dde3bd4e45ef7.jpg"
     caption = f"{user_name} ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ"
     
     # Send image with caption and markup keyboard
@@ -200,7 +200,7 @@ async def add_rarity_callback(update: Update, context: CallbackContext) -> None:
         # Edit caption to show selected rarity
         await query.message.edit_caption(caption=f"ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ {rarity}")
 
-application.add_handler(CommandHandler("whmode", add_rarity, block=False))
+application.add_handler(CommandHandler("hmode", add_rarity, block=False))
 add_rarity_handler = CallbackQueryHandler(add_rarity_callback, pattern='^add_rarity', block=False)
 application.add_handler(add_rarity_handler)
 
