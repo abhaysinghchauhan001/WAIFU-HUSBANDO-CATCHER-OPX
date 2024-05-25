@@ -16,8 +16,10 @@ async def p(_, message: t.Message):
     if not waifu:
         return await message.reply_text("No waifu found with that ID.", quote=True)
     
-    # Get the top 10 users with the most of this waifu
+    # Get the top 10 users with the most of this waifu in the current chat
     top_users = await user_collection.aggregate([
+        {'$match': {'characters.id': waifu_id}},
+        {'$unwind': '$characters'},
         {'$match': {'characters.id': waifu_id}},
         {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
         {'$sort': {'count': -1}},
@@ -28,8 +30,12 @@ async def p(_, message: t.Message):
     usernames = []
     for user_info in top_users:
         user_id = user_info['_id']
-        user = await bot.get_users(user_id)
-        usernames.append(user.username if user.username else f"User {user_id}")
+        try:
+            user = await bot.get_users(user_id)
+            usernames.append(user.username if user.username else f"User {user_id}")
+        except Exception as e:
+            print(e)
+            usernames.append(f"User {user_id}")
     
     # Construct the caption
     caption = (
@@ -37,13 +43,13 @@ async def p(_, message: t.Message):
         f"Name: {waifu['name']}\n"
         f"Rarity: {waifu['rarity']}\n"
         f"Anime: {waifu['anime']}\n"
-        f"ID: {waifu['id']}\n"
-        f"Top 10 Users with Most of this Waifu:\n"
+        f"ID: {waifu['id']}\n\n"
+        f"Here is the list of users who have this character:\n\n"
     )
     for i, user_info in enumerate(top_users):
         count = user_info['count']
         username = usernames[i]
-        caption += f"{i+1}. {username}: {count}\n"
+        caption += f"{i + 1}. {username} x{count}\n"
     
     # Reply with the waifu information and top users
     await message.reply_photo(photo=waifu['img_url'], caption=caption)
