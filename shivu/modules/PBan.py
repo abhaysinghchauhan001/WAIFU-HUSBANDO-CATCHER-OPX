@@ -102,5 +102,5 @@ bot.add_handler(filters.create(check_ban))
 
 # Add your other command handlers here
 
-if name == "main":
+Mainif name == "main":
     bot.run()
