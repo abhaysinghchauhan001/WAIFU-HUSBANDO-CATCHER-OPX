@@ -39,7 +39,7 @@ async def hclaim(_, message: t.Message):
         last_claim_date = last_claim_time[user_id]
         if last_claim_date.date() == now.date():
             next_claim_time = (last_claim_date + timedelta(days=1)).strftime("%H:%M:%S")
-            return await message.reply_text(f"Please wait until {next_claim_time} to claim your next waifu.", quote=True)
+            return await message.reply_text(f"𝑲𝒂𝒍 𝑨𝒏𝒂 𝑲𝒂𝒍 😂", quote=True)
 
     # Update the last claim time for the user
     last_claim_time[user_id] = now
@@ -50,10 +50,12 @@ async def hclaim(_, message: t.Message):
         await user_collection.update_one({'id': receiver_id}, {'$push': {'characters': {'$each': unique_characters}}})
         img_urls = [character['img_url'] for character in unique_characters]
         captions = [
-            f"Congratulations {mention}! You have received a new waifu for your harem ðŸ’!\n"
-            f"Name: {character['name']}\n"
-            f"Rarity: {character['rarity']}\n"
-            f"Anime: {character['anime']}\n"
+            f"𝑪𝒐𝒏𝒈𝒓𝒂𝒕𝒖𝒍𝒂𝒕𝒊𝒐𝒏𝒔 🎊 {mention}! 𝒀𝒐𝒖 𝒈𝒐𝒕 𝒀𝒐𝒖𝒓 𝒏𝒆𝒘 𝒅𝒂𝒊𝒍𝒚 𝒘𝒂𝒊𝒇𝒖 ✨\n"
+            f"🎀 𝑵𝑨𝑴𝑬: {character['name']}\n"
+            f"⚕️ 𝑹𝑨𝑹𝑰𝑻𝒀: {character['rarity']}\n"
+            f"⚜️ 𝑨𝑵𝑰𝑴𝑬: {character['anime']}\n"
+
+            f"𝑪𝒐𝒎𝒆 𝒂𝒈𝒂𝒊𝒏 𝑻𝒐𝒎𝒐𝒓𝒓𝒐𝒘 𝒇𝒐𝒓 𝒚𝒐𝒖𝒓 𝒏𝒆𝒙𝒕 𝒄𝒍𝒂𝒊𝒎 🍀\n"
             for character in unique_characters
         ]
         for img_url, caption in zip(img_urls, captions):
@@ -64,13 +66,13 @@ async def hclaim(_, message: t.Message):
 @bot.on_message(filters.command(["hfind"]))
 async def hfind(_, message: t.Message):
     if len(message.command) < 2:
-        return await message.reply_text("Please provide the waifu ID.", quote=True)
+        return await message.reply_text("🔖𝑷𝒍𝒆𝒂𝒔𝒆 𝒑𝒓𝒐𝒗𝒊𝒅𝒆 𝒕𝒉𝒆 𝒘𝒂𝒊𝒇𝒖 𝑰𝑫 ☘️", quote=True)
     
     waifu_id = message.command[1]
     waifu = await collection.find_one({'id': waifu_id})
     
     if not waifu:
-        return await message.reply_text("No waifu found with that ID.", quote=True)
+        return await message.reply_text("🎗️ 𝑵𝒐 𝒘𝒂𝒊𝒇𝒖 𝒇𝒐𝒖𝒏𝒅 𝒘𝒊𝒕𝒉 𝒕𝒉𝒂𝒕 𝑰𝑫 ❌", quote=True)
     
     # Get the top 10 users with the most of this waifu in the current chat
     top_users = await user_collection.aggregate([
@@ -95,13 +97,14 @@ async def hfind(_, message: t.Message):
     
     # Construct the caption
     caption = (
-        f"Waifu Information:\n"
-        f"Name: {waifu['name']}\n"
+        f"🧩 𝑾𝒂𝒊𝒇𝒖 𝑰𝒏𝒇𝒐𝒓𝒎𝒂𝒕𝒊𝒐𝒏:\n"
+        f"🪭 𝑵𝒂𝒎𝒆: {waifu['name']}\n"
 
-f"Rarity: {waifu['rarity']}\n"
-        f"Anime: {waifu['anime']}\n"
-        f"ID: {waifu['id']}\n\n"
-        f"Here is the list of users who have this character:\n\n"
+f"⚕️ 𝑹𝒂𝒓𝒊𝒕𝒚: {waifu['rarity']}\n"
+        f"⚜️ 𝑨𝒏𝒊𝒎𝒆: {waifu['anime']}\n"
+        f"🪅 𝑰𝑫: {waifu['id']}\n\n"
+        f"
+✳️ 𝑯𝒆𝒓𝒆 𝒊𝒔 𝒕𝒉𝒆 𝒍𝒊𝒔𝒕 𝒐𝒇 𝒖𝒔𝒆𝒓𝒔 𝒘𝒉𝒐 𝒉𝒂𝒗𝒆 𝒕𝒉𝒊𝒔 𝒄𝒉𝒂𝒓𝒂𝒄𝒕𝒆𝒓 〽️:\n\n"
     )
     for i, user_info in enumerate(top_users):
         count = user_info['count']
@@ -114,17 +117,17 @@ f"Rarity: {waifu['rarity']}\n"
 @bot.on_message(filters.command(["cfind"]))
 async def cfind(_, message: t.Message):
     if len(message.command) < 2:
-        return await message.reply_text("Please provide the anime name.", quote=True)
+        return await message.reply_text("𝑷𝒍𝒆𝒂𝒔𝒆 𝒑𝒓𝒐𝒗𝒊𝒅𝒆 𝒕𝒉𝒆 𝒂𝒏𝒊𝒎𝒆 𝒏𝒂𝒎𝒆✨", quote=True)
 
     anime_name = " ".join(message.command[1:])
     characters = await collection.find({'anime': anime_name}).to_list(length=None)
     
     if not characters:
-        return await message.reply_text(f"No characters found from the anime {anime_name}.", quote=True)
+        return await message.reply_text(f"𝑵𝒐 𝒄𝒉𝒂𝒓𝒂𝒄𝒕𝒆𝒓𝒔 𝒇𝒐𝒖𝒏𝒅 𝒇𝒓𝒐𝒎 𝒕𝒉𝒆 𝒂𝒏𝒊𝒎𝒆 ❎ {anime_name}.", quote=True)
 
     captions = [
-        f"Name: {char['name']}\nID: {char['id']}\nRarity: {char['rarity']}\n"
+        f"🎏 𝑵𝒂𝒎𝒆: {char['name']}\n🪅 𝑰𝑫: {char['id']}\n🧩 𝑹𝒂𝒓𝒊𝒕𝒚: {char['rarity']}\n"
         for char in characters
     ]
     response = "\n".join(captions)
-    await message.reply_text(f"Characters from {anime_name}:\n\n{response}", quote=True)
+    await message.reply_text(f"🍁 𝑪𝒉𝒂𝒓𝒂𝒄𝒕𝒆𝒓𝒔 𝒇𝒓𝒐𝒎 {anime_name}:\n\n{response}", quote=True)
