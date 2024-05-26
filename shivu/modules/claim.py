@@ -90,10 +90,10 @@ async def hfind(_, message: t.Message):
         user_id = user_info['_id']
         try:
             user = await bot.get_users(user_id)
-            usernames.append(user.username if user.username else f"User {user_id}")
+            usernames.append(user.username if user.username else f"➥ {user_id}")
         except Exception as e:
             print(e)
-            usernames.append(f"User {user_id}")
+            usernames.append(f"➥ {user_id}")
     
     # Construct the caption
     caption = (
