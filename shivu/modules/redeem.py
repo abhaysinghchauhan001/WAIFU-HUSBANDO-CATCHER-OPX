@@ -26,7 +26,7 @@ async def waifugen(update, context):
     if str(update.effective_user.id) not in sudo_user_ids:
         await update.message.reply_text("You are not authorized to generate waifus.")
         return
-    
+
     try:
         waifu_id = context.args[0]  # Get the waifu ID from the command
         quantity = int(context.args[1])  # Get the quantity from the command
@@ -34,10 +34,10 @@ async def waifugen(update, context):
         await update.message.reply_text("Invalid usage. Usage: /hgen <waifu_id> <quantity>")
         return
 
-    # Find the waifu by ID
-    waifu = await collection.find_one({'_id': waifu_id})
+    # Fetch the waifu based on the provided ID
+    waifu = await collection.find_one({'id': waifu_id})
     if not waifu:
-        await update.message.reply_text("Failed to find waifu with the provided ID.")
+        await update.message.reply_text("Invalid waifu ID.")
         return
 
     code = generate_random_code()
