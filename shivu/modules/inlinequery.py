@@ -75,7 +75,7 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
             caption = f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>{(escape(user.get('first_name', user['id'])))}</a>'s Character</b>\n\n🎀: <b>{character['name']} (x{user_character_count})</b>\n🧿: <b>{character['anime']} ({user_anime_characters}/{anime_characters})</b>\n<b>{character['rarity']}</b>\n\n<b>𝙄𝘿 :</b> {character['id']}"
         else:
             caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙<b>{character['rarity'][0]}𝙍𝘼𝙍𝙄𝙏𝙔:</b>{character['rarity']}﹚\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...\n\n✳️ 𝖧𝖾𝗋𝖾 𝗂𝗌 𝗍𝗁𝖾 𝗅𝗂𝗌𝗍 𝗈𝖿 𝗎𝗌𝖾𝗋𝗌 𝗐𝗁𝗈 𝗁𝖺𝗏𝖾 𝗍𝗁𝗂𝗌 𝖼𝗁𝖺𝗋𝖺𝖼𝗍𝖾𝗋 〽️:\n\n"
-    )
+    
     for i, user_info in enumerate(top_users):
         count = user_info['count']
         username = usernames[i]
