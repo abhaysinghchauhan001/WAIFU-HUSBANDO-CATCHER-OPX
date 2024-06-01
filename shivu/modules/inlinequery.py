@@ -74,7 +74,7 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
             user_anime_characters = sum(c['anime'] == character['anime'] for c in user['characters'])
             caption = f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>{(escape(user.get('first_name', user['id'])))}</a>'s Character</b>\n\n🎀: <b>{character['name']} (x{user_character_count})</b>\n🧿: <b>{character['anime']} ({user_anime_characters}/{anime_characters})</b>\n<b>{character['rarity']}</b>\n\n<b>𝙄𝘿:</b> {character['id']}"
         else:
-            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n\n<b>{character ['id']</b> : {character['name']}\n <b>{character['anime']}</b>\n(({character['rarity'][0]}𝙍𝘼𝙍𝙔𝙏𝙔{character['rarity']}))\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
+            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n\n<b>{character ['id']</b> : {character['name']}\n <b>{character['anime']}</b>\n{character['rarity'][0]}𝙍𝘼𝙍𝙔𝙏𝙔{character['rarity']}\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
         results.append(
             InlineQueryResultPhoto(
                 thumbnail_url=character['img_url'],
