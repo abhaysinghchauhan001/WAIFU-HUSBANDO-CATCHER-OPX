@@ -77,7 +77,7 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
     
 
         else:
-            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙<b>𝙍𝘼𝙍𝙄𝙏𝙔:</b>{character['rarity']}﹚\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...\n\n✳️ 𝖧𝖾𝗋𝖾 𝗂𝗌 𝗍𝗁𝖾 𝗅𝗂𝗌𝗍 𝗈𝖿 𝗎𝗌𝖾𝗋𝗌 𝗐𝗁𝗈 𝗁𝖺𝗏𝖾 𝗍𝗁𝗂𝗌 𝖼𝗁𝖺𝗋𝖺𝖼𝗍𝖾𝗋 〽️:\n\n"
+            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙<b>𝙍𝘼𝙍𝙄𝙏𝙔:</b>{character['rarity']}﹚\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times..."
     
         results.append(
             InlineQueryResultPhoto(
