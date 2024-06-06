@@ -69,7 +69,7 @@ async def upload(update: Update, context: CallbackContext) -> None:
             message = await context.bot.send_photo(
                 chat_id=CHARA_CHANNEL_ID,
                 photo=args[0],
-                caption=f'<b>Character Name:</b> {character_name}\n<b>Anime Name:</b> {anime}\n<b>Rarity:</b> {rarity}\n<b>ID:</b> {id}\nAdded by <a href="tg://user?id={update.effective_user.id}">{update.effective_user.first_name}</a>',
+                caption=f"<b>{anime}</b>\n<b>{id}:</b> <b>{character_name} [💞]</b>\n(🎐<b>Rarity:</b> {rarity})\n\n💞<b>Valentine</b>💞"
                 parse_mode='HTML'
             )
             character['message_id'] = message.message_id
