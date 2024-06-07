@@ -20,7 +20,7 @@ def ul(_, message):
 
 @shivuu.on_message(filters.command(["graph" , "grf"]))
 def ul(_, message):
-    reply = message.reply_to_message
+    reply = message.reply
     if reply.media:
         i = message.reply("𝐌𝙰𝙺𝙴 𝐀 𝐋𝙸𝙽𝙺...")
         path = reply.download()
