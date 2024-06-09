@@ -197,41 +197,59 @@ async def guess(update: Update, context: CallbackContext) -> None:
 
         await update.message.reply_text(f'<b><a href="tg://user?id={user_id}">{escape(update.effective_user.first_name)}</a></b> Congratulations 🎊 You grabbed a new waifu !! ✅️ \n\n🎀 𝙉𝙖𝙢𝙚: <b>{last_characters[chat_id]["name"]}</b> \n⚡𝘼𝙣𝙞𝙢𝙚: <b>{last_characters[chat_id]["anime"]}</b> \n𝙍𝙖𝙧𝙞𝙩𝙮: <b>{last_characters[chat_id]["rarity"]}</b>\n\n✧⁠ Character successfully added in your harem.', parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
 
-    else:
-        await update.message.reply_text('***<b>Pʟᴇᴀsᴇ Wʀɪᴛᴇ Cᴏʀʀᴇᴄᴛ Cʜᴀʀᴀᴄᴛᴇʀ Nᴀᴍᴇ... ❌️</b>***')
-   
-
-async def fav(update: Update, context: CallbackContext) -> None:
+    async def fav(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_user.id
 
-    
     if not context.args:
-        await update.message.reply_text('***</b>Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ Cʜᴀʀᴀᴄᴛᴇʀ ɪᴅ...</b>***')
+        await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙥𝙧𝙤𝙫𝙞𝙙𝙚 𝙃𝙪𝙨𝙗𝙖𝙣𝙙𝙤 𝙞𝙙...')
         return
 
     character_id = context.args[0]
 
-    
     user = await user_collection.find_one({'id': user_id})
     if not user:
-        await update.message.reply_text('**Yᴏᴜ ʜᴀᴠᴇ ɴᴏᴛ Gᴜᴇssᴇᴅ ᴀɴʏ ᴄʜᴀʀᴀᴄᴛᴇʀs ʏᴇᴛ....**')
+        await update.message.reply_text('𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙣𝙤𝙩 𝙂𝙤𝙩 𝘼𝙣𝙮 𝙒𝘼𝙄𝙁𝙐 𝙮𝙚𝙩...')
         return
-
 
     character = next((c for c in user['characters'] if c['id'] == character_id), None)
     if not character:
-        await update.message.reply_text('***<b>Tʜɪs Cʜᴀʀᴀᴄᴛᴇʀ ɪs Nᴏᴛ Iɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ</b>***')
+        await update.message.reply_text('𝙏𝙝𝙞𝙨 𝙒𝘼𝙄𝙁𝙐 𝙞𝙨 𝙉𝙤𝙩 𝙄𝙣 𝙮𝙤𝙪𝙧 𝙒𝘼𝙄𝙁𝙐 𝙡𝙞𝙨𝙩')
         return
 
-
-    user['favorites'] = [character_id]
-
-
+    # Constructing the confirmation message
+    keyboard = [
+        [InlineKeyboardButton("YES", callback_data=f'confirm_fav_{character_id}'),
+         InlineKeyboardButton("NO", callback_data='cancel_fav')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     
-await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}}, {'$pull': {'favorites': {'img_url': character['img_url']}}})
+    # Loading the image
+    image_path = '/mnt/data/Screenshot_2024-06-09-18-56-40-82_948cd9899890cbd5c2798760b2b95377.jpg'
+    caption = f"ARE YOU SURE YOU WANT TO MAKE THIS HUSBANDO YOUR FAVOURITE?\n↪ {character['name']} (Dragon Ball Series)"
 
-    await update.message.reply_text(f'✨ 𝙒𝘼𝙄𝙁𝙐 {character["name"]} 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙖𝙙𝙙𝙚𝙙 𝙩𝙤 𝙮𝙤𝙪𝙧 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚...')
+    with open(image_path, 'rb') as image_file:
+        await context.bot.send_photo(chat_id=update.effective_chat.id, photo=image_file, caption=caption, reply_markup=reply_markup)
+
+# Callback handler for the buttons
+async def button(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    query.answer()
     
+    user_id = query.from_user.id
+
+    if query.data.startswith('confirm_fav_'):
+        character_id = query.data.split('_')[2]
+
+        user = await user_collection.find_one({'id': user_id})
+        character = next((c for c in user['characters'] if c['id'] == character_id), None)
+
+        user['favorites'] = [character_id]
+        await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}})
+        
+        await query.edit_message_text(f'✨ 𝙃𝙐𝙎𝘽𝘼𝙉𝘿𝙊 {character["name"]} 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙖𝙙𝙙𝙚𝙙 𝙩𝙤 𝙮𝙤𝙪𝙧 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚...')
+
+    elif query.data == 'cancel_fav':
+        await query.edit_message_text('❌ Operation cancelled.')
 
 
 
