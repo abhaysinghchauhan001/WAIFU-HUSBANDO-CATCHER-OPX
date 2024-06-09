@@ -33,6 +33,3 @@ def main():
 
     # Ban the user for 10 minutes.
     ban_user(bot, chat_id, user_id, 10)
-
-if __name__ == "__main__":
-    main()
