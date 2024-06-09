@@ -257,8 +257,7 @@ def main() -> None:
     dispatcher.add_handler(CommandHandler('fav', fav))
 dispatcher.add_handler(CallbackQueryHandler(button))
    
-    application.run_polling(drop_pending_updates=True)
-    
+ 
 if __name__ == "__main__":
     shivuu.start()
     LOGGER.info("Bot started")
