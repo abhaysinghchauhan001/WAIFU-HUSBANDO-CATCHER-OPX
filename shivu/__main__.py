@@ -227,7 +227,8 @@ async def fav(update: Update, context: CallbackContext) -> None:
     user['favorites'] = [character_id]
 
 
-    await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}})
+    
+await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}}, {'$pull': {'favorites': {'img_url': character['img_url']}}})
 
     await update.message.reply_text(f'✨ 𝙒𝘼𝙄𝙁𝙐 {character["name"]} 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙖𝙙𝙙𝙚𝙙 𝙩𝙤 𝙮𝙤𝙪𝙧 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚...')
     
