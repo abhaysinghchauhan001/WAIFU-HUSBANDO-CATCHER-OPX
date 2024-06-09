@@ -228,9 +228,9 @@ async def fav(update: Update, context: CallbackContext) -> None:
 
 
     await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}})
-img_url = [favourites['img_url'] for character in favorites_characters]
 
-    await update.message.reply_text(f'**Cʜᴀʀᴀᴄᴛᴇʀ {character["name"]} ʜᴀs ʙᴇᴇɴ ᴀᴅᴅᴇᴅ ᴛᴏ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ...**')
+    await
+img_url = [favourites['img_url'] for character in favorites_characters] update.message.reply_text(f'**Cʜᴀʀᴀᴄᴛᴇʀ {character["name"]} ʜᴀs ʙᴇᴇɴ ᴀᴅᴅᴇᴅ ᴛᴏ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ...**')
     
 
 
