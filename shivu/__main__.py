@@ -256,8 +256,7 @@ def main() -> None:
     application.add_handler(CommandHandler(["grab"], guess, block=False))
     dispatcher.add_handler(CommandHandler('fav', fav))
 dispatcher.add_handler(CallbackQueryHandler(button))
-    application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
-
+   
     application.run_polling(drop_pending_updates=True)
     
 if __name__ == "__main__":
