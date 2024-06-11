@@ -254,8 +254,8 @@ def main() -> None:
     """Run bot."""
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
-    dispatcher.add_handler(CommandHandler('fav', fav))
-dispatcher.add_handler(CallbackQueryHandler(button))
+    application.add_handler(CommandHandler('fav', fav))
+application.add_handler(CallbackQueryHandler(button))
    
  
 if __name__ == "__main__":
