@@ -255,7 +255,7 @@ def main() -> None:
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
     application.add_handler(CommandHandler('fav', fav))
-application.add_handler(CallbackHandler(buttons))
+
    
  
 if __name__ == "__main__":
