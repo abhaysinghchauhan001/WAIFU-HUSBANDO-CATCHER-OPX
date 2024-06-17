@@ -34,7 +34,7 @@ async def start(update: Update, context: CallbackContext) -> None:
         
         
         caption = f"""
-         ***𝙷𝚎𝚕𝚕𝚘...💫<a href="tg://user?id={update.effective_user.id}">{update.effective_user.first_name}</a>
+         ***𝙷𝚎𝚕𝚕𝚘...💫 <a href="tg://user?id={update.effective_user.id}">{update.effective_user.first_name}</a>
 
 ◈ ━━━━━━━━ ● ━━━━━━━━ ◈
 
