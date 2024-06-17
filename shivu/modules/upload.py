@@ -6,7 +6,7 @@ from telegram.ext import CommandHandler, CallbackContext
 
 from shivu import application, sudo_users, collection, db, CHARA_CHANNEL_ID, SUPPORT_CHAT
 
-WRONG_FORMAT_TEXT = """Wrong ❌️ format...  eg. /upload Img_url muzan-kibutsuji Demon-slayer 3
+WRONG_FORMAT_TEXT = """Wrong ❌️ format...  eg. /upload Img_url muzan-kibutsuji Demon-slayer 3 👘𝑲𝒊𝒎𝒐𝒏𝒐👘
 
 img_url character-name anime-name rarity-number
 
@@ -63,13 +63,14 @@ async def upload(update: Update, context: CallbackContext) -> None:
             'anime': anime,
             'rarity': rarity,
             'id': id
+            'catagory': catagory 
         }
 
         try:
             message = await context.bot.send_photo(
                 chat_id=CHARA_CHANNEL_ID,
                 photo=args[0],
-                caption=f'<b>{id}:</b> {character_name}\n<b>{anime}</b>\n﹙<b>{rarity[0]} 𝙍𝘼𝙍𝙄𝙏𝙔: </b>{rarity[2:]})\n\n👘𝑲𝒊𝒎𝒐𝒏𝒐👘\n\n𝑨𝒅𝒅𝒆𝒅 𝑩𝒚 ➥ <a href="tg://user?id={update.effective_user.id}">{update.effective_user.first_name}</a>',
+                caption=f'<b>{id}:</b> {character_name}\n<b>{anime}</b>\n﹙<b>{rarity[0]} 𝙍𝘼𝙍𝙄𝙏𝙔: </b>{rarity[2:]})\n\n{catagory}\n\n𝑨𝒅𝒅𝒆𝒅 𝑩𝒚 ➥ <a href="tg://user?id={update.effective_user.id}">{update.effective_user.first_name}</a>',
                 parse_mode='HTML'
             )
             character['message_id'] = message.message_id
