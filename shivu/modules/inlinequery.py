@@ -77,7 +77,7 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
     
 
         else:
-            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙<b>𝙍𝘼𝙍𝙸𝙏𝙔:</b>{character['rarity']}﹚\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times..."
+            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙{character['rarity'][0]}<b>𝙍𝘼𝙍𝙄𝙏𝙔:</b>{character['rarity'][2:]}﹚\n\n{character['catagory']}\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times..."
 
 
         results.append(
