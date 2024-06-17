@@ -79,33 +79,7 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
         else:
             caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙<b>𝙍𝘼𝙍𝙸𝙏𝙔:</b>{character['rarity']}﹚\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times..."
 
-# Get the top 10 users with the most of this waifu in the current chat
-top_users = await user_collection.aggregate([
-    {'$match': {'characters.id': waifu_id}},
-    {'$unwind': '$characters'},
-    {'$match': {'characters.id': waifu_id}},
-    {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
-    {'$sort': {'count': -1}},
-    {'$limit': 10}
-]).to_list(length=10)
 
-# Get the usernames of the top users
-usernames = []
-for user_info in top_users:
-    user_id = user_info['_id']
-    try:
-        user = await bot.get_users(user_id)
-        usernames.append(user.username if user.username else f"➥ {user_id}")
-    except Exception as e:
-        print(e)
-        usernames.append(f"➥ {user_id}")
-
-# Format the usernames and append to the caption
-if usernames:
-    caption += "\n\n<b>Top Users:</b>"
-    for username in usernames:
-        caption += f"\n➥ {username}"
-    
         results.append(
             InlineQueryResultPhoto(
                 thumbnail_url=character['img_url'],
