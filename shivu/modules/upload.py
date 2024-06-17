@@ -63,7 +63,6 @@ async def upload(update: Update, context: CallbackContext) -> None:
             'anime': anime,
             'rarity': rarity,
             'id': id
-            'catagory': catagory 
         }
 
         try:
