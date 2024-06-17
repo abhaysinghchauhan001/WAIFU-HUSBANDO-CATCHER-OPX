@@ -35,7 +35,7 @@ async def upload(update: Update, context: CallbackContext) -> None:
 
     try:
         args = context.args
-        if len(args) != 4:
+        if len(args) != 5:
             await update.message.reply_text(WRONG_FORMAT_TEXT)
             return
 
@@ -62,7 +62,7 @@ async def upload(update: Update, context: CallbackContext) -> None:
             'name': character_name,
             'anime': anime,
             'rarity': rarity,
-            'id': id 
+            'id': id
         }
 
         try:
