@@ -167,7 +167,7 @@ async def gift(client, message):
 
     await message.reply_text(
 
-               photo=args[0]
+               photo=args[0],
                caption=f"do You Really Wanns To Gift {message.reply_to_message.from_user.mention} ?", reply_markup=keyboard)
 
 @shivuu.on_callback_query(filters.create(lambda _, __, query: query.data in ["confirm_gift", "cancel_gift"]))
