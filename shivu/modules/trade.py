@@ -151,6 +151,7 @@ async def gift(client, message):
 
     
     pending_gifts[(sender_id, receiver_id)] = {
+        'img_url': args[0],
         'character': character,
         'receiver_username': receiver_username,
         'receiver_first_name': receiver_first_name
