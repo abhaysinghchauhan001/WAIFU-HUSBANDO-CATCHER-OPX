@@ -151,7 +151,6 @@ async def gift(client, message):
 
     
     pending_gifts[(sender_id, receiver_id)] = {
-        'img_url': args[0],
         'character': character,
         'receiver_username': receiver_username,
         'receiver_first_name': receiver_first_name
@@ -165,7 +164,7 @@ async def gift(client, message):
         ]
     )
 
-     await message.reply_photo(photo=character["img_url"], caption=f' do You Really Wanna Gift {character["name"]} to {message.reply_to_message.from_user.mention}  ? ', reply_markup=keyboard)
+    await message.reply_photo(photo=character["img_url"], caption=f' do You Really Wanna Gift {character["name"]} to {message.reply_to_message.from_user.mention}  ? ', reply_markup=keyboard)
 
 @shivuu.on_callback_query(filters.create(lambda _, __, query: query.data in ["confirm_gift", "cancel_gift"]))
 async def on_callback_query(client, callback_query):
