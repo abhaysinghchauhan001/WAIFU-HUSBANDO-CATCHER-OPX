@@ -209,35 +209,62 @@ async def guess(update: Update, context: CallbackContext) -> None:
     else:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙧𝙞𝙩𝙚 𝘾𝙤𝙧𝙧𝙚𝙘𝙩 𝙉𝙖𝙢𝙚... ❌️')
 
-async def fav(update: Update, context: CallbackContext) -> None:
-    user_id = update.effective_user.id
+async def set_favorite(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Set a character as favorite."""
 
+    user_id = update.effective_user.id
 
     if not context.args:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙥𝙧𝙤𝙫𝙞𝙙𝙚 𝙒𝘼𝙄𝙁𝙐 𝙞𝙙...')
         return
 
     character_id = context.args[0]
-
-
     user = await user_collection.find_one({'id': user_id})
+
     if not user:
         await update.message.reply_text('𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙣𝙤𝙩 𝙂𝙤𝙩 𝘼𝙣𝙮 𝙒𝘼𝙄𝙁𝙐 𝙮𝙚𝙩...')
         return
 
-
     character = next((c for c in user['characters'] if c['id'] == character_id), None)
+
     if not character:
         await update.message.reply_text('𝙏𝙝𝙞𝙨 𝙒𝘼𝙄𝙁𝙐 𝙞𝙨 𝙉𝙤𝙩 𝙄𝙣 𝙮𝙤𝙪𝙧 𝙒𝘼𝙄𝙁𝙐 𝙡𝙞𝙨𝙩')
         return
 
+    # Prepare inline keyboard
+    keyboard = [
+        [InlineKeyboardButton("💖 Yes", callback_data=f"favorite_yes_{character_id}"), 
+         InlineKeyboardButton("💔 No", callback_data=f"favorite_no_{character_id}")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
 
-    user['favorites'] = [character_id]
+    await update.message.reply_photo(
+        photo=character["img_url"], 
+        caption=f'ᴅᴏ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴛʜɪs ᴡᴀɪғᴜ ʏᴏᴜʀ ғᴀᴠᴏᴜʀɪᴛᴇ ?\n ↬ {character["name"]} ({character["anime"]})',
+        reply_markup=reply_markup,
+        parse_mode='Markdown'
+    )
 
+async def handle_favorite_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle the user's choice from the inline keyboard."""
+    query = update.callback_query
+    await query.answer() 
 
-    await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}})
+    choice, _, character_id = query.data.split("_")
+    user_id = update.effective_user.id
 
-    await update.message.reply_text(f'{character["img_url"][:0]}\n{character["name"]}')
+    user = await user_collection.find_one({'id': user_id})
+
+    if choice == "favoriteyes":
+        user['favorites'] = [character_id] 
+        await user_collection.update_one({'id': user_id}, {'$set': {'favorites': user['favorites']}})
+        await query.edit_message_caption(
+            caption=f"You made {character['name']} your favorite! 💖" 
+        )
+    else:
+        await query.edit_message_caption(
+            caption=f"No worries! Maybe another time. 😊"
+        )
 
 
 def main() -> None:
@@ -245,6 +272,8 @@ def main() -> None:
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
     application.add_handler(CommandHandler("fav", fav, block=False))
+
+application.add_handler(CallbackQueryHandler(handle_favorite_choice))
     application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
     application.run_polling(drop_pending_updates=True)
 
