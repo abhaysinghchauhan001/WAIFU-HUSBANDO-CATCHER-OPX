@@ -60,5 +60,12 @@ async def handle_favorite_choice(update: Update, context: ContextTypes.DEFAULT_T
         )
     else:
         await query.edit_message_caption(
-            caption=f"No worries! Maybe another time. 😊")
-        
+            caption=f"No worries! Maybe another time. 😊"
+        )
+
+    application = Application.builder().token("YOUR_BOT_TOKEN").build()
+
+    application.add_handler(CommandHandler("setfavorite", set_favorite))
+    application.add_handler(CallbackQueryHandler(handle_favorite_choice))
+
+    application.run_polling()
