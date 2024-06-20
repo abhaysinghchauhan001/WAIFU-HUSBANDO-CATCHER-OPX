@@ -7,7 +7,7 @@ from shivu import user_collection, collection
 # ... (your database setup and user_collection definition)
 
 
-    """Set a character as favorite."""
+    
 
     user_id = update.effective_user.id
 
