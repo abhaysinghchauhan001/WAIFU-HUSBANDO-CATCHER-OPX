@@ -6,7 +6,7 @@ from shivu import user_collection, collection
 
 # ... (your database setup and user_collection definition)
 
-async def set_favorite(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+
     """Set a character as favorite."""
 
     user_id = update.effective_user.id
