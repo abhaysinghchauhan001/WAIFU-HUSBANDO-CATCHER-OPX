@@ -6,12 +6,6 @@ from shivu import user_collection, collection
 
 # ... (your database setup and user_collection definition)
 
-
-    
-
-    
-
-    if not context.args:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙥𝙧𝙤𝙫𝙞𝙙𝙚 𝙒𝘼𝙄𝙁𝙐 𝙞𝙙...')
         return
 
