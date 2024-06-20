@@ -274,8 +274,8 @@ def main() -> None:
     application.add_handler(CommandHandler("fav", fav, block=False))
  
 application.add_handler(CallbackQueryHandler(handle_favorite_choice))
-   
-    application.run_polling(drop_pending_updates=True)
+
+    application.run_polling()
 
 if __name__ == "__main__":
     shivuu.start()
