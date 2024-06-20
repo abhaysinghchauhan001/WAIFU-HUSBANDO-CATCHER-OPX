@@ -60,5 +60,5 @@ async def handle_favorite_choice(update: Update, context: ContextTypes.DEFAULT_T
         )
     else:
         await query.edit_message_caption(
-            caption=f"No worries! Maybe another time. 😊"
+            caption=f"No worries! Maybe another time. 😊")
         
