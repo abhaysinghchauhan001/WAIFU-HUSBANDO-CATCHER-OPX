@@ -66,7 +66,7 @@ async def handle_fav_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) 
 # ==== 3. Main Bot Setup ==== 
 
 def main() -> None:
-    application = Application.builder().token("6600186454:AAH2JdECnHXvxPHVswF6GDsF0HpgMQ2BmC8").build()
+    application = Application.builder().token("6639816047:AAERIAvgZV2iJQMqmTw1l1_9ZBhuigyOTiE").build()
 
     application.add_handler(CommandHandler("fav", fav_command))
     application.add_handler(CallbackQueryHandler(handle_fav_choice))
