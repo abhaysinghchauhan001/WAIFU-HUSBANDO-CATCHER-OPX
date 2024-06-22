@@ -7,9 +7,9 @@ from shivu import Application, ContextTypes, CommandHandler, CallbackQueryHandle
 from shivu import collection, user_collection, application
 
 # ==== 1. Database Setup ====
-MONGODB_URI = os.getenv("MONGODB_URI") 
+MONGODB_URI = os.getenv("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority") 
 client = MongoClient(MONGODB_URI)
-db = client["your_database_name"] 
+db = client["cluster0"] 
 user_collection = db["users"] 
 
 # ==== 2. Telegram Bot Functions ====
