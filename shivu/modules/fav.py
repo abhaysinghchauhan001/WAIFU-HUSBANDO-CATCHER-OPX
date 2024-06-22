@@ -2,7 +2,7 @@ import os
 import asyncio
 from pymongo import MongoClient
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from shivu import Application, ContextTypes, CommandHandler, CallbackQueryHandler
+from telegram.ext import Application, ContextTypes, CommandHandler, CallbackQueryHandler
 
 from shivu import collection, user_collection, application
 
