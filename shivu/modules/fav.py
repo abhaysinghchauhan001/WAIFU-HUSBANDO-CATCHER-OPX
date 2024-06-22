@@ -66,7 +66,7 @@ async def handle_fav_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         await query.edit_message_text(f"Okay, character {character_id} was not added.")
 
 
-    application = Application.builder().token("YOUR_BOT_TOKEN").build()
+   
 
     application.add_handler(CommandHandler("fav", fav_command))
     application.add_handler(CallbackQueryHandler(handle_fav_choice))
