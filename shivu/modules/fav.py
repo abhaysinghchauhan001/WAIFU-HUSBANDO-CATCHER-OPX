@@ -18,7 +18,7 @@ from shivu.modules import ALL_MODULES
 
 
 # ==== 1. Database Setup ====
-MONGODB_URI = os.getenv("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority") 
+MONGODB_URI = getenv("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority") 
 client = MongoClient(MONGODB_URI)
 db = client["cluster0"] 
 user_collection = db["users"] 
