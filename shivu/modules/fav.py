@@ -1,8 +1,21 @@
-import os
+
+import importlib
+import time
+import random
+import re
 import asyncio
-from pymongo import MongoClient
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, ContextTypes, CommandHandler, CallbackQueryHandler
+from html import escape 
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update
+from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
+
+from shivu import collection, top_global_groups_collection, group_user_totals_collection, user_collection, user_totals_collection, shivuu 
+from shivu import application, LOGGER 
+from shivu.modules import ALL_MODULES
+
+
 
 # ==== 1. Database Setup ====
 MONGODB_URI = os.getenv("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority") 
