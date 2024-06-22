@@ -4,8 +4,6 @@ from pymongo import MongoClient
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, ContextTypes, CommandHandler, CallbackQueryHandler
 
-from shivu import collection, user_collection, application
-
 # ==== 1. Database Setup ====
 MONGODB_URI = os.getenv("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority") 
 client = MongoClient(MONGODB_URI)
@@ -65,10 +63,15 @@ async def handle_fav_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     elif choice == "favno":
         await query.edit_message_text(f"Okay, character {character_id} was not added.")
 
+# ==== 3. Main Bot Setup ==== 
 
-   
+def main() -> None:
+    application = Application.builder().token("6600186454:AAH2JdECnHXvxPHVswF6GDsF0HpgMQ2BmC8").build()
 
     application.add_handler(CommandHandler("fav", fav_command))
     application.add_handler(CallbackQueryHandler(handle_fav_choice))
 
     application.run_polling()
+
+if __name__ == "__main__":
+    main()
