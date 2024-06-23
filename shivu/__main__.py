@@ -210,19 +210,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙧𝙞𝙩𝙚 𝘾𝙤𝙧𝙧𝙚𝙘𝙩 𝙉𝙖𝙢𝙚... ❌️')
 
    
-    return application
-
-async def find_user_id(update: Update, context: ContextType.DEFAULT_TYPE) -> Optional[int]:
-    user_id = update.effective_user.id
-    return user_id
-
-async def find_user(user_id: int):
-    user = await user_collection.find_one({ "id": user_id })
-    return user
-
-async def find_favorite(user: dict, character_id: str):
-    character = next((c for c in user["characters"] if c["id"] == character_id), None)
-    return character
+    
 
 async def fav(update: Update, context: CallbackContext) -> None:
     user_id = await find_user_id(update, context)
