@@ -212,7 +212,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
    
     return application
 
-async def find_user_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[int]:
+async def find_user_id(update: Update, context: ContextType.DEFAULT_TYPE) -> Optional[int]:
     user_id = update.effective_user.id
     return user_id
 
