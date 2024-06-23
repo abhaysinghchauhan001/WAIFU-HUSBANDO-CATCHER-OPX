@@ -21,7 +21,7 @@ from shivu.modules import ALL_MODULES
 
 # ==== 2. Telegram Bot Functions ====
 
-async def fav_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def fav_command(update: Update, context: DEFAULT_TYPE) -> None:
     """Handle the /fav command, asking for confirmation."""
     user_id = update.effective_user.id
     character_id = context.args[0] if context.args else None
