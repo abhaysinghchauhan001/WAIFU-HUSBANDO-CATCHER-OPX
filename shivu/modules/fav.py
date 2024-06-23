@@ -1,40 +1,71 @@
-
-import importlib
-import time
-import random
-import re
-import asyncio
-from html import escape 
-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram import Update
-from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
+from telegram.ext import CallbackContext, CommandHandler, ContextTypes
+from telegram.ext.inlinequeryhandler import InlineQueryHandler
+from telegram.ext.callbackqueryhandler import CallbackQueryHandler
+from telegram.ext.updater import CommandObject
+from telegram.ext.filters import Filters
+from pymongo import MongoClient
 
-from shivu import collection, top_global_groups_collection, group_user_totals_collection, user_collection, user_totals_collection, shivuu 
-from shivu import application, LOGGER 
-from shivu.modules import ALL_MODULES
+# Setup Mongodb Connection URL
+MONGO_URL = "YOUR_MONGO_URL"
 
+# Connect mongodb
+client = MongoClient(MONGO_URL)
 
+# Define database objects
+db = client["DatabaseName"]
+user_collection = db["UserCollection"]
 
+def main() -> None:
+    application = asyncio.run(
+        setup_application().extra_types[0]
+    )
 
+async def setup_application() -> CommandObject:
+    application = Application.builder().token("YOUR_TELEGRAM_BOT_TOKEN").build()
 
-# ==== 2. Telegram Bot Functions ====
+    application.add_handler(CommandHandler("fav", fav, block=False))
 
-async def fav_command(update: Update, context: DEFAULT_TYPE) -> None:
-    """Handle the /fav command, asking for confirmation."""
+    return application
+
+async def find_user_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[int]:
     user_id = update.effective_user.id
-    character_id = context.args[0] if context.args else None
+    return user_id
 
-    if not character_id:
-        await update.message.reply_text("Please provide a character ID: /fav [character_id]")
+async def find_user(user_id: int):
+    user = await user_collection.find_one({ "id": user_id })
+    return user
+
+async def find_favorite(user: dict, character_id: str):
+    character = next((c for c in user["characters"] if c["id"] == character_id), None)
+    return character
+
+async def fav(update: Update, context: CallbackContext) -> None:
+    user_id = await find_user_id(update, context)
+
+    if not context.args:
+        await update.message.reply_text('Please enter waifu ID.')
         return
 
-    # Check if the character already exists in the database (optional)
-    # character = await get_character_from_db(character_id)  
-    # if not character:
-    #     await update.message.reply_text(f"Character with ID {character_id} not found.")
-    #     return
+    character_id = context.args[0]
+
+    user = await find_user(user_id)
+    if not user:
+        await update.message.reply_text("You are not registered yet!")
+        return
+
+    character = await find_favorite(user, character_id)
+
+    if not character:
+        await update.message.reply_text('Character not found.')
+        return
+
+    user["favorites"] = [character_id]
+
+    user = await user_collection.find_one({"id": user_id})
+    if "-1" not in user["favorites"]:
+        user["favorites"].append("-1")
+        await user_collection.update_one({"id": user_id}, {'$set': {"favorites": user["favorites"]}})
 
     keyboard = [
         [
@@ -44,43 +75,11 @@ async def fav_command(update: Update, context: DEFAULT_TYPE) -> None:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await update.message.reply_text(
-        f"Do you want to add character {character_id} to your favorites?", 
-        reply_markup=reply_markup
-    )
+    await update.message.reply_photo( photo=character["img_url"], caption=f'Do you want to make this waifu your favourite ?\n ↬ {character["name"]} ({character["anime"]})', parse_mode="Markdownv2", reply_markup=reply_markup )
 
-async def handle_fav_choice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Handle the Yes/No inline button presses."""
+async def button_answer(update, context) -> None:
     query = update.callback_query
-    await query.answer()
 
-    choice, _, character_id = query.data.split("_")
-    user_id = update.effective_user.id
-
-    if choice == "favyes":
-        user = await user_collection.find_one({"user_id": user_id})
-        if not user:
-            user = {"user_id": user_id, "favorites": []}
-        
-        if character_id in user["favorites"]:
-            await query.edit_message_text(f"Character {character_id} is already in your favorites!")
-        else: 
-            user["favorites"].append(character_id)
-            await user_collection.update_one({"user_id": user_id}, {"$set": user}, upsert=True)
-            await query.edit_message_text(f"Added character {character_id} to your favorites!")
-
-    elif choice == "favno":
-        await query.edit_message_text(f"Okay, character {character_id} was not added.")
-
-# ==== 3. Main Bot Setup ==== 
-
-def main() -> None:
-    application = Application.builder().token("6639816047:AAERIAvgZV2iJQMqmTw1l1_9ZBhuigyOTiE").build()
-
-    application.add_handler(CommandHandler("fav", fav_command))
-    application.add_handler(CallbackQueryHandler(handle_fav_choice))
-
-    application.run_polling()
-
-if __name__ == "__main__":
-    main()
+    if query and query.data:
+        callback_data = query.data
+        split_callback = callback_data.split("_")
