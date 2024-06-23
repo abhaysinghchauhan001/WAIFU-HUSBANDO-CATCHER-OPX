@@ -1,26 +1,13 @@
-import re
-import time
-from html import escape
-from cachetools import TTLCache
-from pymongo import MongoClient, ASCENDING
+from telegram import Update
+from itertools import groupby
+import math
+from html import escape 
+import random
 
-from telegram import Update, InlineQueryResultPhoto
-from telegram.ext import InlineQueryHandler, CallbackContext, CommandHandler 
+from telegram.ext import CommandHandler, CallbackContext, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from shivu import user_collection, collection, application, db
-
-
-
-# Setup Mongodb Connection URL
-MONGO_URL = "YOUR_MONGO_URL"
-
-# Connect mongodb
-client = MongoClient(MONGO_URL)
-
-# Define database objects
-db = client["DatabaseName"]
-user_collection = db["UserCollection"]
+from shivu import collection, user_collection, application
 
 def main() -> None:
     application = asyncio.run(
