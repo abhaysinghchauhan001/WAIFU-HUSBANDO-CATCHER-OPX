@@ -1,10 +1,16 @@
-from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler, ContextTypes
-from shivu.inlinequeryhandler import InlineQueryHandler
-from telegram.ext.callbackqueryhandler import CallbackQueryHandler
-from telegram.ext.updater import CommandObject
-from telegram.ext.filters import Filters
-from pymongo import MongoClient
+import re
+import time
+from html import escape
+from cachetools import TTLCache
+from pymongo import MongoClient, ASCENDING
+
+from telegram import Update, InlineQueryResultPhoto
+from telegram.ext import InlineQueryHandler, CallbackContext, CommandHandler 
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+from shivu import user_collection, collection, application, db
+
+
 
 # Setup Mongodb Connection URL
 MONGO_URL = "YOUR_MONGO_URL"
