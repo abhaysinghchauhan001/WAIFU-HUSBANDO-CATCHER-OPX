@@ -1,6 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, ContextTypes
-from telegram.ext.inlinequeryhandler import InlineQueryHandler
+from shivu.inlinequeryhandler import InlineQueryHandler
 from telegram.ext.callbackqueryhandler import CallbackQueryHandler
 from telegram.ext.updater import CommandObject
 from telegram.ext.filters import Filters
