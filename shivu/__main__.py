@@ -209,8 +209,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
     else:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙧𝙞𝙩𝙚 𝘾𝙤𝙧𝙧𝙚𝙘𝙩 𝙉𝙖𝙢𝙚... ❌️')
 
-   application.add_handler(CommandHandler("fav", fav, block=False))
-
+   
     return application
 
 async def find_user_id(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Optional[int]:
@@ -273,6 +272,7 @@ def main() -> None:
     """Run bot."""
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
+    application.add_handler(CommandHandler("fav", fav, block=False))
     application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
     application.run_polling(drop_pending_updates=True)
 
