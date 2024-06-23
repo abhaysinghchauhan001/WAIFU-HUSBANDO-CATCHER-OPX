@@ -213,7 +213,7 @@ async def guess(update: Update, context: CallbackContext) -> None:
     
 
 async def fav(update: Update, context: CallbackContext) -> None:
-    user_id = await find_user_id(update, context)
+    user_id = update._user_id(update, context)
 
     if not context.args:
         await update.message.reply_text('Please enter waifu ID.')
