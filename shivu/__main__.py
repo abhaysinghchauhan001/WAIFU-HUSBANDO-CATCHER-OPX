@@ -218,7 +218,7 @@ def main() -> None:
     """Run bot."""
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
-     application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
+     
     application.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
