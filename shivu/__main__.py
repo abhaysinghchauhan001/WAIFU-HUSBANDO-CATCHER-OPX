@@ -212,57 +212,13 @@ async def guess(update: Update, context: CallbackContext) -> None:
    
     
 
-async def fav(update: Update, context: CallbackContext) -> None:
-        user_id = update.effective_user.id
 
-
-    if not context.args:
-        await update.message.reply_text('Please provide Character id...')
-        return
-
-    character_id = context.aqrgs[0]
-
-    user = await find_user(user_id)
-    if not user:
-        await update.message.reply_text("You are not registered yet!")
-        return
-
-    character = await find_favorite(user, character_id)
-
-    if not character:
-        await update.message.reply_text('Character not found.')
-        return
-
-    user["favorites"] = [character_id]
-
-    user = await user_collection.find_one({"id": user_id})
-    if "-1" not in user["favorites"]:
-        user["favorites"].append("-1")
-        await user_collection.update_one({"id": user_id}, {'$set': {"favorites": user["favorites"]}})
-
-    keyboard = [
-        [
-            InlineKeyboardButton("✅ Yes", callback_data=f"fav_yes_{character_id}"),
-            InlineKeyboardButton("❌ No", callback_data=f"fav_no_{character_id}")
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
-    await update.message.reply_photo( photo=character["img_url"], caption=f'Do you want to make this waifu your favourite ?\n ↬ {character["name"]} ({character["anime"]})', parse_mode="Markdownv2", reply_markup=reply_markup )
-
-async def button_answer(update, context) -> None:
-    query = update.callback_query
-
-    if query and query.data:
-        callback_data = query.data
-        split_callback = callback_data.split("_")
 
 def main() -> None:
     """Run bot."""
 
     application.add_handler(CommandHandler(["grab"], guess, block=False))
-    application.add_handler(CommandHandler("fav", fav, block=False))
-    application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
+     application.add_handler(MessageHandler(filters.ALL, message_counter, block=False))
     application.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
