@@ -29,7 +29,7 @@ async def sudoadd(_, message: Message):
         except:
             return await message.reply_text("ғᴀɪʟᴇᴅ ᴛᴏ ᴀᴅᴅ ᴜsᴇʀ ɪɴ sᴜᴅᴏᴇʀs.")
 
-    if message.reply_to_message.from_user.id in SUDOERS:
+    if message.reply_to_message.from_user.id in sudo_users:
         return await message.reply_text(
             f"» {message.reply_to_message.from_user.mention} ɪs ᴀʟʀᴇᴀᴅʏ ᴀ sᴜᴅᴏ ᴜsᴇʀ."
         )
