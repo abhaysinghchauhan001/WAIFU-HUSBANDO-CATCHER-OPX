@@ -1,10 +1,9 @@
 from pyrogram import filters
 from pyrogram.types import Message
 
-from config import OWNER_ID
 from shivu import application 
 
-
+OWNER_ID: 6584789596
 @app.on_message(filters.command(["addsudo"]) & filters.user(OWNER_ID))
 async def sudoadd(_, message: Message):
     try:
