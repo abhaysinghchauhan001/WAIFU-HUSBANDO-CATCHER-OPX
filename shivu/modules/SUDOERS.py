@@ -34,7 +34,7 @@ async def sudoadd(_, message: Message):
             f"» {message.reply_to_message.from_user.mention} ɪs ᴀʟʀᴇᴀᴅʏ ᴀ sᴜᴅᴏ ᴜsᴇʀ."
         )
     try:
-        SUDOERS.add(message.reply_to_message.from_user.id)
+        sudo_users.add(message.reply_to_message.from_user.id)
         await message.reply_text(
             f"ᴀᴅᴅᴇᴅ {message.reply_to_message.from_user.mention} ɪɴ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ."
         )
