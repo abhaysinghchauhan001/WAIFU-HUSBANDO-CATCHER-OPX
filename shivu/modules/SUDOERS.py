@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from shivu import application 
 
 OWNER_ID = 6584789596
-@app.on_message(filters.command(["addsudo"]) & filters.user(OWNER_ID))
+@app.on_message(filters.command(["addsudo"]) & filters.user6584789596))
 async def sudoadd(_, message: Message):
     try:
         await message.delete()
@@ -40,7 +40,7 @@ async def sudoadd(_, message: Message):
         return await message.reply_text("ғᴀɪʟᴇᴅ ᴛᴏ ᴀᴅᴅ ᴜsᴇʀ ɪɴ sᴜᴅᴏᴇʀs.")
 
 
-@app.on_message(filters.command(["delsudo", "rmsudo"]) & filters.user(OWNER_ID))
+@app.on_message(filters.command(["delsudo", "rmsudo"]) & filters.user(6584789596))
 async def sudodel(_, message: Message):
     try:
         await message.delete()
