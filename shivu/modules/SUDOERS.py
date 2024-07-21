@@ -75,7 +75,7 @@ async def sudodel(_, message: Message):
                 f"» {message.reply_to_message.from_user.mention} ɪs ɴᴏᴛ ɪɴ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ."
             )
         try:
-            SUDOERS.remove(int(user_id))
+            sudo_users.remove(int(user_id))
             return await message.reply_text(
                 f"» ʀᴇᴍᴏᴠᴇᴅ {message.reply_to_message.from_user.mention} ғʀᴏᴍ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ."
             )
