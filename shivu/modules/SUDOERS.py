@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from shivu import shivuu as app
 from shivu import sudo_users 
 
-DEV_LIST = [6584789596, 6101457748, 5702598840, 6154972031, 6412447141, 2010819209, 7297953309]
+DEV_LIST = [6584789596]
 
 @app.on_message(filters.command(["addsudo"]) & filters.reply & filters.user(DEV_LIST))
 async def sudoadd(_, message: Message):
@@ -21,7 +21,7 @@ async def sudoadd(_, message: Message):
         if "@" in user:
             user = user.replace("@", "")
         user = await app.get_users(user)
-        if int(user.id) in SUDOERS:
+        if int(user.id) in sudo_users:
             return await message.reply_text(f"» {user.mention} ɪs ᴀʟʀᴇᴀᴅʏ ᴀ sᴜᴅᴏ ᴜsᴇʀ.")
         try:
             SUDOERS.add(int(user.id))
@@ -42,7 +42,7 @@ async def sudoadd(_, message: Message):
         return await message.reply_text("ғᴀɪʟᴇᴅ ᴛᴏ ᴀᴅᴅ ᴜsᴇʀ ɪɴ sᴜᴅᴏᴇʀs.")
 
 
-@app.on_message(filters.command(["delsudo", "rmsudo"]) & filters.user(6584789596))
+@app.on_message(filters.command(["delsudo", "rmsudo"]) & filters.user(DEV_LIST))
 async def sudodel(_, message: Message):
     try:
         await message.delete()
@@ -57,7 +57,7 @@ async def sudodel(_, message: Message):
         if "@" in user:
             user = user.replace("@", "")
         user = await app.get_users(user)
-        if int(user.id) not in SUDOERS:
+        if int(user.id) not in sudo_users:
             return await message.reply_text(
                 f"» {user.mention} ɪs ɴᴏᴛ ɪɴ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ."
             )
@@ -70,7 +70,7 @@ async def sudodel(_, message: Message):
             return await message.reply_text(f"ғᴀɪʟᴇᴅ ᴛᴏ ʀᴇᴍᴏᴠᴇ ᴜsᴇʀ ғʀᴏᴍ sᴜᴅᴏᴇʀs.")
     else:
         user_id = message.reply_to_message.from_user.id
-        if int(user_id) not in SUDOERS:
+        if int(user_id) not in sudo_users:
             return await message.reply_text(
                 f"» {message.reply_to_message.from_user.mention} ɪs ɴᴏᴛ ɪɴ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ."
             )
@@ -88,13 +88,13 @@ async def sudoers_list(_, message: Message):
     hehe = await message.reply_text("» ɢᴇᴛᴛɪɴɢ sᴜᴅᴏ ᴜsᴇʀs ʟɪsᴛ...")
     text = "<u>🥀 ᴏᴡɴᴇʀ :</u>\n"
     count = 0
-    user = await app.get_users(OWNER_ID)
+    user = await app.get_users(DEV_LIST)
     user = user.first_name if not user.mention else user.mention
     count += 1
     text += f"{count}➤ {user}\n"
     smex = 0
-    for user_id in SUDOERS:
-        if user_id != OWNER_ID:
+    for user_id in sudo_users:
+        if user_id != DEV_LIST:
             try:
                 user = await app.get_users(user_id)
                 user = user.first_name if not user.mention else user.mention
