@@ -108,5 +108,3 @@ async def sudoers_list(_, message: Message):
         await message.reply_text("» ɴᴏ sᴜᴅᴏ ᴜsᴇʀs ғᴏᴜɴᴅ.")
     else:
         await hehe.edit_text(text)
-
-Change' Import name shivu
