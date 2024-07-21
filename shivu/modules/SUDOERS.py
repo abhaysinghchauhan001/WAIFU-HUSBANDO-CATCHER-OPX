@@ -4,7 +4,7 @@ from pyrogram.types import Message
 from shivu import application 
 
 OWNER_ID = 6584789596
-@app.on_message(filters.command(["addsudo"]) & filters.user6584789596))
+@app.on_message(filters.command(["addsudo"]) & filters.user(6584789596))
 async def sudoadd(_, message: Message):
     try:
         await message.delete()
