@@ -1,143 +1,97 @@
-#credit @ishikki_Akabane
-
 import io
-import os
-import textwrap
+import sys
 import traceback
 from contextlib import redirect_stdout
+from subprocess import getoutput as run
+from pyrogram import filters
+from pyrogram import Client 
+from shivu import shivuu as bot
+from datetime import datetime
 
-from shivu import application, LOGGER
-from telegram import Update
-from telegram.constants import ChatID, ParseMode
-from telegram.ext import ContextTypes, CommandHandler
-from telegram.ext import CallbackContext 
+DEV_LIST = [5702598840,2010819209,6154972031,6584789596,7185106962]
 
-namespaces = {}
-DEV_LIST = [6584789596]
-
-def namespace_of(chat, update, bot):
-    if chat not in namespaces:
-        namespaces[chat] = {
-            "__builtins__": globals()["__builtins__"],
-            "bot": bot,
-            "effective_message": update.effective_message,
-            "effective_user": update.effective_user,
-            "effective_chat": update.effective_chat,
-            "update": update,
-        }
-
-    return namespaces[chat]
+async def aexec(code, client, message):
+    exec(
+        "async def __aexec(client, message): "
+        + "".join(f"\n {l_}" for l_ in code.split("\n"))
+    )
+    return await locals()["__aexec"](client, message)
 
 
-def log_input(update):
-    user = update.effective_user.id
-    chat = update.effective_chat.id
-    LOGGER.info(f"IN: {update.effective_message.text} (user={user}, chat={chat})")
+@bot.on_message(filters.command(["run","eval"],["?","!",".","*","/","$",]))
+async def eval(client, message):
+    if message.from_user.id not in DEV_LIST:
+         return await message.reply_text("You Don't Have Enough Rights To Run This!")
+    if len(message.text.split()) <2:
+          return await message.reply_text("Input Not Found!")
+    status_message = await message.reply_text("Processing ...")
+    cmd = message.text.split(None, 1)[1]
+    start = datetime.now()
+    reply_to_ = message
+    if message.reply_to_message:
+        reply_to_ = message.reply_to_message
 
+    old_stderr = sys.stderr
+    old_stdout = sys.stdout
+    redirected_output = sys.stdout = io.StringIO()
+    redirected_error = sys.stderr = io.StringIO()
+    stdout, stderr, exc = None, None, None
 
-async def send(msg, bot, update):
-    if len(str(msg)) > 2000:
-        with io.BytesIO(str.encode(msg)) as out_file:
-            out_file.name = "output.txt"
-            await bot.send_document(
-                chat_id=update.effective_chat.id, 
-                document=out_file, 
-                message_thread_id=update.effective_message.message_thread_id if update.effective_chat.is_forum else None
+    try:
+        await aexec(cmd, client, message)
+    except Exception:
+        exc = traceback.format_exc()
+
+    stdout = redirected_output.getvalue()
+    stderr = redirected_error.getvalue()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
+
+    evaluation = ""
+    if exc:
+        evaluation = exc
+    elif stderr:
+        evaluation = stderr
+    elif stdout:
+        evaluation = stdout
+    else:
+        evaluation = "Success"
+    end = datetime.now()
+    ping = (end-start).microseconds / 1000
+    final_output = "<b>📎 Input</b>: "
+    final_output += f"<code>{cmd}</code>\n\n"
+    final_output += "<b>📒 Output</b>:\n"
+    final_output += f"<code>{evaluation.strip()}</code> \n\n"
+    final_output += f"<b>✨ Taken Time</b>: {ping}<b>ms</b>"
+    if len(final_output) > 4096:
+        with io.BytesIO(str.encode(final_output)) as out_file:
+            out_file.name = "eval.text"
+            await reply_to_.reply_document(
+                document=out_file, caption=cmd, disable_notification=True
             )
     else:
-        LOGGER.info(f"OUT: '{msg}'")
-        await bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=f"`{msg}`",
-            parse_mode=ParseMode.MARKDOWN,
-            message_thread_id=update.effective_message.message_thread_id if update.effective_chat.is_forum else None
-        )
+        await status_message.edit_text(final_output)
 
 
-async def evaluate(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_message.from_user.id not in 6584789596:
-        return
-
-    bot = context.bot
-    await send(await do(eval, bot, update), bot, update)
-
-
-async def execute(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_message.from_user.id not in 6584789596:
-        return
-
-    bot = context.bot
-    await send(await do(exec, bot, update), bot, update)
-
-
-def cleanup_code(code):
-    if code.startswith("```") and code.endswith("```"):
-        return "\n".join(code.split("\n")[1:-1])
-    return code.strip("` \n")
-
-
-async def do(func, bot, update):
-    log_input(update)
-    content = update.message.text.split(" ", 1)[-1]
-    body = cleanup_code(content)
-    env = namespace_of(update.message.chat_id, update, bot)
-
-    os.chdir(os.getcwd())
-    with open(
-        "temp.txt", "w",
-    ) as temp:
-        temp.write(body)
-
-    stdout = io.StringIO()
-
-    to_compile = f'async def func():\n{textwrap.indent(body, "  ")}'
-
-    try:
-        exec(to_compile, env)
-    except Exception as e:
-        return f"{e.__class__.__name__}: {e}"
-
-    func = env["func"]
-
-    try:
-        with redirect_stdout(stdout):
-            func_return = await func()
-    except Exception as e:
-        value = stdout.getvalue()
-        return f"{value}{traceback.format_exc()}"
+@bot.on_message(filters.command(["sh","shell"],["?","!",".","*","/","$",]))
+async def sh(client, message):
+    if message.from_user.id !=5690711835:
+         return await message.reply_text("You Don't Have Enough Rights To Run This!")
+         await message.reply_text("No Input Found!")
     else:
-        value = stdout.getvalue()
-        result = None
-        if func_return is None:
-            if value:
-                result = f"{value}"
-            else:
-                try:
-                    result = f"{repr(eval(body, env))}"
-                except:
-                    pass
-        else:
-            result = f"{value}{func_return}"
-        if result:
-            return result
+          code = message.text.replace(message.text.split(" ")[0], "")
+          x = run(code)
+          string = f"📎 Input: {code}\n\n📒 Output :\n{x}"
+          try:
+             await message.reply_text(string) 
+          except Exception as e:
+              with io.BytesIO(str.encode(string)) as out_file:
+                 out_file.name = "shell.text"
+                 await message.reply_document(document=out_file, caption=e)
 
-
-async def clear(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.effective_message.from_user.id not in 6584789596:
-        return
-
-    bot = context.bot
-    log_input(update)
-    global namespaces
-    if update.message.chat_id in namespaces:
-        del namespaces[update.message.chat_id]
-    await send("Cleared locals.", bot, update)
-
-
-EVAL_HANDLER = CommandHandler(("e", "ev", "eva", "eval"), evaluate, block=False)
-EXEC_HANDLER = CommandHandler(("x", "ex", "exe", "exec", "py"), execute, block=False)
-CLEAR_HANDLER = CommandHandler("clearlocals", clear, block=False)
-
-application.add_handler(EVAL_HANDLER)
-application.add_handler(EXEC_HANDLER)
-application.add_handler(CLEAR_HANDLER)
+async def aexec(code, client, message):
+    exec(
+        "async def __aexec(client, message): "
+        + "".join(f"\n {l_}" for l_ in code.split("\n"))
+    )
+    return await locals()["__aexec"](client, message)
