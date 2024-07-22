@@ -218,8 +218,16 @@ Description: {character['description']}""",
     else:
         await query.answer("Character not found!")
 
+def main() -> None:
+    """Run bot."""
+
 application.add_handler(CommandHandler("grab", guess))
 application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), message_counter))
 application.add_handler(CallbackQueryHandler(character_info, pattern=r"info_\d+"))
 
 LOGGER.info("Loaded Husbando Finder module")
+
+if __name__ == "__main__":
+    shivuu.start()
+    LOGGER.info("Bot started")
+    main()
