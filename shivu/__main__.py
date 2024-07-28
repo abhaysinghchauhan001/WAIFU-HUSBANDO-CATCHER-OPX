@@ -210,25 +210,6 @@ async def guess(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙧𝙞𝙩𝙚 𝘾𝙤𝙧𝙧𝙚𝙘𝙩 𝙉𝙖𝙢𝙚... ❌️')
 
 
-ran_away_count = {}
-async def ran_away(update: Update, context: CallbackContext) -> None:
-    chat_id = update.effective_chat.id
-    if chat_id in last_characters:
-        if chat_id not in ran_away_count:
-            ran_away_count[chat_id] = 0
-        ran_away_count[chat_id] += 1
-        character_data = last_characters[chat_id]
-        character_name = character_data['name']
-        if ran_away_count[chat_id] > 15:
-            if chat_id in first_correct_guesses:
-                if chat_id in ran_away_count:
-                    del ran_away_count[chat_id]
-            else:
-                message_text = f"Ohh No!! slave [{character_name}] Has Been Ran Away From Your Chat Store His/Her Name For Next Time"
-                await context.bot.send_message(chat_id=chat_id, text=message_text)           
-            if chat_id in ran_away_count:
-                del ran_away_count[chat_id]
-            del last_characters[chat_id]
 
 
 
