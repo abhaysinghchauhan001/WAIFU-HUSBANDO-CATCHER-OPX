@@ -78,19 +78,58 @@ async def inlinequery(update: Update, context: CallbackContext) -> None:
 
     
 
-        else:
-            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}</b>: {character['name']}\n <b>{character['anime']}</b>\n﹙{character['rarity'][0]}<b>𝙍𝘼𝙍𝙄𝙏𝙔:</b>{character['rarity'][2:]}﹚\n\n{character['catagory']}\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times..."
+        
+emojis = {
+    "beach": "🏖️",
+    "kimono": "👘",
+    "umbrella": "☔",
+    "maid": "☕",
+    "cup": "☕",
+    "cup": "☕",
+    "star": "⭐" 
+}
 
+events = {
+    "Sammer": {
+        "emoji": emojis["beach"],
+        "description": "Find the refreshment under the sun!",
+    },
+    "Jujutsu Kaisen": {
+        "emoji": emojis["kimono"],
+        "description": "A mystical adventure filled with thrills!",
+    },
+    "Coffee Break": { 
+        "emoji": emojis["cup"], 
+        "description": "Take a break and enjoy a cup of coffee!",
+    }
+}
 
-        results.append(
-            InlineQueryResultPhoto(
-                thumbnail_url=character['img_url'],
-                id=f"{character['id']}_{time.time()}",
-                photo_url=character['img_url'],
-                caption=caption,
-                parse_mode='HTML'
-            )
+# ... (rest of your code)
+
+else:
+    # Assuming 'character' now has an 'event' key, e.g., character['event'] = "Sammer"
+    event_name = character.get('event') 
+    event_info = events.get(event_name, {}) # Get event details, use empty dict if not found
+
+    caption = (
+        f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs Wᴀɪғᴜ....!!</b>\n\n"
+        f"<b>{character['id']}:</b> {character['name']}\n"
+        f"<b>{character['anime']}</b>\n"
+        f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
+        f"{event_info.get('emoji', '')}{event_name}{event_info.get('emoji', '')}" # Event info 
+        f"<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>\n\n"
+        f"✳️ 𝖧𝖾𝗋𝖾 𝗂𝗌 𝗍𝗁𝖾 𝗅𝗂𝗌𝗍 𝗈𝖿 𝗎𝗌𝖾𝗋𝗌 𝗐𝗁𝗈 𝗁𝖺𝗏𝖾 𝗍𝗁𝗂𝗌 𝖼𝗁𝖺𝗋𝖺𝖼𝗍𝖾𝗋\n"
+    )
+
+    results.append(
+        types.InlineQueryResultPhoto(
+            title=title,
+            thumb_url=character['img_url'],
+            photo_url=character['img_url'],
+            caption=caption,
+            parse_mode=enums.ParseMode.HTML
         )
+    )
 
     await update.inline_query.answer(results, next_offset=next_offset, cache_time=5)
 
