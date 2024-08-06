@@ -84,8 +84,8 @@ emojis = {
     "kimono": "👘",
     "umbrella": "☔",
     "maid": "☕",
-    "cup": "☕",
-    "cup": "☕",
+    "summer": "💐",
+    "valentine": "❤️",
     "star": "⭐" 
 }
 
