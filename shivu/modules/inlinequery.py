@@ -93,7 +93,7 @@ async def inlinequery(client: Client, query: types.InlineQuery):
 
         results.append(
             types.InlineQueryResultPhoto(
-                thumbnail_url=character['img_url'],
+                thumb_url=character['img_url'],
                 id=f"{character['id']}_{time.time()}",
                 photo_url=character['img_url'],
                 caption=caption,
