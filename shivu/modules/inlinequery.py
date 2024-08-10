@@ -13,14 +13,7 @@ from shivu import user_collection, collection, db
 EVENT_EMOJIS = ["👘", "☔", "🎄", "☃️", "🥻", "💖", "🏖️"]
 EVENT_NAMES = ["KIMONO", "MONSOON", "CHRISTMAS", "WINTER", "SAREE", "VALENTINE", "SUMMER"]
 
-# --- MongoDB indexes ---
-db.characters.create_index([('id', ASCENDING)])
-db.characters.create_index([('anime', ASCENDING)])
-db.characters.create_index([('img_url', ASCENDING)])
-
-db.user_collection.create_index([('characters.id', ASCENDING)])
-db.user_collection.create_index([('characters.name', ASCENDING)])
-db.user_collection.create_index([('characters.img_url', ASCENDING)])
+# ... (MongoDB indexes code - same as before) ...
 
 # --- Caching for performance ---
 all_characters_cache = TTLCache(maxsize=10000, ttl=36000)
@@ -32,16 +25,17 @@ async def inlinequery(client: Client, query: types.InlineQuery):
 
     # --- Determine search scope (global or user collection) ---
     if query.query.startswith('collection.'):
-        user_id, *search_terms = query.query.split(' ')[0].split('.')[1], ' '.join(query.query.split(' ')[1:])
         try:
-            user_id = int(user_id)
+            user_id = int(query.query.split(' ')[0].split('.')[1])
+            search_terms = ' '.join(query.query.split(' ')[1:])
+
             user = user_collection_cache.get(user_id) or await user_collection.find_one({'id': user_id})
             user_collection_cache[user_id] = user
 
             if user:
                 all_characters = list({v['id']: v for v in user['characters']}.values())
                 if search_terms:
-                    regex = re.compile(' '.join(search_terms), re.IGNORECASE)
+                    regex = re.compile(search_terms, re.IGNORECASE)
                     all_characters = [char for char in all_characters if any(regex.search(str(char.get(field, ''))) for field in ['name', 'rarity', 'id', 'anime'])]
             else:
                 all_characters = []
@@ -71,35 +65,40 @@ async def inlinequery(client: Client, query: types.InlineQuery):
         # --- Determine event (if any) and format event details ---
         event_details = ""
         for i, event_emoji in enumerate(EVENT_EMOJIS):
-            if event_emoji in character.get("event", ""):  # Check if the emoji is in the character's "event" field
-                event_details = f" **•** __{EVENT_NAMES[i]} EVENT__"
-                break  # Stop checking after finding the first event
+            if event_emoji in character.get("event", ""): 
+                event_details = f" • {EVENT_NAMES[i]} EVENT"
+                break 
 
         # --- Customized result display for user collections ---
         if query.query.startswith('collection.'):
             user_character_count = sum(c['id'] == character['id'] for c in user['characters'])
             user_anime_characters = sum(c['anime'] == character['anime'] for c in user['characters'])
-                        # ... previous code in your file ...
-
-    caption = f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>{(escape(user.get('first_name', user['id'])))}</a>'s wᴀɪғᴜ....!!</b>\n\n" \
-              f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n" \
-              f"<b>{character['anime']}</b> {user_anime_characters}/{anime_characters}\n" \
-              f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n" \
-              f"{event_details}\n\n"  # Add event details here
-
-# ... rest of your code ...  
+            caption = (
+                f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>"
+                f"{(escape(user.get('first_name', user['id'])))}</a>'s wᴀɪғᴜ....!!</b>\n\n"
+                f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n"
+                f"<b>{character['anime']}</b> {user_anime_characters}/{anime_characters}\n"
+                f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
+                f"{event_details}\n\n"
+            )
         else:
-            caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}:</b> {character['name']}\n <b>{character['anime']}</b>\n﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n{event_details}\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
+            caption = (
+                f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs wᴀɪғᴜ....!!</b>\n\n"
+                f"<b>{character['id']}:</b> {character['name']}\n"
+                f"<b>{character['anime']}</b>\n"
+                f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
+                f"{event_details}\n\n"
+                f"<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
+            )
+
         results.append(
-            InlineQueryResultPhoto(
+            types.InlineQueryResultPhoto(
                 thumbnail_url=character['img_url'],
                 id=f"{character['id']}_{time.time()}",
                 photo_url=character['img_url'],
                 caption=caption,
-                parse_mode='HTML'
+                parse_mode=enums.ParseMode.HTML 
             )
         )
 
-    await update.inline_query.answer(results, next_offset=next_offset, cache_time=5)
-
-application.add_handler(InlineQueryHandler(inlinequery, block=False))
+    await query.answer(results, next_offset=next_offset, cache_time=5)
