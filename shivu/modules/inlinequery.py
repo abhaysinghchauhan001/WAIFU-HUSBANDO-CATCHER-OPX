@@ -79,9 +79,15 @@ async def inlinequery(client: Client, query: types.InlineQuery):
         if query.query.startswith('collection.'):
             user_character_count = sum(c['id'] == character['id'] for c in user['characters'])
             user_anime_characters = sum(c['anime'] == character['anime'] for c in user['characters'])
-                        caption = f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>{(escape(user.get('first_name', user['id'])))}</a>'s wᴀɪғᴜ....!!</b>\n\n <b>{character['id']}:</b> {character['name']} x{user_character_count}\n<b>{character['anime']}</b> {user_anime_characters}/{anime_characters}\n﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n{event_details}\n\n"  # Add event details here
-            )
-            # ... rest of your code ... 
+                        # ... previous code in your file ...
+
+    caption = f"<b> Lᴏᴏᴋ Aᴛ <a href='tg://user?id={user['id']}'>{(escape(user.get('first_name', user['id'])))}</a>'s wᴀɪғᴜ....!!</b>\n\n" \
+              f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n" \
+              f"<b>{character['anime']}</b> {user_anime_characters}/{anime_characters}\n" \
+              f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n" \
+              f"{event_details}\n\n"  # Add event details here
+
+# ... rest of your code ...  
         else:
             caption = f"<b>Lᴏᴏᴋ Aᴛ Tʜɪs wᴀɪғᴜ....!!</b>\n\n<b>{character['id']}:</b> {character['name']}\n <b>{character['anime']}</b>\n﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n{event_details}\n\n<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
         results.append(
