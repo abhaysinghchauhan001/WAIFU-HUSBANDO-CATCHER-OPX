@@ -63,9 +63,9 @@ async def inlinequery(client: Client, query: types.InlineQuery):
         total_characters = len(all_characters)
 
         # --- Determine event (if any) and format event details ---
-        event_details = "👘𝑲𝒊𝒎𝒐𝒏𝒐👘"
+        event_details = 
         for i, event_emoji in enumerate(EVENT_EMOJIS):
-            if event_emoji in character.get("event", "👘𝑲𝒊𝒎𝒐𝒏𝒐👘"): 
+            if event_emoji in character.get("event", ""): 
                 event_details = f" • {EVENT_NAMES[i]} EVENT"
                 break 
 
@@ -79,7 +79,7 @@ async def inlinequery(client: Client, query: types.InlineQuery):
                 f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n"
                 f"<b>{character['anime']}</b> {user_anime_characters}/{anime_characters}\n"
                 f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
-                f"{event_details}\n\n"
+                
                 f"{EVENT_EMOJIS}{EVENT_NAMES[i]}{EVENT_EMOJIS}\n\n"
             )
         else:
@@ -88,8 +88,8 @@ async def inlinequery(client: Client, query: types.InlineQuery):
                 f"<b>{character['id']}:</b> {character['name']}\n"
                 f"<b>{character['anime']}</b>\n"
                 f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
-                f"{event_details}\n\n"
-                f"{EVENT_EMOJIS}{EVENT_NAMES[i]}{EVENT_EMOJIS}\n\n"
+                
+                f"{EVENT_NAMES[i]}\n\n"
                 f"<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
             )
 
