@@ -10,8 +10,8 @@ from shivu import shivuu as app
 from shivu import user_collection, collection, db
 
 # --- Constants for Event Categories ---
-EVENT_EMOJIS = ["👘", "☔", "🎄", "☃️", "🥻", "💖", "🏖️"]
-EVENT_NAMES = ["KIMONO", "MONSOON", "CHRISTMAS", "WINTER", "SAREE", "VALENTINE", "SUMMER"]
+EVENT_EMOJIS = [""]
+EVENT_NAMES = ["👘𝑲𝒊𝒎𝒐𝒏𝒐👘"]
 
 # ... (MongoDB indexes code - same as before) ...
 
