@@ -89,7 +89,7 @@ async def inlinequery(client: Client, query: types.InlineQuery):
                 f"<b>{character['anime']}</b>\n"
                 f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
                 f"{event_details}\n\n"
-                f"{EVENT_NAMES[i]}\n\n"
+                f"{EVENT_EMOJIS}{EVENT_NAMES[i]}{EVENT_EMOJIS}\n\n"
                 f"<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
             )
 
