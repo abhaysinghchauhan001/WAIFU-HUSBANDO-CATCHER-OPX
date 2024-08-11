@@ -65,7 +65,7 @@ async def inlinequery(client: Client, query: types.InlineQuery):
         # --- Determine event (if any) and format event details ---
         event_details = "👘𝑲𝒊𝒎𝒐𝒏𝒐👘"
         for i, event_emoji in enumerate(EVENT_EMOJIS):
-            if event_emoji in character.get("event", "👘𝑲𝒊𝒎𝒐𝒏𝒐👘", "☃️𝑾𝒊𝒏𝒕𝒆𝒓☃️"): 
+            if event_emoji in character.get("event", "👘𝑲𝒊𝒎𝒐𝒏𝒐👘"): 
                 event_details = f" • {EVENT_NAMES[i]} EVENT"
                 break 
 
