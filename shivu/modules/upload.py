@@ -115,8 +115,8 @@ async def update(update: Update, context: CallbackContext) -> None:
             await update.message.reply_text('Incorrect format. Please use: /update id field new_value')
             return
 
-        # Get character by ID
-        character = await collection.find_one({'id': args[0]})
+        # Get character by ID And NAME
+        character = await collection.find_one({'id', 'name': args[0]})
         if not character:
             await update.message.reply_text('Character not found.')
             return
