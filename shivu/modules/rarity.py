@@ -1,25 +1,12 @@
-from telegram import Update
-from itertools import groupby
-import urllib.request
-import re
-import math
-import html
-import random
-from collections import Counter
-from telegram.ext import Updater, CommandHandler, CallbackContext, MessageHandler, filters
-from shivu import collection, user_collection, application
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultPhoto, InputTextMessageContent, InputMediaPhoto
-from telegram import InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, CallbackContext, CommandHandler, CallbackQueryHandler, InlineQueryHandler, ChosenInlineResultHandler
 import asyncio
-from telegram.ext import Updater, CommandHandler, CallbackContext, MessageHandler, filters
-from telegram.ext import InlineQueryHandler, CallbackQueryHandler, ChosenInlineResultHandler
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
+from shivu import application
+from telegram.ext import Updater, MessageHandler, Filters
+from shivu import user_collection
+from telegram.ext import CallbackContext
+import collection
 
-
-
-
-async def add_rarity(update: Update, context: CallbackContext) -> None:
+async def add_rarity(update: Update, context: CallbackContext):
     user_id = update.effective_user.id
     user_collection = context.user_data
     rarities = ["🟢 Common", "🟣 Rare", "🟡 Legendary", "💮 Special Edition", "🔮 Premium Edition", "🎗️ Supreme"]
@@ -30,7 +17,7 @@ async def add_rarity(update: Update, context: CallbackContext) -> None:
     for i in range(0, len(rarities), 2):
         row = [InlineKeyboardButton(f"{rarities[i].title()} {'✅️' if rarities[i] == current_rarity else ''}",
                                     callback_data=f"add_rarity:{rarities[i]}")]
-        if i + 1 < len(rarities):
+        if i + 1 &lt; len(rarities):
             row.append(InlineKeyboardButton(f"{rarities[i + 1].title()} {'✅️' if rarities[i + 1] == current_rarity else ''}",
                                         callback_data=f"add_rarity:{rarities[i + 1]}")]
         keyboard.append(row)
@@ -41,8 +28,7 @@ async def add_rarity(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text("Select your desired Harem rarity:", reply_markup=reply_markup)
 
-
-deasync def add_rarity_callback(update: Update, context: CallbackContext) -> None:
+def add_rarity_callback(update: Update, context: CallbackContext):
     query = update.callback_query
     data = query.data
     user_id = query.from_user.id
@@ -58,7 +44,7 @@ deasync def add_rarity_callback(update: Update, context: CallbackContext) -> Non
     for i in range(0, len(rarities), 2):
         row = [InlineKeyboardButton(f"{rarities[i].title()} {'✅️' if rarities[i] == rarity else ''}",
                                     callback_data=f"add_rarity:{rarities[i]}")]
-        if i + 1 < len(rarities):
+        if i + 1 &lt; len(rarities):
             row.append(InlineKeyboardButton(f"{rarities[i + 1].title()} {'✅️' if rarities[i + 1] == rarity else ''}",
                                         callback_data=f"add_rarity:{rarities[i + 1]}")]
         keyboard.append(row)
@@ -67,7 +53,6 @@ deasync def add_rarity_callback(update: Update, context: CallbackContext) -> Non
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.message.edit_reply_markup(reply_markup=reply_markup)
 
-
-application.add_handler(CommandHandler("hmode", add_rarity, pass_user_data=True, pass_args=True, pass_update_queue=True))
-add_rarity_handler = CallbackQueryHandler(add_rarity_callback, pass_user_data=True, pass_chat_data=True, pattern='^add_rarity')
+application.add_handler(CommandHandler("hmode", add_rarity, pass_user_data=True))
+add_rarity_handler = CallbackQueryHandler(add_rarity_callback, pass_user_data=True)
 application.add_handler(add_rarity_handler)
