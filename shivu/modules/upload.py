@@ -116,7 +116,8 @@ async def update(update: Update, context: CallbackContext) -> None:
             return
 
         # Get character by ID And NAME
-        character = await collection.find_one({'id': <put-ID-value-here>, 'name': args[0]})
+        character = await collection.find_one({'id': some_value, 'name': args[0]})
+
 
         if not character:
             await update.message.reply_text('Character not found.')
