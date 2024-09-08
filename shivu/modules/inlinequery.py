@@ -153,3 +153,5 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
 
 # Add the handlers to the application
 application.add_handler(CallbackQueryHandler(top10_grabbers_callback, pattern=r'^top10_grabbers_'))
+# Add inline query handler to the application
+application.add_handler(InlineQueryHandler(inlinequery, block=False))
