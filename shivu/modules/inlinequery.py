@@ -129,30 +129,37 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     # Extract character ID from callback data
     character_id = query.data.split('_')[2]
 
-    # Fetch the top 10 grabbers for this specific character
-    top_grabbers = await user_collection.aggregate([
-        {'$match': {'characters.id': character_id}},
-        {'$unwind': '$characters'},
-        {'$match': {'characters.id': character_id}},
-        {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
-        {'$sort': {'count': -1}},
-        {'$limit': 10}
-    ]).to_list(length=10)
+    # Initialize the text for top grabbers
+    grabbers_text = "An error occurred while fetching top grabbers."
 
-    # Get usernames for each user in the top 10
-    usernames = []
-    for grabber in top_grabbers:
-        user_id = grabber['_id']
-        try:
-            user = await context.bot.get_chat(user_id)
-            usernames.append(user.username if user.username else f"➥ tg://user?id={user_id}'>{escape(user.first_name)}")
-        except Exception as e:
-            usernames.append(f"➥ tg://user?id={user_id}'>{escape(user.first_name)}")
+    try:
+        # Fetch the top 10 grabbers for this specific character
+        top_grabbers = await user_collection.aggregate([
+            {'$match': {'characters.id': character_id}},
+            {'$unwind': '$characters'},
+            {'$match': {'characters.id': character_id}},
+            {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
+            {'$sort': {'count': -1}},
+            {'$limit': 10}
+        ]).to_list(length=10)
 
-    # Format the top 10 grabbers into a message
-    if top_grabbers:
-        grabbers_text = "<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
-        grabbers_text += "\n".join([f"{i + 1}. {usernames[i]} x{top_grabbers[i]['count']}" for i in range(len(top_grabbers))])
+        if top_grabbers:
+            grabbers_text = f"<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
+            for index, grabber in enumerate(top_grabbers, 1):
+                user_id = grabber['_id']
+                total_grabs = grabber['count']
+                try:
+                    user = await context.bot.get_chat(user_id)
+                    username = user.username if user.username else f"tg://user?id={user_id}"
+                    first_name = escape(user.first_name) if user.first_name else 'Unknown'
+                    grabbers_text += f"{index}. <a href='{username}'>{first_name}</a> - {total_grabs} Grabs\n"
+                except Exception:
+                    grabbers_text += f"{index}. <a href='tg://user?id={user_id}'>{user_id}</a> - {total_grabs} Grabs\n"
+        else:
+            grabbers_text = f"No grabbers found for Character {character_id}."
+
+    except Exception as e:
+        grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
 
     # Edit the original message to show the top grabbers
     await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
