@@ -152,4 +152,4 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
 
 # Add the handlers to the application
-application.add_handler(CallbackQueryHandler(top10_grabbers_callback, pattern=r
+application.add_handler(CallbackQueryHandler(top10_grabbers_callback, pattern=r'^top10_grabbers_'))
