@@ -2,6 +2,9 @@
 import re
 import time
 import html
+import logging
+from telegram import Update
+from telegram.ext import CallbackContext, CallbackQueryHandler
 from html import escape
 from cachetools import TTLCache
 from pymongo import ASCENDING
