@@ -136,37 +136,37 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
 
     try:
         # Fetch the top 10 grabbers for this specific character
-    top_grabbers = await user_collection.aggregate([
-        {'$match': {'characters.id': character_id}},
-        {'$unwind': '$characters'},
-        {'$match': {'characters.id': character_id}},
-        {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
-        {'$sort': {'count': -1}},
-        {"$match": {"group_id": chat_id}},
-        {"$project": {"username": 1, "first_name": 1, "character_count": "$count"}},
-        {"$sort": {"character_count": -1}},
-        {"$limit": 10}
-    ]).to_list(length=10)
+        top_grabbers = await user_collection.aggregate([
+            {'$match': {'characters.id': character_id}},
+            {'$unwind': '$characters'},
+            {'$match': {'characters.id': character_id}},
+            {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
+            {'$sort': {'count': -1}},
+            {"$match": {"group_id": chat_id}},
+            {"$project": {"username": 1, "first_name": 1, "character_count": "$count"}},
+            {"$sort": {"character_count": -1}},
+            {"$limit": 10}
+        ]).to_list(length=10)
 
-    if top_grabbers:
-        grabbers_text = f"<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
-        for i, user in enumerate(top_grabbers, start=1):
-            username = user.get('username', 'Unknown')
-            first_name = html.escape(user.get('first_name', 'Unknown'))
+        if top_grabbers:
+            grabbers_text = f"<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
+            for i, user in enumerate(top_grabbers, start=1):
+                username = user.get('username', 'Unknown')
+                first_name = html.escape(user.get('first_name', 'Unknown'))
 
-            if len(first_name) > 10:
-                first_name = first_name[:10] + '...'
-            character_count = user['character_count']
-            grabbers_text += f'{i}. <a href="https://t.me/{username}"><b>{first_name}</b></a> ➾ <b>{character_count}</b>\n'
-    else:
-        grabbers_text = f"No grabbers found for Character {character_id}."
+                if len(first_name) > 10:
+                    first_name = first_name[:10] + '...'
+                character_count = user['character_count']
+                grabbers_text += f'{i}. <a href="https://t.me/{username}"><b>{first_name}</b></a> ➾ <b>{character_count}</b>\n'
+        else:
+            grabbers_text = f"No grabbers found for Character {character_id}."
 
-    # Edit the original message to show the top grabbers
-    await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
+        # Edit the original message to show the top grabbers
+        await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
 
-except Exception as e:
-    grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
-    await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
+    except Exception as e:
+        grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
+        await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
 
 # Add the handlers to the application
 application.add_handler(CallbackQueryHandler(top10_grabbers_callback, pattern=r'^top10_grabbers_'))
