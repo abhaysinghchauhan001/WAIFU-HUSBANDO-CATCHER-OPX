@@ -135,12 +135,12 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     grabbers_text = "An error occurred while fetching top grabbers."
 
     try:
-    # Fetch the top 10 grabbers for this specific character
-    top_grabbers = await user_collection.aggregate([
-        {'$match': {'characters.id': character_id}},
-        {'$unwind': '$characters'},
-        {'$match': {'characters.id': character_id}},
-        {'$group': {'_id': '$id', 'username': {'$first': '$username'}, 'first_name': {'$first': '$first_name'}, 'character_count': {'$sum': 1}}},
+        # Fetch the top 10 grabbers for this specific character
+        top_grabbers = await user_collection.aggregate([
+            {'$match': {'characters.id': character_id}},
+            {'$unwind': '$characters'},
+            {'$match': {'characters.id': character_id}},
+            {'$group': {'_id': '$id', 'username': {'$first': '$username'}, 'first_name': {'$first': '$first_name'}, 'character_count': {'$sum': 1}}},
         {'$sort': {'character_count': -1}},
         {'$limit': 10}
     ]).to_list(length=10)
