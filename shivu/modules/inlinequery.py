@@ -135,50 +135,35 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     grabbers_text = "An error occurred while fetching top grabbers."
 
     try:
+        # Fetch the top 10 grabbers for this specific character
         top_grabbers = await user_collection.aggregate([
             {'$match': {'characters.id': character_id}},
             {'$unwind': '$characters'},
             {'$match': {'characters.id': character_id}},
             {'$group': {'_id': '$id', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
-            {"$match": {"group_id": chat_id}},
-            {"$project": {"username": 1, "first_name": 1, "character_count": "$count"}},
-            {"$sort": {"character_count": -1}},
-            {"$limit": 10}
+            {'$limit': 10}
         ]).to_list(length=10)
 
         if top_grabbers:
             grabbers_text = f"<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
-            for i, user in enumerate(top_grabbers, start=1):
-                username = user.get('username', 'Unknown')
-                first_name = html.escape(user.get('first_name', 'Unknown'))
-
-                if len(first_name) > 10:
-                    first_name = first_name[:10] + '...'
-                character_count = user['character_count']
-                grabbers_text += f'{i}. <a href="https://t.me/{username}"><b>{first_name}</b></a> ➾ <b>{character_count}</b>\n'
+            for index, grabber in enumerate(top_grabbers, 1):
+                user_id = grabber['_id']
+                total_grabs = grabber['count']
+                try:
+                    user = await context.bot.get_chat(user_id)
+                    username = user.username if user.username else f"tg://user?id={user_id}"
+                    first_name = escape(user.first_name) if user.first_name else 'Unknown'
+                    grabbers_text += f"{index}. <a href='{username}'>{first_name}</a> - {total_grabs} Grabs\n"
+                except Exception:
+                    grabbers_text += f"{index}. <a href='tg://user?id={user_id}'>{user_id}</a> - {total_grabs} Grabs\n"
         else:
             grabbers_text = f"No grabbers found for Character {character_id}."
 
     except Exception as e:
         grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
-    
-    return grabbers_text
 
-async def some_async_function(query, character_id):
-    chat_id = query.message.chat_id  # Make sure chat_id is properly defined
-    grabbers_text = await fetch_and_format_top_grabbers(character_id, chat_id)
-    await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
-
-async def top10_grabbers_callback(update: Update, context: CallbackContext) -> None:
-    query = update.callback_query
-    await query.answer()  # Acknowledge the callback
-
-    # Extract character ID from callback data
-    character_id = query.data.split('_')[2]
-    chat_id = query.message.chat_id  # Make sure chat_id is properly defined
-
-    grabbers_text = await fetch_and_format_top_grabbers(character_id, chat_id)
+    # Edit the original message to show the top grabbers
     await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
 
 # Add the handlers to the application
