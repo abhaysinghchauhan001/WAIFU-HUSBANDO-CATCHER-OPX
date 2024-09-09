@@ -98,7 +98,6 @@ f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n"
                 f"<b>{character['id']}:</b> {character['name']}\n"
                 f"<b>{character['anime']}</b>\n"
                 f"﹙<b>{character['rarity'][0]} 𝙍𝘼𝙍𝙄𝙏𝙔:</b> {character['rarity'][2:]}﹚\n\n"
-                f"<b>Gʟᴏʙᴀʟʟʏ Gʀᴀʙ {global_count} Times...</b>"
             )
 
         # Create Inline Keyboard for Top 10 Grabbers for this specific character
@@ -136,11 +135,11 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
 
     try:
     # Fetch the top 10 grabbers for this specific character
-    top_grabbers = await user_collection.aggregate([
-        {'$match': {'characters.id': character_id}},
-        {'$unwind': '$characters'},
-        {'$match': {'characters.id': character_id}},
-        {'$group': {'_id': '$id', 'username': {'$first': '$username'}, 'first_name': {'$first': '$first_name'}, 'character_count': {'$sum': 1}}},
+        top_grabbers = await user_collection.aggregate([
+            {'$match': {'characters.id': character_id}},
+            {'$unwind': '$characters'},
+            {'$match': {'characters.id': character_id}},
+            {'$group': {'_id': '$id', 'username': {'$first': '$username'}, 'first_name': {'$first': '$first_name'}, 'character_count': {'$sum': 1}}},
         {'$sort': {'character_count': -1}},
         {'$limit': 10}
     ]).to_list(length=10)
