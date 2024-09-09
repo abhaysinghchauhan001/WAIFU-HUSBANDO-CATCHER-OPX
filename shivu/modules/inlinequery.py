@@ -167,7 +167,7 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
                 if first_name is None:
                     first_name = 'Unknown'
                 
-                first_name = html.escape(first_name)
+                first_name = html.escape(first_name)  # Safe to use now
                 
                 logger.debug(f"Username: {username}, First Name: {first_name}")
 
