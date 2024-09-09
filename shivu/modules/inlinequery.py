@@ -1,6 +1,7 @@
 
 import re
 import time
+import html
 from html import escape
 from cachetools import TTLCache
 from pymongo import ASCENDING
