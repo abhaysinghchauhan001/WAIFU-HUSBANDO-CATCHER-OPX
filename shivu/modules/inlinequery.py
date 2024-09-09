@@ -134,8 +134,8 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     # Initialize the text for top grabbers
     grabbers_text = "An error occurred while fetching top grabbers."
 
+    async def fetch_and_format_top_grabbers(character_id, chat_id):
     try:
-        # Fetch the top 10 grabbers for this specific character
         top_grabbers = await user_collection.aggregate([
             {'$match': {'characters.id': character_id}},
             {'$unwind': '$characters'},
@@ -161,12 +161,26 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
         else:
             grabbers_text = f"No grabbers found for Character {character_id}."
 
-        # Edit the original message to show the top grabbers
-        await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
-
     except Exception as e:
         grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
-        await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
+    
+    return grabbers_text
+
+async def some_async_function(query, character_id):
+    chat_id = query.message.chat_id  # Make sure chat_id is properly defined
+    grabbers_text = await fetch_and_format_top_grabbers(character_id, chat_id)
+    await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
+
+async def top10_grabbers_callback(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()  # Acknowledge the callback
+
+    # Extract character ID from callback data
+    character_id = query.data.split('_')[2]
+    chat_id = query.message.chat_id  # Make sure chat_id is properly defined
+
+    grabbers_text = await fetch_and_format_top_grabbers(character_id, chat_id)
+    await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
 
 # Add the handlers to the application
 application.add_handler(CallbackQueryHandler(top10_grabbers_callback, pattern=r'^top10_grabbers_'))
