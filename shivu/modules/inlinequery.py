@@ -161,7 +161,13 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
             grabbers_text = f"<b>Top 10 Grabbers for Character {character_id}:</b>\n\n"
             for i, user in enumerate(top_grabbers, start=1):
                 username = user.get('username', 'Unknown') or 'Unknown'
-                first_name = html.escape(user.get('first_name', 'Unknown')) or 'Unknown'
+                first_name = user.get('first_name', 'Unknown')
+                
+                # Ensure first_name is not None
+                if first_name is None:
+                    first_name = 'Unknown'
+                
+                first_name = html.escape(first_name)
                 
                 logger.debug(f"Username: {username}, First Name: {first_name}")
 
