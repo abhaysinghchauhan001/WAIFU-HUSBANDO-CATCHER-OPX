@@ -134,7 +134,6 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
     # Initialize the text for top grabbers
     grabbers_text = "An error occurred while fetching top grabbers."
 
-    async def fetch_and_format_top_grabbers(character_id, chat_id):
     try:
         top_grabbers = await user_collection.aggregate([
             {'$match': {'characters.id': character_id}},
