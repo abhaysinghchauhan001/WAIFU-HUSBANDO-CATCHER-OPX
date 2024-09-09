@@ -127,12 +127,19 @@ f"<b>{character['id']}:</b> {character['name']} x{user_character_count}\n"
 
     await update.inline_query.answer(results, next_offset=next_offset, cache_time=5)
 
+logger = logging.getLogger(name)
+
 async def top10_grabbers_callback(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()  # Acknowledge the callback
 
     # Extract character ID from callback data
-    character_id = query.data.split('_')[2]
+    try:
+        character_id = query.data.split('_')[2]
+    except IndexError:
+        grabbers_text = "Invalid callback data format."
+        await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
+        return
 
     # Initialize the text for top grabbers
     grabbers_text = "An error occurred while fetching top grabbers."
@@ -153,6 +160,8 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
             for i, user in enumerate(top_grabbers, start=1):
                 username = user.get('username', 'Unknown')
                 first_name = html.escape(user.get('first_name', 'Unknown'))
+                
+                logger.debug(f"Username: {username}, First Name: {first_name}")
 
                 if len(first_name) > 10:
                     first_name = first_name[:10] + '...'
@@ -163,6 +172,7 @@ async def top10_grabbers_callback(update: Update, context: CallbackContext) -> N
 
     except Exception as e:
         grabbers_text = f"An error occurred while fetching top grabbers: {str(e)}"
+        logger.error(f"Exception occurred: {e}", exc_info=True)
 
     # Edit the original message to show the top grabbers or the error message
     await query.edit_message_text(text=grabbers_text, parse_mode='HTML')
