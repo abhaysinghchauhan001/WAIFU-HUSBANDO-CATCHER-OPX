@@ -61,7 +61,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
-    
+
     if query.data == 'help':
         help_text = """
         ***Help Section:***
@@ -80,9 +80,6 @@ async def button(update: Update, context: CallbackContext) -> None:
         await context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=help_text, reply_markup=reply_markup, parse_mode='markdown')
 
     elif query.data == 'refresh':
-        await query.edit_message_text(text="Refreshed!")
-
-    elif query.data == 'back':
         user_id = update.effective_user.id
         user_data = await collection.find_one({"_id": user_id})
         first_name = user_data['first_name'] if user_data else "User"
@@ -97,7 +94,7 @@ async def button(update: Update, context: CallbackContext) -> None:
         ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
 
         ──────────────────
-        ✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
+        ✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
 
         ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***"""
 
