@@ -21,8 +21,8 @@ db.user_collection.create_index([('characters.id', ASCENDING)])
 db.user_collection.create_index([('characters.name', ASCENDING)])
 db.user_collection.create_index([('characters.img_url', ASCENDING)])
 
-all_characters_cache = TTLCache(maxsize=10000, ttl=36000)
-user_collection_cache = TTLCache(maxsize=10000, ttl=60)
+all_characters_cache = TTLCache(maxsize=1000000, ttl=3600000)
+user_collection_cache = TTLCache(maxsize=1000000, ttl=6000)
 
 async def inlinequery(update: Update, context: CallbackContext) -> None:
     query = update.inline_query.query
