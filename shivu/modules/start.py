@@ -62,6 +62,9 @@ async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
 
+    # Get the current message caption
+    current_caption = query.message.caption
+
     if query.data == 'help':
         help_text = """
         ***Help Section:***
@@ -77,9 +80,27 @@ async def button(update: Update, context: CallbackContext) -> None:
         help_keyboard = [[InlineKeyboardButton("⤂ ʙᴀᴄᴋ", callback_data='back')]]
         reply_markup = InlineKeyboardMarkup(help_keyboard)
 
-        await context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=help_text, reply_markup=reply_markup, parse_mode='markdown')
+        # Update only if the help text is different
+        if current_caption != help_text:
+            await context.bot.edit_message_text(
+                chat_id=query.message.chat_id,
+                message_id=query.message.message_id,
+                text=help_text,
+                reply_markup=reply_markup,
+                parse_mode='markdown'
+            )
 
     elif query.data == 'refresh':
+        # Handle refresh logic if needed
+
+        # Example refresh caption
+        refresh_caption = "Refreshed!"
+        if current_caption != refresh_caption:
+            await query.edit_message_text(
+                text=refresh_caption
+            )
+
+    elif query.data == 'back':
         user_id = update.effective_user.id
         user_data = await collection.find_one({"_id": user_id})
         first_name = user_data['first_name'] if user_data else "User"
@@ -94,21 +115,19 @@ async def button(update: Update, context: CallbackContext) -> None:
         ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
 
         ──────────────────
-        ✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
+        ✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
 
-        ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***"""
+        ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
+        """
 
-        keyboard = [
-            [InlineKeyboardButton("✤ ᴀᴅᴅ ᴍᴇ ✤", url=f'http://t.me/{BOT_USERNAME}?startgroup=new')],
-            [InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}'),
-             InlineKeyboardButton("✠ ᴜᴘᴅᴀᴛᴇ𝗌 ✠", url=f'https://t.me/{UPDATE_CHAT}')],
-            [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
-             InlineKeyboardButton("≎ ᴄʀᴇᴅɪᴛ ≎", url=f'https://t.me/{UPDATE_CHAT}')],
-            [InlineKeyboardButton("Refresh", callback_data='refresh')]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-
-        await context.bot.edit_message_caption(chat_id=update.effective_chat.id, message_id=query.message.message_id, caption=caption, reply_markup=reply_markup, parse_mode='markdown')
+        if current_caption != caption:
+            await context.bot.edit_message_caption(
+                chat_id=update.effective_chat.id,
+                message_id=query.message.message_id,
+                caption=caption,
+                reply_markup=reply_markup,
+                parse_mode='markdown'
+            )
 
 # Add handlers to the application
 
