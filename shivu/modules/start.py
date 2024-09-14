@@ -64,21 +64,21 @@ async def button(update: Update, context: CallbackContext) -> None:
     
     if query.data == 'help':
         help_text = """
-***Help Section :***
+        ***Help Section:***
 
-***/grab - to grab a character (only works in groups)***
-***/fav - add your favorite character***
-***/trade - to trade characters***
-***/gift - give any character***
-***/harem - to see your harem***
-***/top - to see top users***
-***/changetime - change character appearance time***
+        /grab - to grab a character (only works in groups)
+        /fav - add your favorite character
+        /trade - to trade characters
+        /gift - give any character
+        /harem - to see your harem
+        /top - to see top users
+        /changetime - change character appearance time
         """
         help_keyboard = [[InlineKeyboardButton("⤂ ʙᴀᴄᴋ", callback_data='back')]]
         reply_markup = InlineKeyboardMarkup(help_keyboard)
 
         await context.bot.edit_message_text(chat_id=query.message.chat_id, message_id=query.message.message_id, text=help_text, reply_markup=reply_markup, parse_mode='markdown')
-    
+
     elif query.data == 'refresh':
         await query.edit_message_text(text="Refreshed!")
 
@@ -88,31 +88,33 @@ async def button(update: Update, context: CallbackContext) -> None:
         first_name = user_data['first_name'] if user_data else "User"
 
         caption = f"""
-***ʜᴇʟʟᴏ....💫  {escape(first_name)}
+        ***ʜᴇʟʟᴏ....💫  {escape(first_name)}
 
-ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** [˹𝐆ʀᴀʙʙɪɴɢ 𝐘ᴏᴜʀ 𝐖ᴀɪғᴜ˼](https://t.me/Grabbing_Your_Waifu_Bot)
+        ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** [˹𝐆ʀᴀʙʙɪɴɢ 𝐘ᴏᴜʀ 𝐖ᴀɪғᴜ˼](https://t.me/Grabbing_Your_Waifu_Bot)
 
-***◈ ━━━━━━━━ ● ━━━━━━━━ ◈
+        ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈
 
-ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
+        ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
 
-──────────────────
-✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
+        ──────────────────
+        ✧⁠ COMMAND - ᴜsᴇ /ɢʀᴀʙ  ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʟʟᴇᴄᴛɪᴏɴ...✨️
 
-    ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***"""
+        ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***"""
 
-    keyboard = [
-        [InlineKeyboardButton("✤ ᴀᴅᴅ ᴍᴇ ✤", url=f'http://t.me/{BOT_USERNAME}?startgroup=new')],
-        [InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}'),
-         InlineKeyboardButton("✠ ᴜᴘᴅᴀᴛᴇ𝗌 ✠", url=f'https://t.me/{UPDATE_CHAT}')],
-        [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
-         InlineKeyboardButton("≎ ᴄʀᴇᴅɪᴛ ≎", url=f'https://t.me/{UPDATE_CHAT}')],
-        [InlineKeyboardButton("Refresh", callback_data='refresh')]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+        keyboard = [
+            [InlineKeyboardButton("✤ ᴀᴅᴅ ᴍᴇ ✤", url=f'http://t.me/{BOT_USERNAME}?startgroup=new')],
+            [InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}'),
+             InlineKeyboardButton("✠ ᴜᴘᴅᴀᴛᴇ𝗌 ✠", url=f'https://t.me/{UPDATE_CHAT}')],
+            [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
+             InlineKeyboardButton("≎ ᴄʀᴇᴅɪᴛ ≎", url=f'https://t.me/{UPDATE_CHAT}')],
+            [InlineKeyboardButton("Refresh", callback_data='refresh')]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await context.bot.edit_message_caption(chat_id=update.effective_chat.id, message_id=query.message.message_id, caption=caption, reply_markup=reply_markup, parse_mode='markdown')
+        await context.bot.edit_message_caption(chat_id=update.effective_chat.id, message_id=query.message.message_id, caption=caption, reply_markup=reply_markup, parse_mode='markdown')
 
-application.add_handler(CallbackQueryHandler(button, pattern='^help$|^back$', block=False))
+# Add handlers to the application
+application = Application.builder().build()
+application.add_handler(CallbackQueryHandler(button, pattern='^help$|^back$|^refresh$', block=False))
 start_handler = CommandHandler('start', start, block=False)
 application.add_handler(start_handler)
