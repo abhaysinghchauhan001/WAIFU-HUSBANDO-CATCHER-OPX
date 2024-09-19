@@ -38,7 +38,11 @@ async def rarity_callback(update: Update, context: CallbackContext) -> None:
         rarity = data.split(':')[1]
         user_id = query.from_user.id
 
-        await user_collection.update_one({'id': user_id}, {'$set': {'selected_rarity': rarity if rarity != "default" else None}})
+        await user_collection.update_one(
+            {'id': user_id},
+            {'$set': {'selected_rarity': rarity if rarity != "default" else None}},
+            write_concern={'w': 1}  # Adjusted write concern
+        )
         await query.answer(f"Rarity set to: {rarity.title() if rarity != 'default' else 'Default'}")
         await query.edit_message_text("Rarity updated successfully.")
 
