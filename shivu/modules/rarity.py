@@ -42,5 +42,5 @@ async def rarity_callback(update: Update, context: CallbackContext) -> None:
         await query.answer(f"Rarity set to: {rarity.title() if rarity != 'default' else 'Default'}")
         await query.edit_message_text("Rarity updated successfully.")
 
-application.add_handler(CommandHandler("set_rarity", add_rarity, block=False))
+application.add_handler(CommandHandler("mode", add_rarity, block=False))
 application.add_handler(CallbackQueryHandler(rarity_callback, pattern='^add_rarity:', block=False))
