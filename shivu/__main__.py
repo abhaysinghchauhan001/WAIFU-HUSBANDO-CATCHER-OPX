@@ -258,8 +258,7 @@ async def button(update: Update, context: CallbackContext) -> None:
         # Update the user's favorites
         await user_collection.update_one(
             {'id': user_id},
-            {'$set': {'favorites': [character_id]}},
-            write_concern=WriteConcern(w=1)  # Now this line will work
+            {'$set': {'favorites': [character_id]}}
         )
         await query.message.reply_text('✅ 𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚𝙙 𝙩𝙝𝙚 𝙝𝙪𝙨𝙗𝙖𝙣𝙙𝙤!')
     elif query.data == 'cancel_fav':
