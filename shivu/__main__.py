@@ -258,20 +258,23 @@ async def button(update: Update, context: CallbackContext) -> None:
         # Update the user's favorites
         await user_collection.update_one(
             {'id': user_id},
-            {'$addToSet': {'favorites': character_id}}  # Use $addToSet to avoid duplicates
+            {'$addToSet': {'favorites': character_id}}
         )
+
+        # Fetch updated user data
+        user = await user_collection.find_one({'id': user_id})
+        favorite_characters = user.get('favorites', [])
 
         # Edit the original message caption to confirm the favorite
         await query.edit_message_caption(
-            caption='✅ 𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚𝙙 𝙩𝙝𝙚 𝙝𝙪𝙨𝙗𝙖𝙣𝙙𝙤!',
+            caption=f'✅ 𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚𝙙 𝙩𝙝𝙚 𝙝𝙪𝙨𝙗𝙖𝙣𝙙𝙤: {character_id}!\n\nYour favorites: {favorite_characters}',
             parse_mode='HTML'
         )
     elif query.data == 'cancel_fav':
-        # Edit the original message caption to cancel the action
         await query.edit_message_caption(
             caption='❌ 𝙏𝙝𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙞𝙣𝙜 𝙖𝙘𝙩𝙞𝙤𝙣 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙘𝙖𝙣𝙘𝙚𝙡𝙚𝙙.',
             parse_mode='HTML'
-        )
+         )
 
 def main() -> None:
     """Run bot."""
