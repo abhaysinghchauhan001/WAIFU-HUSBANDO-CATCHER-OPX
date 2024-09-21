@@ -260,17 +260,12 @@ async def button(update: Update, context: CallbackContext) -> None:
     elif query.data == 'cancel_fav':
         await query.message.reply_text('❌ 𝙏𝙝𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙞𝙣𝙜 𝙖𝙘𝙩𝙞𝙤𝙣 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙘𝙖𝙣𝙘𝙚𝙡𝙚𝙙.')
 
-
-
-
-
 def main() -> None:
     """Run bot."""
-
     # Add handlers
-application.add_handler(CommandHandler(["grab"], guess, block=False))
-application.add_handler(CommandHandler("hfav", fav, block=False))
-application.add_handler(CallbackQueryHandler(button))
+    application.add_handler(CommandHandler(["grab"], guess, block=False))
+    application.add_handler(CommandHandler("hfav", fav, block=False))
+    application.add_handler(CallbackQueryHandler(button))
 
     application.run_polling(drop_pending_updates=True)
 
