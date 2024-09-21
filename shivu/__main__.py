@@ -10,6 +10,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
+from pymongo import WriteConcern
 
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext, CallbackQueryHandler
@@ -249,17 +250,17 @@ async def fav(update: Update, context: CallbackContext) -> None:
 async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
-    
+
     if query.data.startswith('fav_'):
         character_id = query.data.split('_')[1]
         user_id = query.from_user.id
-        
+
         # Update the user's favorites
         await user_collection.update_one(
-    {'id': user_id},
-    {'$set': {'favorites': [character_id]}},
-    write_concern=WriteConcern(w=1)  # Change this line
-)
+            {'id': user_id},
+            {'$set': {'favorites': [character_id]}},
+            write_concern=WriteConcern(w=1)  # Now this line will work
+        )
         await query.message.reply_text('✅ 𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚𝙙 𝙩𝙝𝙚 𝙝𝙪𝙨𝙗𝙖𝙣𝙙𝙤!')
     elif query.data == 'cancel_fav':
         await query.message.reply_text('❌ 𝙏𝙝𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙞𝙣𝙜 𝙖𝙘𝙩𝙞𝙤𝙣 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙘𝙖𝙣𝙘𝙚𝙡𝙚𝙙.')
