@@ -1,4 +1,7 @@
 from pymongo import MongoClient, WriteConcern
+from shivu.database import user_collection
+
+# Now you can use user_collection in your code
 
 # Replace with your actual connection string
 connection_string = "mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority"
