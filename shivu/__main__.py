@@ -11,6 +11,9 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
 
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext, CallbackQueryHandler
+
 from shivu import collection, top_global_groups_collection, group_user_totals_collection, user_collection, user_totals_collection, shivuu 
 from shivu import application, LOGGER 
 from shivu.modules import ALL_MODULES
@@ -264,8 +267,8 @@ async def button(update: Update, context: CallbackContext) -> None:
 def main() -> None:
     """Run bot."""
 
-    application.add_handler(CommandHandler(["grab"], guess, block=False))
-
+    # Add handlers
+application.add_handler(CommandHandler(["grab"], guess, block=False))
 application.add_handler(CommandHandler("hfav", fav, block=False))
 application.add_handler(CallbackQueryHandler(button))
 
