@@ -1,5 +1,4 @@
 from pymongo import MongoClient, WriteConcern
-from shivu.database import user_collection
 
 # Now you can use user_collection in your code
 
