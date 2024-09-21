@@ -1,4 +1,4 @@
-
+from shivu.database import user_collection
 import importlib
 import time
 import random
@@ -11,7 +11,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from telegram import Update
 from telegram.ext import CommandHandler, CallbackContext, MessageHandler, filters
 from pymongo import WriteConcern
-from shivu.database import user_collection
+
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackContext, CallbackQueryHandler
 
