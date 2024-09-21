@@ -209,7 +209,53 @@ async def guess(update: Update, context: CallbackContext) -> None:
     else:
         await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙒𝙧𝙞𝙩𝙚 𝘾𝙤𝙧𝙧𝙚𝙘𝙩 𝙉𝙖𝙢𝙚... ❌️')
 
+async def fav(update: Update, context: CallbackContext) -> None:
+    user_id = update.effective_user.id
 
+    if not context.args:
+        await update.message.reply_text('𝙋𝙡𝙚𝙖𝙨𝙚 𝙥𝙧𝙤𝙫𝙞𝙙𝙚 𝙃𝙪𝙨𝙗𝙖𝙣𝙙𝙤 𝙞𝙙...')
+        return
+
+    character_id = context.args[0]
+
+    user = await user_collection.find_one({'id': user_id})
+    if not user:
+        await update.message.reply_text('𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙣𝙤𝙩 𝙂𝙤𝙩 𝘼𝙣𝙮 𝙃𝙪𝙨𝙗𝙖𝙣𝙙𝙤 𝙮𝙚𝙩...')
+        return
+
+    character = next((c for c in user['characters'] if c['id'] == character_id), None)
+    if not character:
+        await update.message.reply_text('𝙏𝙝𝙞𝙨 𝙃𝙪𝙨𝙗𝙖𝙣𝙙𝙤 𝙞𝙨 𝙉𝙤𝙩 𝙄𝙣 𝙮𝙤𝙪𝙧 𝙃𝙪𝙨𝙗𝙖𝙣𝙙𝙤 𝙡𝙞𝙨𝙩')
+        return
+
+    keyboard = [
+        [
+            InlineKeyboardButton("Confirm", callback_data=f'fav_{character_id}'),
+            InlineKeyboardButton("Cancel", callback_data='cancel_fav')
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_photo(
+        photo=character["img_url"],
+        caption=f"<b>ᴅᴏ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴛʜɪs ʜᴜsʙᴀɴᴅᴏ ʏᴏᴜʀ ғᴀᴠᴏʀɪᴛᴇ..! \n↬ <code>{character['name']}</code> (<code>{character['anime']}</code>)</b>",
+        reply_markup=reply_markup,
+        parse_mode='HTML'
+    )
+
+async def button(update: Update, context: CallbackContext) -> None:
+    query = update.callback_query
+    await query.answer()
+    
+    if query.data.startswith('fav_'):
+        character_id = query.data.split('_')[1]
+        user_id = query.from_user.id
+        
+        # Update the user's favorites
+        await user_collection.update_one({'id': user_id}, {'$set': {'favorites': [character_id]}})
+        await query.message.reply_text('✅ 𝙔𝙤𝙪 𝙝𝙖𝙫𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙚𝙙 𝙩𝙝𝙚 𝙝𝙪𝙨𝙗𝙖𝙣𝙙𝙤!')
+    elif query.data == 'cancel_fav':
+        await query.message.reply_text('❌ 𝙏𝙝𝙚 𝙛𝙖𝙫𝙤𝙧𝙞𝙩𝙞𝙣𝙜 𝙖𝙘𝙩𝙞𝙤𝙣 𝙝𝙖𝙨 𝙗𝙚𝙚𝙣 𝙘𝙖𝙣𝙘𝙚𝙡𝙚𝙙.')
 
 
 
