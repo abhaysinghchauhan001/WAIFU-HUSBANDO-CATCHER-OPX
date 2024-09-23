@@ -73,7 +73,7 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
         nav_buttons.append(InlineKeyboardButton("⤂", callback_data=f"harem:{page - 1}:{user_id}"))
     if page < total_pages - 1:
         nav_buttons.append(InlineKeyboardButton("⤃", callback_data=f"harem:{page + 1}:{user_id}"))
-    keyboard.append(nav_buttons)  # Corrected line
+    keyboard.append(nav_buttons)  # Append the navigation buttons
     
 
     reply_markup = InlineKeyboardMarkup(keyboard)
