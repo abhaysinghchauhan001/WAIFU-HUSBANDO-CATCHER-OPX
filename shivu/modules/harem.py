@@ -68,12 +68,12 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
                 included_characters.add(character['id'])
     keyboard = [[InlineKeyboardButton(f"💠Inline💠", switch_inline_query_current_chat=f"collection.{user_id}")]]
     if total_pages > 1:
-        nav_buttons = []
-        if page > 0:
-            nav_buttons.append(InlineKeyboardButton("⤂", callback_data=f"harem:{page - 1}:{user_id}"))
-        if page < total_pages - 1:
-            nav_buttons.append(InlineKeyboardButton("⤃", callback_data=f"harem:{page + 1}:{user_id}"))
-        keyboard.append(nav_buttons)for  in range(len()) :
+    nav_buttons = []
+    if page > 0:
+        nav_buttons.append(InlineKeyboardButton("⤂", callback_data=f"harem:{page - 1}:{user_id}"))
+    if page < total_pages - 1:
+        nav_buttons.append(InlineKeyboardButton("⤃", callback_data=f"harem:{page + 1}:{user_id}"))
+    keyboard.append(nav_buttons)  # Corrected line
     
 
     reply_markup = InlineKeyboardMarkup(keyboard)
