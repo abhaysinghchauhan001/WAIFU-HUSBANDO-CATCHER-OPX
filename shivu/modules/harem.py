@@ -1,9 +1,7 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackContext, CallbackQueryHandler
 from html import escape
-import random
 import math
-from itertools import groupby
 from shivu import collection, user_collection, application
 
 async def harem(update: Update, context: CallbackContext, page=0, edit=False) -> None:
@@ -17,18 +15,13 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
         "supreme": "🎗️ Supreme",
         "default": None
     }
-    
+
     user = await user_collection.find_one({'id': user_id})
     if not user:
-        await update.message.reply_text("You need to register first by starting the bot in dm.")
+        await update.message.reply_text("You need to register first by starting the bot in DM.")
         return
-    
-    characters = user.get('characters', [])
-    fav_character_id = user.get('favorites', [])[0] if 'favorites' in user else None
-    fav_character = None
-    if fav_character_id:
-        fav_character = next((c for c in characters if isinstance(c, dict) and c.get('id') == fav_character_id), None)
 
+    characters = user.get('characters', [])
     hmode = user.get('smode', 'default')
     rarity_value = "all" if hmode == "default" else harem_mode_mapping.get(hmode)
 
@@ -45,7 +38,12 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
 
     harem_message = f"<b>{escape(update.effective_user.first_name)}'s Harem - Page {page + 1}/{total_pages}</b>\n"
     for character in current_characters:
+        anime = character.get("anime", "Unknown")
+        count = await collection.count_documents({"anime": anime})
+        harem_message += f'\n𖤍 <b>{anime}</b> ｛{len(characters)}/{count}｝\n'
+        harem_message += f'⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋\n'
         harem_message += f'<b>𒄬</b> {character["id"]} [ {character["rarity"][0]} ] {character["name"]}\n'
+        harem_message += f'⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋\n'
 
     keyboard = [[InlineKeyboardButton("💠 Inline 💠", switch_inline_query_current_chat=f"collection.{user_id}")]]
     if total_pages > 1:
@@ -57,10 +55,15 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
         keyboard.append(nav_buttons)
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(harem_message, reply_markup=reply_markup, parse_mode='HTML')
+
+    if edit:
+        await update.callback_query.edit_message_text(harem_message, reply_markup=reply_markup, parse_mode='HTML')
+    else:
+        await update.message.reply_text(harem_message, reply_markup=reply_markup, parse_mode='HTML')
 
 async def harem_callback(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
+    await query.answer()  # Acknowledge the callback
     _, page, user_id = query.data.split(':')
     await harem(update, context, int(page), edit=True)
 
