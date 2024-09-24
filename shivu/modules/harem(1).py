@@ -9,16 +9,12 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
     user_id = update.effective_user.id
     # Define a mapping dictionary for harem modes to rarity values
     harem_mode_mapping = {
-        "low": "🔵 𝙇𝙊𝙒",
-        "medium": "🟢 𝙈𝙀𝘿𝙄𝙐𝙈",
-        "high": "🔴 𝙃𝙄𝙂𝙃",
-        "nobel": "🟡 𝙉𝙊𝘽𝙀𝙇",
-        "nudes": "🥵 𝙉𝙐𝘿𝙀𝙎",
-        "limited": "🔮 𝙇𝙄𝙈𝙄𝙏𝙀𝘿",
-        "cosplay": "💋 𝘾𝙊𝙎𝙋𝙇𝘼𝙔 [𝙇]",
-        "x_verse": "⚫️ [𝙓] 𝙑𝙚𝙧𝙨𝙚",
-        "erotic": "🎭 𝙀𝙍𝙊𝙏𝙄𝘾",
-        "slutry": "🍑 𝙎𝙪𝙡𝙩𝙧𝙮",
+        "common": "🟢 Common",
+        "rare": "🟣 Rare",
+        "legendary": "🟡 Legendary",
+        "spacial_edition": "💮 Spacial Edition",
+        "premium_edition": "🔮 Premium Edition",
+        "supreme": "🎗️ Supreme",
         "default": None
     }
     user = await user_collection.find_one({'id': user_id})
@@ -65,9 +61,9 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
             if character['id'] not in included_characters:
                 count = character_counts[character['id']]
                 formatted_id = f"{int(character['id']):04d}"
-                harem_message += f'𝐈𝐃 : <b>{character["id"]} ⌠ {character["rarity"][0]} ⌡ {character["name"]} ×{count}</b>\n'
+                harem_message += f'{character["id"]}  [ {character["rarity"][0]} ] {character["name"]} ×{count}\n'
                 included_characters.add(character['id'])
-    keyboard = [[InlineKeyboardButton(f"🔞 𝙨𝙡𝙖𝙫𝙚𝙨", switch_inline_query_current_chat=f"collection.{user_id}")]]
+    keyboard = [[InlineKeyboardButton(f"", switch_inline_query_current_chat=f"collection.{user_id}")]]
     if total_pages > 1:
         nav_buttons = []
         if page > 0:
