@@ -130,28 +130,17 @@ async def set_hmode(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     message = await update.message.reply_photo(
         photo="https://te.legra.ph/file/e714526fdc85b8800e1de.jpg",
-        caption="𝐒𝐞𝐭 𝐘𝐨𝐮𝐫 𝐒𝐥𝐚𝐯𝐞 𝐌𝐨𝐝𝐞 :",
+        caption="",
         reply_markup=reply_markup,
     )
 async def hmode_rarity(update: Update, context: CallbackContext) -> None:
     keyboard = [
-        [
-            InlineKeyboardButton("⌠🔵⌡", callback_data="low"),
-            InlineKeyboardButton("⌠🟢⌡", callback_data="medium"),
-            InlineKeyboardButton("⌠🔴⌡", callback_data="high"),
-        ],
-        [
-            InlineKeyboardButton("⌠🟡⌡", callback_data="nobel"),
-            InlineKeyboardButton("⌠🥵⌡", callback_data="nudes"),
-            InlineKeyboardButton("⌠🔮⌡", callback_data="limited"),
-        ],
-        [
-            InlineKeyboardButton("⌠💋⌡ ", callback_data="cosplay"),
-            InlineKeyboardButton("⌠⚫️⌡", callback_data="x_verse"),
-            InlineKeyboardButton("⌠🎭⌡ ", callback_data="erotic"),
-        ],
-        [
-            InlineKeyboardButton("⌠🍑⌡", callback_data="slutry"),
+        [InlineKeyboardButton("🟢 Common", callback_data="common"),
+         InlineKeyboardButton("🟣 Rare", callback_data="rare")],
+        [InlineKeyboardButton("🟡 Legendary", callback_data="legendary"),
+         InlineKeyboardButton("💮 Special Edition", callback_data="spacial_edition")],
+        [InlineKeyboardButton("🔮 Premium Edition", callback_data="premium_edition"),
+         InlineKeyboardButton("🎗️ Supreme", callback_data="supreme"),
         ],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
