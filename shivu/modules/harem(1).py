@@ -81,7 +81,7 @@ if total_pages > 1:
         nav_buttons.append(InlineKeyboardButton("⤃", callback_data=f"harem:{page + 1}:{user_id}"))
     keyboard.append(nav_buttons)
 
-reply_markup = InlineKeyboardMarkup(keyboard))
+reply_markup = InlineKeyboardMarkup(keyboard)
 
     message = update.message or update.callback_query.message
 
