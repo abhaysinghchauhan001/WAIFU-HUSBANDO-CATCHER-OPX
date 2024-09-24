@@ -78,7 +78,7 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
 
     keyboard = [
         [InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="ignore")],
-        [InlineKeyboardButton("Inline", switch_inline_query_current_chat=f"collection.{user_id}")]
+        [InlineKeyboardButton("❄️ ɪɴʟɪɴᴇ ❄️", switch_inline_query_current_chat=f"collection.{user_id}")]
     ]
 
     if total_pages > 1:
