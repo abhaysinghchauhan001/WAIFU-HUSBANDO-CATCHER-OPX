@@ -20,7 +20,10 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
     
     user = await user_collection.find_one({'id': user_id})
     if not user:
-        await update.message.reply_text("You need to register first by starting the bot in DM.")
+        await update.message.reply_text(
+    "<b>ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ʀᴇɢɪsᴛᴇʀ ғɪʀsᴛ ʙʏ sᴛᴀʀᴛɪɴɢ ᴛʜᴇ ʙᴏᴛ ɪɴ DM.</b>",
+    parse_mode="HTML"
+)
         return
 
     characters = user.get('characters', [])
@@ -44,7 +47,10 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
         characters = sorted(characters, key=lambda x: (x.get('anime', ''), x.get('id', '')))
 
     if not characters:
-        await update.message.reply_text(f"You don't have any ({rarity_value}) slave. Please change it from /smode.")
+        await update.message.reply_text(
+    f"<b>ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀɴʏ</b> (<i>{rarity_value}</i>) <b>ᴡᴀɪғᴜ ᴘʟᴇᴀsᴇ ᴄʜᴀɴɢᴇ ɪᴛ ғʀᴏᴍ</b> /hmode.",
+    parse_mode="HTML"
+)
         return
 
     character_counts = {k: len(list(v)) for k, v in groupby(characters, key=lambda x: x['id'])}
@@ -52,7 +58,7 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
     if page < 0 or page >= total_pages:
         page = 0
 
-    harem_message = f"<b>{escape(update.effective_user.first_name)}'s ({rarity_value}) Waifu - Page {page + 1}/{total_pages}</b>\n"
+    harem_message = f"<b>{escape(update.effective_user.first_name)}'s (<i>{rarity_value}</i>) ʜᴀʀᴇᴍ - ᴘᴀɢᴇ {page + 1}/{total_pages}</b>\n"
     current_characters = characters[page * 10:(page + 1) * 10]
     current_grouped_characters = {anime: list(chars) for anime, chars in groupby(current_characters, key=lambda x: x['anime'])}
 
@@ -144,8 +150,9 @@ async def set_hmode(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     message = await update.message.reply_photo(
         photo="https://graph.org/file/4b0da20b223036b6c7989.jpg",
-        caption=f"{escape(update.effective_user.first_name)} ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ",
+        caption=f"{escape(update.effective_user.first_name)} <b>ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ</>",
         reply_markup=reply_markup,
+        parse_mode="HTML"
     )
 
 async def hmode_rarity(update: Update, context: CallbackContext) -> None:
@@ -160,9 +167,10 @@ async def hmode_rarity(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
     await query.edit_message_caption(
-        caption="𝐂𝐡𝐚𝐧𝐠𝐞 Waifu 𝐒𝐨𝐫𝐭𝐢𝐧𝐠 𝐌𝐨𝐝𝐞 𝐓𝐨 : ʀᴀʀɪᴛʏ",
-        reply_markup=reply_markup,
-    )
+    caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ʀᴀʀɪᴛʏ</i>",
+    reply_markup=reply_markup,
+    parse_mode="HTML"
+)
     await query.answer()
 
 async def button(update: Update, context: CallbackContext) -> None:
@@ -174,14 +182,18 @@ async def button(update: Update, context: CallbackContext) -> None:
         await user_collection.update_one({'id': user_id}, {'$set': {'smode': data}})
         await query.answer()
         await query.edit_message_caption(
-            caption="𝐂𝐡𝐚𝐧𝐠𝐞 𝐒𝐥𝐚𝐯𝐞 𝐒𝐨𝐫𝐭𝐢𝐧𝐠 𝐌𝐨𝐝𝐞 𝐓𝐨 : ᴅᴇꜰᴀᴜʟᴛ"
-        )
+    caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ᴅᴇꜰᴀᴜʟᴛ</i>",
+    parse_mode="HTML"
+)
     elif data == "rarity":
         await hmode_rarity(update, context)
     else:
         await user_collection.update_one({'id': user_id}, {'$set': {'smode': data}})
         await query.answer()
-        await query.edit_message_caption(f"𝐂𝐡𝐚𝐧𝐠𝐞 Waifu' 𝐒𝐨𝐫𝐭𝐢𝐧𝐠 𝐌𝐨𝐝𝐞 𝐓𝐨 : {data}")
+        await query.edit_message_caption(
+    f"<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>{data}</I>",
+    parse_mode="HTML"
+)
 
 # Command Handlers
 application.add_handler(CommandHandler(["myslave", "slaves", "grabbers"], harem, block=False))
