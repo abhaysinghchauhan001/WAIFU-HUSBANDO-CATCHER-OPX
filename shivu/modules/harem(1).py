@@ -70,7 +70,6 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
                 formatted_id = f"{int(character['id']):04d}"
                 harem_message += f'<b>𒄬</b> {formatted_id}  [ {character["rarity"][0]} ] {character["name"]} ×{count}\n'
                 included_characters.add(character['id'])
-                harem_message += f'<b>⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋</b>\n'
 
     keyboard = [
         [InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="ignore")],
