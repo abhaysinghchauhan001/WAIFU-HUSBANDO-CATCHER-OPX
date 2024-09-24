@@ -47,7 +47,7 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
     total_pages = math.ceil(len(characters) / 10)
     if page < 0 or page >= total_pages:
         page = 0
-    harem_message = f"<b>{escape(update.effective_user.first_name)}'s ({rarity_value}) Slave's - Page {page + 1}/{total_pages}</b>\n"
+    harem_message = f"<b>{escape(update.effective_user.first_name)}'s ({rarity_value}) Waifu - Page {page + 1}/{total_pages}</b>\n"
     current_characters = characters[page * 10:(page + 1) * 10]
     current_grouped_characters = {k: list(v) for k, v in groupby(current_characters, key=lambda x: x['anime'])}
     # Set to keep track of characters already included in the message
