@@ -48,30 +48,40 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
     if page < 0 or page >= total_pages:
         page = 0
     harem_message = f"<b>{escape(update.effective_user.first_name)}'s ({rarity_value}) Waifu - Page {page + 1}/{total_pages}</b>\n"
-    current_characters = characters[page * 10:(page + 1) * 10]
-    current_grouped_characters = {k: list(v) for k, v in groupby(current_characters, key=lambda x: x['anime'])}
-    # Set to keep track of characters already included in the message
-    included_characters = set()
-    for anime, characters in current_grouped_characters.items():
-        user_anime_count = len([char for char in user['characters'] if isinstance(char, dict) and char.get('anime') == anime])
-        total_anime_count = await collection.count_documents({"anime": anime})
-        harem_message += f'\n⌬ <b>{anime} 〔{user_anime_count}/{total_anime_count}〕</b>\n'
-        for character in characters:
-            # Check if character ID is already included
-            if character['id'] not in included_characters:
-                count = character_counts[character['id']]
-                formatted_id = f"{int(character['id']):04d}"
-                harem_message += f'{character["id"]}  [ {character["rarity"][0]} ] {character["name"]} ×{count}\n'
-                included_characters.add(character['id'])
-    keyboard = [[InlineKeyboardButton(f"", switch_inline_query_current_chat=f"collection.{user_id}")]]
-    if total_pages > 1:
-        nav_buttons = []
-        if page > 0:
-            nav_buttons.append(InlineKeyboardButton("𝐏𝐞𝐯", callback_data=f"harem:{page - 1}:{user_id}"))
-        if page < total_pages - 1:
-            nav_buttons.append(InlineKeyboardButton("𝐍𝐞𝐱𝐭", callback_data=f"harem:{page + 1}:{user_id}"))
-        keyboard.append(nav_buttons)
-    reply_markup = InlineKeyboardMarkup(keyboard)
+current_characters = characters[page * 10:(page + 1) * 10]
+current_grouped_characters = {anime: list(chars) for anime, chars in groupby(current_characters, key=lambda x: x['anime'])}
+
+included_characters = set()
+
+for anime, chars in current_grouped_characters.items():
+    user_anime_count = sum(1 for char in user['characters'] if isinstance(char, dict) and char.get('anime') == anime)
+    total_anime_count = await collection.count_documents({"anime": anime})
+
+    harem_message += f'\n<b>𖤍</b> <b>{anime} ｛{user_anime_count}/{total_anime_count}｝</b>\n'
+    harem_message += f'<b>⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋</b>\n'
+
+    for character in chars:
+        if character['id'] not in included_characters:
+            count = character_counts[character['id']]
+            formatted_id = f"{int(character['id']):04d}"
+            harem_message += f'<b>𒄬</b> {formatted_id}  [ {character["rarity"][0]} ] {character["name"]} ×{count}\n'
+            harem_message += f'<b>⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋⚋</b>\n'
+            included_characters.add(character['id'])
+
+keyboard = [
+    [InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="ignore")],
+    [InlineKeyboardButton("Inline", switch_inline_query_current_chat=f"collection.{user_id}")]
+]
+
+if total_pages > 1:
+    nav_buttons = []
+    if page > 0:
+        nav_buttons.append(InlineKeyboardButton("⤂", callback_data=f"harem:{page - 1}:{user_id}"))
+    if page < total_pages - 1:
+        nav_buttons.append(InlineKeyboardButton("⤃", callback_data=f"harem:{page + 1}:{user_id}"))
+    keyboard.append(nav_buttons)
+
+reply_markup = InlineKeyboardMarkup(keyboard))
 
     message = update.message or update.callback_query.message
 
@@ -129,8 +139,8 @@ async def set_hmode(update: Update, context: CallbackContext) -> None:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     message = await update.message.reply_photo(
-        photo="https://te.legra.ph/file/e714526fdc85b8800e1de.jpg",
-        caption="",
+        photo="https://graph.org/file/4b0da20b223036b6c7989.jpg",
+        caption=f"{escape(update.effective_user.first_name)} ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ",
         reply_markup=reply_markup,
     )
 async def hmode_rarity(update: Update, context: CallbackContext) -> None:
@@ -146,7 +156,7 @@ async def hmode_rarity(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
     await query.edit_message_caption(
-        caption="𝐂𝐡𝐚𝐧𝐠𝐞 𝐒𝐥𝐚𝐯𝐞 𝐒𝐨𝐫𝐭𝐢𝐧𝐠 𝐌𝐨𝐝𝐞 𝐓𝐨 : ʀᴀʀɪᴛʏ",
+        caption="𝐂𝐡𝐚𝐧𝐠𝐞 Waifu 𝐒𝐨𝐫𝐭𝐢𝐧𝐠 𝐌𝐨𝐝𝐞 𝐓𝐨 : ʀᴀʀɪᴛʏ",
         reply_markup=reply_markup,
     )
     await query.answer()
