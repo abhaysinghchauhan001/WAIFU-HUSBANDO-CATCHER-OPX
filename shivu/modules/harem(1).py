@@ -195,7 +195,7 @@ async def button(update: Update, context: CallbackContext) -> None:
 )
 
 # Command Handlers
-application.add_handler(CommandHandler(["myslave", "slaves", "grabbers"], harem, block=False))
+application.add_handler(CommandHandler(["grabbing", "harem", "grabbers"], harem, block=False))
 harem_handler = CallbackQueryHandler(harem_callback, pattern='^harem', block=False)
 application.add_handler(harem_handler)
 application.add_handler(CommandHandler("hmode", set_hmode))
