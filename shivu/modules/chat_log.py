@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 import shivu  # Import your custom module
+from shivu import shivuu as app 
 
 # Replace with your actual API ID and Hash
 API_ID = '24089031'
