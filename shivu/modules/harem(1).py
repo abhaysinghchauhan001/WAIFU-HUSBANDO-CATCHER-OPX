@@ -6,6 +6,8 @@ import math
 from itertools import groupby
 from shivu import collection, user_collection, application
 
+MAX_CAPTION_LENGTH = 2000  # Maximum length for Telegram captions
+
 async def harem(update: Update, context: CallbackContext, page=0, edit=False) -> None:
     user_id = update.effective_user.id
     harem_mode_mapping = {
@@ -17,13 +19,13 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
         "supreme": "🎗️ Supreme",
         "default": None
     }
-    
+
     user = await user_collection.find_one({'id': user_id})
     if not user:
         await update.message.reply_text(
-    "<b>ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ʀᴇɢɪsᴛᴇʀ ғɪʀsᴛ ʙʏ sᴛᴀʀᴛɪɴɢ ᴛʜᴇ ʙᴏᴛ ɪɴ DM.</b>",
-    parse_mode="HTML"
-)
+            "<b>ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ʀᴇɢɪsᴛᴇʀ ғɪʀsᴛ ʙʏ sᴛᴀʀᴛɪɴɢ ᴛʜᴇ ʙᴏᴛ ɪɴ DM.</b>",
+            parse_mode="HTML"
+        )
         return
 
     characters = user.get('characters', [])
@@ -48,9 +50,9 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
 
     if not characters:
         await update.message.reply_text(
-    f"<b>ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀɴʏ</b> (<i>{rarity_value}</i>) <b>ᴡᴀɪғᴜ ᴘʟᴇᴀsᴇ ᴄʜᴀɴɢᴇ ɪᴛ ғʀᴏᴍ</b> /hmode.",
-    parse_mode="HTML"
-)
+            f"<b>ʏᴏᴜ ᴅᴏɴ'ᴛ ʜᴀᴠᴇ ᴀɴʏ</b> (<i>{rarity_value}</i>) <b>ᴡᴀɪғᴜ ᴘʟᴇᴀsᴇ ᴄʜᴀɴɢᴇ ɪᴛ ғʀᴏᴍ</b> /hmode.",
+            parse_mode="HTML"
+        )
         return
 
     character_counts = {k: len(list(v)) for k, v in groupby(characters, key=lambda x: x['id'])}
@@ -75,6 +77,10 @@ async def harem(update: Update, context: CallbackContext, page=0, edit=False) ->
                 formatted_id = f"{int(character['id']):04d}"
                 harem_message += f'<b>𒄬</b> {formatted_id}  [ {character["rarity"][0]} ] {character["name"]} ×{count}\n'
                 included_characters.add(character['id'])
+
+    # Truncate harem_message if it's too long
+    if len(harem_message) > MAX_CAPTION_LENGTH:
+        harem_message = harem_message[:MAX_CAPTION_LENGTH] + '...'
 
     keyboard = [
         [InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="ignore")],
@@ -149,10 +155,10 @@ async def set_hmode(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     message = await update.message.reply_photo(
         photo="https://graph.org/file/4b0da20b223036b6c7989.jpg",
-        caption=f"{escape(update.effective_user.first_name)} <b>ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ</>",
+        caption=f"{escape(update.effective_user.first_name)} <b>ᴘʟᴇᴀꜱᴇ ᴄʜᴏᴏꜱᴇ ʀᴀʀɪᴛʏ ᴛʜᴀᴛ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ꜱᴇᴛ ᴀꜱ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ</b>",
         reply_markup=reply_markup,
         parse_mode="HTML"
-    )
+)
 
 async def hmode_rarity(update: Update, context: CallbackContext) -> None:
     keyboard = [
@@ -166,10 +172,10 @@ async def hmode_rarity(update: Update, context: CallbackContext) -> None:
     reply_markup = InlineKeyboardMarkup(keyboard)
     query = update.callback_query
     await query.edit_message_caption(
-    caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ʀᴀʀɪᴛʏ</i>",
-    reply_markup=reply_markup,
-    parse_mode="HTML"
-)
+        caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ʀᴀʀɪᴛʏ</i>",
+        reply_markup=reply_markup,
+        parse_mode="HTML"
+    )
     await query.answer()
 
 async def button(update: Update, context: CallbackContext) -> None:
@@ -181,18 +187,18 @@ async def button(update: Update, context: CallbackContext) -> None:
         await user_collection.update_one({'id': user_id}, {'$set': {'smode': data}})
         await query.answer()
         await query.edit_message_caption(
-    caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ᴅᴇꜰᴀᴜʟᴛ</i>",
-    parse_mode="HTML"
-)
+            caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ᴅᴇꜰᴀᴜlt...</i>",
+            parse_mode="HTML"
+        )
     elif data == "rarity":
         await hmode_rarity(update, context)
     else:
         await user_collection.update_one({'id': user_id}, {'$set': {'smode': data}})
         await query.answer()
         await query.edit_message_caption(
-    f"<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>{data}</I>",
-    parse_mode="HTML"
-)
+            caption=f"<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>{data}</i>",
+            parse_mode="HTML"
+        )
 
 # Command Handlers
 application.add_handler(CommandHandler(["grabbing", "harem", "grabbers"], harem, block=False))
