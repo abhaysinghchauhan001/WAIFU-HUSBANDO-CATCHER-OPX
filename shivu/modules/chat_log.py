@@ -9,7 +9,7 @@ API_HASH = '0615e3afe13ddaaf8e9ddbd3977d35ff'
 # Your session name
 app = Client("shivu", api_id=API_ID, api_hash=API_HASH)
 
-GROUP_CHAT_ID = '-1002000314620'  # Replace with your group chat ID
+GROUP_CHAT_ID = '-1002214016605'  # Replace with your group chat ID
 
 @app.on_chat_member_updated(filters.new_chat_members)
 async def log_added(client, update):
