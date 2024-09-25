@@ -2,8 +2,8 @@ from pyrogram import Client, filters
 import shivu  # Import your custom module
 
 # Replace with your actual API ID and Hash
-API_ID = 'YOUR_API_ID'
-API_HASH = 'YOUR_API_HASH'
+API_ID = '24089031'
+API_HASH = '0615e3afe13ddaaf8e9ddbd3977d35ff'
 
 # Your session name
 app = Client("shivu", api_id=API_ID, api_hash=API_HASH)
