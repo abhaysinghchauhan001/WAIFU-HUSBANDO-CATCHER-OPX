@@ -29,7 +29,7 @@ async def start(update: Update, context: CallbackContext) -> None:
         caption = f"""
         ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
 
-        ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** [{BOT_NAME}](https://t.me/{BOT_USERNAME})***
+        ***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}
 
         ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
