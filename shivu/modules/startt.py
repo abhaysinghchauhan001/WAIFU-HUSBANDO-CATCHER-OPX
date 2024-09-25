@@ -1,11 +1,15 @@
 import random
+import logging
 from html import escape
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, Application
 
-from shivu import application, PHOTO_URL, SUPPORT_CHAT, UPDATE_CHAT, BOT_USERNAME, BOT_NAME, db, GROUP_ID
+from shivu import PHOTO_URL, SUPPORT_CHAT, UPDATE_CHAT, BOT_USERNAME, BOT_NAME, db, GROUP_ID
 
+# Set up logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+# Database collection for user data
 collection = db['total_pm_users']
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -17,7 +21,6 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     if user_data is None:
         await collection.insert_one({"_id": user_id, "first_name": first_name, "username": username})
-
         await context.bot.send_message(chat_id=GROUP_ID, text=f"🎋 <b>ɴᴇᴡ ᴜsᴇʀ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ</b>\n\n"
                f"💠 <b>ᴜsᴇʀ ɪᴅ:</b> {user_id}\n"
                f"🔰 <b>ғɪʀsᴛ ɴᴀᴍᴇ:</b> {first_name}\n"
@@ -25,43 +28,33 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(f"Welcome {first_name}!")
 
-    if update.effective_chat.type == "private":
-        caption = f"""
-        ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
+    caption = f"""
+    ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
 
-        ***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}
+    ***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}
 
-        ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
+    ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
-        ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
+    ᴀᴅᴅ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ...✨️ ᴀɴᴅ ɪ ᴡɪʟʟ sᴇɴᴅ ʀᴀɴᴅᴏᴍ ᴄʜᴀʀᴀᴄᴛᴇʀs ᴀғᴛᴇʀ.. ᴇᴠᴇʀʏ 𝟷𝟶𝟶 ᴍᴇssᴀɢᴇs ɪɴ ɢʀᴏᴜᴘ.
 
-        ──────────────────
-        ✧ COMMAND - ᴜsᴇ /ɢʀᴀʙ ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʏ ᴜsɪɴɢ /ʜᴀʀᴇᴍ...✨️
+    ──────────────────
+    ✧ COMMAND - ᴜsᴇ /ɢʀᴀʙ ᴛᴏ ᴄᴏʟʟᴇᴄᴛ ᴛʜᴀᴛ ᴄʜᴀʀᴀᴄᴛᴇʀs ɪɴ ʏᴏᴜʀ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ᴀɴᴅ sᴇᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ʙʏ ᴜsɪɴɢ /ʜᴀʀᴇᴍ...✨️
 
-        ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
-        """
+    ◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
+    """
 
-        keyboard = [
-            [InlineKeyboardButton("✤ ᴀᴅᴅ ᴍᴇ ✤", url=f'http://t.me/{BOT_USERNAME}?startgroup=new')],
-            [InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}'),
-             InlineKeyboardButton("✠ ᴜᴘᴅᴀᴛᴇ𝗌 ✠", url=f'https://t.me/{UPDATE_CHAT}')],
-            [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
-             InlineKeyboardButton("≎ ᴄʀᴇᴅɪᴛ ≎", url=f'https://t.me/{UPDATE_CHAT}')],
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        photo_url = random.choice(PHOTO_URL)
+    keyboard = [
+        [InlineKeyboardButton("✤ ᴀᴅᴅ ᴍᴇ ✤", url=f'http://t.me/{BOT_USERNAME}?startgroup=new')],
+        [InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}'),
+         InlineKeyboardButton("✠ ᴜᴘᴅᴀᴛᴇ𝗌 ✠", url=f'https://t.me/{UPDATE_CHAT}')],
+        [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
+         InlineKeyboardButton("≎ ᴄʀᴇᴅɪᴛ ≎", url=f'https://t.me/{UPDATE_CHAT}')],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    photo_url = random.choice(PHOTO_URL)
 
-        await context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo_url, caption=caption, reply_markup=reply_markup, parse_mode='markdown')
+    await context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo_url, caption=caption, reply_markup=reply_markup, parse_mode='markdown')
 
-    else:
-        photo_url = random.choice(PHOTO_URL)
-        keyboard = [
-            [InlineKeyboardButton("✇ ʜᴇʟᴘ ✇", callback_data='help'),
-             InlineKeyboardButton("☊ 𝗌ᴜᴘᴘᴏʀᴛ ☊", url=f'https://t.me/{SUPPORT_CHAT}')],
-        ]
-
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await context.bot.send_photo(chat_id=update.effective_chat.id, photo=photo_url, caption=f"{first_name}", reply_markup=reply_markup)
 
 async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
@@ -89,7 +82,7 @@ async def button(update: Update, context: CallbackContext) -> None:
         caption = f"""
         ***ʜᴇʟʟᴏ....💫  {first_name}***
 
-        ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** [{BOT_NAME}](https://t.me/{BOT_USERNAME})***
+        ***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** [{BOT_NAME}](https://t.me/{BOT_USERNAME})***
 
         ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
@@ -111,13 +104,13 @@ async def button(update: Update, context: CallbackContext) -> None:
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         await context.bot.edit_message_caption(
-    chat_id=update.effective_chat.id,
-    message_id=query.message.message_id,
-    caption=caption,
-    reply_markup=reply_markup,  # Make sure to use `reply_markup=` here
-    parse_mode='markdown'
-)
+            chat_id=update.effective_chat.id,
+            message_id=query.message.message_id,
+            caption=caption,
+            reply_markup=reply_markup,
+            parse_mode='markdown'
+        )
 
-
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CallbackQueryHandler(button))
+# Add command and callback query handlers
+application.add_handler(CommandHandler("start", start))
+application.add_handler(CallbackQueryHandler(button))
