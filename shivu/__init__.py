@@ -27,7 +27,8 @@ mongo_url = Config.mongo_url
 PHOTO_URL = Config.PHOTO_URL 
 SUPPORT_CHAT = Config.SUPPORT_CHAT 
 UPDATE_CHAT = Config.UPDATE_CHAT
-BOT_USERNAME = Config.BOT_USERNAME 
+BOT_USERNAME = Config.BOT_USERNAME
+BOT_NAME = Config.BOT_NAME
 sudo_users = Config.sudo_users
 OWNER_ID = Config.OWNER_ID 
 
