@@ -1,14 +1,14 @@
 from pyrogram import Client, filters
 import shivu  # Import your custom module
-from shivu import shivuu as app
 
 # Your session name
 app = Client("shivu")
 
-CHANNEL_ID = '-1002000314620'  # Replace with your channel ID
+GROUP_CHAT_ID = '-1002000314620'  # Replace with your group chat ID
 
 @app.on_chat_member_updated(filters.new_chat_members)
 async def log_added(client, update):
+    print("New member added event triggered.")  # Debugging line
     chat = update.chat
     added_by = update.from_user
     member_count = chat.members_count  # Get the current member count
@@ -20,10 +20,11 @@ async def log_added(client, update):
         f"<b>🔗 Username:</b> @{added_by.username or 'N/A'}\n"
         f"<b>👥 Total Members:</b> {member_count}"
     )
-    await client.send_message(CHANNEL_ID, log_message, parse_mode='html')
+    await client.send_message(GROUP_CHAT_ID, log_message, parse_mode='html')
 
 @app.on_chat_member_updated(filters.left_chat_member)
 async def log_left(client, update):
+    print("Member left event triggered.")  # Debugging line
     chat = update.chat
     left_by = update.from_user
     member_count = chat.members_count  # Get the updated member count
@@ -35,4 +36,7 @@ async def log_left(client, update):
         f"<b>🔗 Username:</b> @{left_by.username or 'N/A'}\n"
         f"<b>👥 Total Members:</b> {member_count}"
     )
-    await client.send_message(CHANNEL_ID, log_message, parse_mode='html')
+    await client.send_message(GROUP_CHAT_ID, log_message, parse_mode='html')
+
+# Run the bot
+app.run()
