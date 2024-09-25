@@ -1,5 +1,6 @@
 from pyrogram import Client, filters
 import shivu  # Import your custom module
+from shivu import shivuu as app
 
 # Your session name
 app = Client("shivu")
