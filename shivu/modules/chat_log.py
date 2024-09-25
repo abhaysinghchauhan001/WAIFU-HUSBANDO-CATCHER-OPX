@@ -4,6 +4,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from shivu import shivuu as bot
 from shivu import user_collection, collection
 import html
+from shivu import shivuu as app
 from pyrogram import Client, filters
 import shivu # Import your custom module
 
