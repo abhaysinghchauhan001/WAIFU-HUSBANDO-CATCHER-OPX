@@ -110,7 +110,13 @@ async def button(update: Update, context: CallbackContext) -> None:
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
-        await context.bot.edit_message_caption(chat_id=update.effective_chat.id, message_id=query.message.message_id, caption=caption, reply_markup, parse_mode='markdown')
+        await context.bot.edit_message_caption(
+    chat_id=update.effective_chat.id,
+    message_id=query.message.message_id,
+    caption=caption,
+    reply_markup=reply_markup,  # Make sure to use `reply_markup=` here
+    parse_mode='markdown'
+)
 
 
     application.add_handler(CommandHandler("lstart", start))
