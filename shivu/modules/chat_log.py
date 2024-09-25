@@ -6,7 +6,7 @@ app = Client("shivu")
 
 CHANNEL_ID = '-1002000314620'  # Replace with your channel ID
 
-@app.on_chat_member_updated(filters.chat_member_added)
+@app.on_chat_member_updated(filters.new_chat_members)
 async def log_added(client, update):
     chat = update.chat
     added_by = update.from_user
@@ -21,7 +21,7 @@ async def log_added(client, update):
     )
     await client.send_message(CHANNEL_ID, log_message, parse_mode='html')
 
-@app.on_chat_member_updated(filters.chat_member_left)
+@app.on_chat_member_updated(filters.left_chat_member)
 async def log_left(client, update):
     chat = update.chat
     left_by = update.from_user
