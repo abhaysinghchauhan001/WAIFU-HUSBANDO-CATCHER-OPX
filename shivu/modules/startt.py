@@ -28,7 +28,7 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(f"Welcome {first_name}!")
 
-    bot_mention = f"{BOT_NAME}"  # Using bot name directly here.
+    bot_mention = f"[{BOT_NAME}](tg://user?id={context.bot.id})"  # Creating a mention link for the bot
 
     caption = f"""
 ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
@@ -81,10 +81,12 @@ async def button(update: Update, context: CallbackContext) -> None:
 
     elif query.data == 'back':
         first_name = escape(query.from_user.first_name)  
+        bot_mention = f"[{BOT_NAME}](tg://user?id={context.bot.id})"  # Create mention link
+
         caption = f"""
 ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
 
-***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}  # Using bot name directly.
+***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {bot_mention}
 
 ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
