@@ -1,25 +1,12 @@
-import asyncio
-import random
-from pyrogram import Client
-from pyrogram.types import Message
-from pyrogram import filters
-from pyrogram.types import(InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, InputMediaVideo, Message)
-from shivu import user_collection, shivuu as app
-from pyrogram import filters, Client, types as t
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from shivu import shivuu as bot
-from shivu import user_collection, collection
-import html
-from shivu import shivuu as app
 from pyrogram import Client, filters
-import shivu # Import your custom module
+import shivu  # Import your custom module
 
 # Your session name
-app = Client("shivuu")
+app = Client("shivu")
 
 CHANNEL_ID = '-1002000314620'  # Replace with your channel ID
 
-@app.on_chat_member_updated(filters.status_update.new_chat_members)
+@app.on_chat_member_updated(filters.chat_member_added)
 async def log_added(client, update):
     chat = update.chat
     added_by = update.from_user
@@ -34,7 +21,7 @@ async def log_added(client, update):
     )
     await client.send_message(CHANNEL_ID, log_message, parse_mode='html')
 
-@app.on_chat_member_updated(filters.status_update.left_chat_member)
+@app.on_chat_member_updated(filters.chat_member_left)
 async def log_left(client, update):
     chat = update.chat
     left_by = update.from_user
