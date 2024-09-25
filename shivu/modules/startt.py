@@ -4,7 +4,7 @@ from html import escape
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, Application
 
-from shivu import application, PHOTO_URL, SUPPORT_CHAT, UPDATE_CHAT, BOT_USERNAME, BOT_NAME, db, GROUP_ID, Application 
+from shivu import application, PHOTO_URL, SUPPORT_CHAT, UPDATE_CHAT, BOT_USERNAME, BOT_NAME, db, GROUP_ID
 
 # Set up logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -28,10 +28,12 @@ async def start(update: Update, context: CallbackContext) -> None:
 
     await update.message.reply_text(f"Welcome {first_name}!")
 
+    bot_mention = f"{BOT_NAME}"  # Using bot name directly here.
+
     caption = f"""
 ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
 
-***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}
+***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {bot_mention}
 
 ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
@@ -82,7 +84,7 @@ async def button(update: Update, context: CallbackContext) -> None:
         caption = f"""
 ***ʜᴇʟʟᴏ....💫  {escape(first_name)}***
 
-***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}
+***ᴡʜᴏ ᴀᴍ ɪ - ɪ'ᴍ*** {BOT_NAME}  # Using bot name directly.
 
 ***◈ ━━━━━━━━ ● ━━━━━━━━ ◈***
 
