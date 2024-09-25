@@ -37,6 +37,3 @@ async def log_left(client, update):
         f"<b>👥 Total Members:</b> {member_count}"
     )
     await client.send_message(GROUP_CHAT_ID, log_message, parse_mode='html')
-
-# Run the bot
-app.run()
