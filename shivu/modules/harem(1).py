@@ -187,7 +187,7 @@ async def button(update: Update, context: CallbackContext) -> None:
         await user_collection.update_one({'id': user_id}, {'$set': {'smode': data}})
         await query.answer()
         await query.edit_message_caption(
-            caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ᴅᴇꜰᴀᴜlt...</i>",
+            caption="<b>ʏᴏᴜ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ꜱᴇᴛ ʏᴏᴜʀ ʜᴀʀᴇᴍ ᴍᴏᴅᴇ ʀᴀʀɪᴛʏ ᴀꜱ :</b> <i>ᴅᴇғᴀᴜʟᴛ</i>",
             parse_mode="HTML"
         )
     elif data == "rarity":
