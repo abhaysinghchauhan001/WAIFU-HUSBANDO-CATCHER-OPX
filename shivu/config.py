@@ -11,6 +11,7 @@ class Config(object):
     SUPPORT_CHAT = "Grabbing_Your_WH_Group"
     UPDATE_CHAT = "FLEX_BOTS_NEWS"
     BOT_USERNAME = "Grabbing_Your_Waifu_XBot"
+    BOT_NAME = "˹𝐆ʀᴀʙʙɪɴɢ 𝐘ᴏᴜʀ 𝐖ᴀɪғᴜ˼ 🥀"
     CHARA_CHANNEL_ID = "-1002031911980"
     api_id = 24089031
     api_hash = "0615e3afe13ddaaf8e9ddbd3977d35ff"
