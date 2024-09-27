@@ -1,58 +1,56 @@
-from pyrogram import Client, filters
-import shivu  # Import your custom module
-from shivu import shivuu as app 
+import random
+from pyrogram import Client
+from pyrogram.types import Message
+from pyrogram import filters
+from shivu import user_collection, shivuu as app, LEAVELOGS, JOINLOGS
 
-# Replace with your actual API ID and Hash
-API_ID = '24089031'
-API_HASH = '0615e3afe13ddaaf8e9ddbd3977d35ff'
+async def lul_message(chat_id: int, message: str):
+    await app.send_message(chat_id=chat_id, text=message)
 
-# Your session name
-app = Client("shivu", api_id=API_ID, api_hash=API_HASH)
+@app.on_message(filters.new_chat_members)
+async def on_new_chat_members(client: Client, message: Message):
+    if (await client.get_me()).id in [user.id for user in message.new_chat_members]:
+        added_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
+        chat_title = message.chat.title
+        chat_id = message.chat.id
+        member_count = message.chat.members_count
 
-GROUP_CHAT_ID = '-1002214016605'  # Replace with your group chat ID
+        if message.chat.username:
+            chat_username = f"@{message.chat.username}"
+            chat_link = chat_username
+        else:
+            chat_link = f"https://t.me/c/{chat_id}"
 
-@app.on_chat_member_updated(filters.new_chat_members)
-async def log_added(client, update):
-    print("New member added event triggered.")  # Debugging line
-    chat = update.chat
-    added_by = update.from_user if update.from_user else "Unknown User"
-    
-    for new_member in update.new_chat_members:
-        print(f"New member: {new_member.first_name}")  # Log the new member's name
-        member_count = chat.members_count if chat.members_count else 0  # Safely get member count
-        log_message = (
-            "<b>🏠 Added To New Group</b>\n\n"
-            f"<b>🆔 Group ID:</b> {chat.id}\n"
-            f"<b>📛 Group Name:</b> {chat.title}\n"
-            f"<b>👤 Added By:</b> {added_by.first_name}\n"
-            f"<b>🔗 Username:</b> @{added_by.username or 'N/A'}\n"
-            f"<b>👥 Total Members:</b> {member_count}"
+        lemda_text = (
+            f"<b>🏠 User Added To Group</b>\n\n"
+            f"<b>🆔 Group ID:</b> {chat_id}\n"
+            f"<b>📛 Group Name:</b> {chat_title}\n"
+            f"<b>👤 Added By:</b> {added_by}\n"
+            f"<b>👥 Total Members:</b> {member_count}\n"
+            f"<b>🔗 Group Link:</b> {chat_link}"
         )
-        
-        try:
-            await client.send_message(GROUP_CHAT_ID, log_message, parse_mode='html')
-            print("Log message sent successfully.")  # Confirm successful send
-        except Exception as e:
-            print(f"Failed to send message: {e}")  # Log the error
+        await lul_message(JOINLOGS, lemda_text)
 
-@app.on_chat_member_updated(filters.left_chat_member)
-async def log_left(client, update):
-    print("Member left event triggered.")  # Debugging line
-    chat = update.chat
-    left_by = update.left_chat_member
-    member_count = chat.members_count if chat.members_count else 0  # Safely get member count
+@app.on_message(filters.left_chat_member)
+async def on_left_chat_member(client: Client, message: Message):
+    if (await app.get_me()).id == message.left_chat_member.id:
+        removed_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
+        chat_title = message.chat.title
+        chat_id = message.chat.id
+        member_count = message.chat.members_count
 
-    log_message = (
-        "<b>👋 Left Group</b>\n\n"
-        f"<b>🆔 Group ID:</b> {chat.id}\n"
-        f"<b>📛 Group Name:</b> {chat.title}\n"
-        f"<b>👤 Left By:</b> {left_by.first_name}\n"
-        f"<b>🔗 Username:</b> @{left_by.username or 'N/A'}\n"
-        f"<b>👥 Total Members:</b> {member_count}"
-    )
-    
-    try:
-        await client.send_message(GROUP_CHAT_ID, log_message, parse_mode='html')
-        print("Left log message sent successfully.")  # Confirm successful send
-    except Exception as e:
-        print(f"Failed to send message: {e}")  # Log the error
+        if message.chat.username:
+            chat_username = f"@{message.chat.username}"
+            chat_link = chat_username
+        else:
+            chat_link = f"https://t.me/c/{chat_id}"
+
+        left_text = (
+            f"<b>🚪 User Left Group</b>\n\n"
+            f"<b>🆔 Group ID:</b> {chat_id}\n"
+            f"<b>📛 Group Name:</b> {chat_title}\n"
+            f"<b>👤 Removed By:</b> {removed_by}\n"
+            f"<b>👥 Total Members:</b> {member_count}\n"
+            f"<b>🔗 Group Link:</b> {chat_link}"
+        )
+        await lul_message(LEAVELOGS, left_text)
