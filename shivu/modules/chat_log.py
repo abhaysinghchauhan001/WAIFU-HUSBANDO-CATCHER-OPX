@@ -8,11 +8,6 @@ async def lul_message(chat_id: int, message: str):
         await app.send_message(chat_id=chat_id, text=message)
     except Exception as e:
         print(f"Error sending message: {e}")
-        await asyncio.sleep(2)  # Wait 2 seconds before retrying
-        try:
-            await app.send_message(chat_id=chat_id, text=message)
-        except Exception as e:
-            print(f"Error sending message on retry: {e}")
 
 @app.on_message(filters.new_chat_members)
 async def on_new_chat_members(client: Client, message: Message):
@@ -20,15 +15,19 @@ async def on_new_chat_members(client: Client, message: Message):
         added_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
         chat_id = message.chat.id
         chat_title = message.chat.title
-        member_count = await client.get_chat_members_count(chat_id)
+        
+        try:
+            member_count = await client.get_chat_members_count(chat_id)
+        except Exception as e:
+            print(f"Error getting member count: {e}")
+            member_count = "Unknown"
 
-        # Attempt to create invite link
         try:
             invite_link = await client.create_chat_invite_link(chat_id)
             invite_url = invite_link.invite_link
         except Exception as e:
             print(f"Error creating invite link: {e}")
-            invite_url = f"https://t.me/joinchat/{chat_id}"  # Fallback if unable to create invite
+            invite_url = "Invite link unavailable"
 
         lemda_text = (
             f"<b>🏠 User Added To Group</b>\n\n"
@@ -43,11 +42,10 @@ async def on_new_chat_members(client: Client, message: Message):
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(client: Client, message: Message):
     if (await app.get_me()).id == message.left_chat_member.id:
-        remove_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡн ᴜsᴇʀ"
+        remove_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
         chat_id = message.chat.id
         chat_title = message.chat.title
         
-        # Attempt to get member count
         try:
             member_count = await client.get_chat_members_count(chat_id)
         except Exception as e:
