@@ -32,7 +32,7 @@ async def on_new_chat_members(client: Client, message: Message):
             f"<b>📛 Group Name:</b> {chat_title}\n"
             f"<b>👤 Added By:</b> {added_by}\n"
             f"<b>👥 Total Members:</b> {member_count}\n"
-            f"<b>🔗 Group Link:</b> {chat_link}"
+            f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_link}</a>"
         )
         await lul_message(JOINLOGS, lemda_text)
 
@@ -61,6 +61,6 @@ async def on_left_chat_member(client: Client, message: Message):
             f"<b>📛 Group Name:</b> {chat_title}\n"
             f"<b>👤 Removed By:</b> {removed_by}\n"
             f"<b>👥 Total Members:</b> {member_count}\n"
-            f"<b>🔗 Group Link:</b> {chat_link}"
+            f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_title}</a>"
         )
         await lul_message(LEAVELOGS, left_text)
