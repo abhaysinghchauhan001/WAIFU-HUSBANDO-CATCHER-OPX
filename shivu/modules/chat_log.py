@@ -13,13 +13,17 @@ async def on_new_chat_members(client: Client, message: Message):
         added_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
         chat_title = message.chat.title
         chat_id = message.chat.id
-        member_count = message.chat.members_count
+        member_count = await client.get_chat_members_count(chat_id)
 
         if message.chat.username:
-            chat_username = f"@{message.chat.username}"
-            chat_link = chat_username
+            chat_link = f"https://t.me/{message.chat.username}"  # Public group link
         else:
-            chat_link = f"https://t.me/c/{chat_id}"
+            # Generate invite link for private group
+            try:
+                invite_link = await client.export_chat_invite_link(chat_id)
+                chat_link = invite_link
+            except Exception as e:
+                chat_link = "Invite link not available."
 
         lemda_text = (
             f"<b>🏠 User Added To Group</b>\n\n"
@@ -34,16 +38,20 @@ async def on_new_chat_members(client: Client, message: Message):
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(client: Client, message: Message):
     if (await app.get_me()).id == message.left_chat_member.id:
-        removed_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
+        removed_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡн ᴜsᴇʀ"
         chat_title = message.chat.title
         chat_id = message.chat.id
-        member_count = message.chat.members_count
+        member_count = await client.get_chat_members_count(chat_id)
 
         if message.chat.username:
-            chat_username = f"@{message.chat.username}"
-            chat_link = chat_username
+            chat_link = f"https://t.me/{message.chat.username}"  # Public group link
         else:
-            chat_link = f"https://t.me/c/{chat_id}"
+            # Generate invite link for private group
+            try:
+                invite_link = await client.export_chat_invite_link(chat_id)
+                chat_link = invite_link
+            except Exception as e:
+                chat_link = "Invite link not available."
 
         left_text = (
             f"<b>🚪 User Left Group</b>\n\n"
