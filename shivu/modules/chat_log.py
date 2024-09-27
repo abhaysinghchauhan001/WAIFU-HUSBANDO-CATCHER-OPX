@@ -1,7 +1,6 @@
-import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from shivu import user_collection, shivuu as app, LEAVELOGS, JOINLOGS
+from shivu import shivuu as app, LEAVELOGS, JOINLOGS
 
 async def lul_message(chat_id: int, message: str):
     try:
@@ -15,19 +14,19 @@ async def on_new_chat_members(client: Client, message: Message):
         added_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
         chat_id = message.chat.id
         chat_title = message.chat.title
-        
+
+        # Attempt to get member count
         try:
             member_count = await client.get_chat_members_count(chat_id)
-        except Exception as e:
-            print(f"Error getting member count: {e}")
-            member_count = "Unknown"
+        except Exception:
+            member_count = "Unavailable"
 
+        # Attempt to create an invite link
         try:
             invite_link = await client.create_chat_invite_link(chat_id)
             invite_url = invite_link.invite_link
-        except Exception as e:
-            print(f"Error creating invite link: {e}")
-            invite_url = "Invite link unavailable"
+        except Exception:
+            invite_url = "Unavailable"
 
         lemda_text = (
             f"<b>🏠 User Added To Group</b>\n\n"
@@ -45,12 +44,12 @@ async def on_left_chat_member(client: Client, message: Message):
         remove_by = message.from_user.mention if message.from_user else "ᴜɴᴋɴᴏᴡɴ ᴜsᴇʀ"
         chat_id = message.chat.id
         chat_title = message.chat.title
-        
+
+        # Attempt to get member count
         try:
             member_count = await client.get_chat_members_count(chat_id)
-        except Exception as e:
-            print(f"Error getting member count: {e}")
-            member_count = "Unknown"
+        except Exception:
+            member_count = "Unavailable"
 
         left_message = (
             f"<b>🚪 User Left Group</b>\n\n"
