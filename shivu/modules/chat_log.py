@@ -52,12 +52,12 @@ async def on_left_chat_member(client: Client, message: Message):
         chat_title = message.chat.title
         chat_id = message.chat.id
 
-        # Fallback for member count
-        member_count = 0
+        # Fetch member count after the user leaves
         try:
             member_count = await client.get_chat_members_count(chat_id)
         except Exception as e:
             print(f"Error getting member count: {e}")
+            member_count = "N/A"  # Fallback in case of error
 
         # Generate invite link
         try:
