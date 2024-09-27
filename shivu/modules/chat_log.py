@@ -2,13 +2,13 @@ import random
 from pyrogram import Client
 from pyrogram.types import Message
 from pyrogram import filters
+from pyrogram.types import (InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, InputMediaVideo, Message)
 from shivu import user_collection, shivuu as app, LEAVELOGS, JOINLOGS
 
+
 async def lul_message(chat_id: int, message: str):
-    try:
-        await app.send_message(chat_id=chat_id, text=message)
-    except Exception as e:
-        print(f"Error sending message: {e}")
+    await app.send_message(chat_id=chat_id, text=message)
+
 
 @app.on_message(filters.new_chat_members)
 async def on_new_chat_members(client: Client, message: Message):
@@ -17,12 +17,12 @@ async def on_new_chat_members(client: Client, message: Message):
         chat_title = message.chat.title
         chat_id = message.chat.id
 
-        # Fallback for member count
-        member_count = 0
+        # Fetch member count
         try:
             member_count = await client.get_chat_members_count(chat_id)
         except Exception as e:
             print(f"Error getting member count: {e}")
+            member_count = "N/A"  # Fallback
 
         # Generate invite link
         try:
@@ -41,9 +41,15 @@ async def on_new_chat_members(client: Client, message: Message):
             f"<b>📛 Group Name:</b> {chat_title}\n"
             f"<b>👤 Added By:</b> {added_by}\n"
             f"<b>👥 Total Members:</b> {member_count}\n"
-            f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_link}</a>"
+            f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_title}</a>"
         )
-        await lul_message(JOINLOGS, lemda_text)
+        
+        # Send the message to logs
+        try:
+            await lul_message(JOINLOGS, lemda_text)
+        except Exception as e:
+            print(f"Error sending message: {e}")
+
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(client: Client, message: Message):
@@ -52,12 +58,12 @@ async def on_left_chat_member(client: Client, message: Message):
         chat_title = message.chat.title
         chat_id = message.chat.id
 
-        # Fetch member count after the user leaves
+        # Fetch member count
         try:
             member_count = await client.get_chat_members_count(chat_id)
         except Exception as e:
             print(f"Error getting member count: {e}")
-            member_count = "N/A"  # Fallback in case of error
+            member_count = "N/A"  # Fallback
 
         # Generate invite link
         try:
@@ -78,4 +84,9 @@ async def on_left_chat_member(client: Client, message: Message):
             f"<b>👥 Total Members:</b> {member_count}\n"
             f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_title}</a>"
         )
-        await lul_message(LEAVELOGS, left_text)
+        
+        # Attempt to send the message to logs
+        try:
+            await lul_message(LEAVELOGS, left_text)
+        except Exception as e:
+            print(f"Error sending message: {e}")
