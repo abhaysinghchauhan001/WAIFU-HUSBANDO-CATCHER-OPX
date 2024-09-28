@@ -36,7 +36,7 @@ async def on_new_chat_members(client: Client, message: Message):
             print(f"Error creating invite link: {e}")
 
         lemda_text = (
-            f"<b>🏠 User Added To Group</b>\n\n"
+            f"<b>🏠 Added To Group</b>\n\n"
             f"<b>🆔 Group ID:</b> {chat_id}\n"
             f"<b>📛 Group Name:</b> {chat_title}\n"
             f"<b>👤 Added By:</b> {added_by}\n"
