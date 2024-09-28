@@ -10,6 +10,25 @@ async def lul_message(chat_id: int, message: str):
     except Exception as e:
         print(f"Error sending message: {e}")
 
+async def get_member_count(client: Client, chat_id: int) -> int:
+    try:
+        return await client.get_chat_members_count(chat_id)
+    except Exception as e:
+        print(f"Error getting member count: {e}")
+        return 0  # Fallback to 0
+
+async def get_chat_link(client: Client, chat_id: int) -> str:
+    try:
+        chat = await client.get_chat(chat_id)
+        if chat.username:
+            return f"https://t.me/{chat.username}"
+        else:
+            invite_link = await client.create_chat_invite_link(chat_id)
+            return invite_link.invite_link if invite_link else "Invite link not available."
+    except Exception as e:
+        print(f"Error creating invite link: {e}")
+        return "Invite link not available due to an error."
+
 @app.on_message(filters.new_chat_members)
 async def on_new_chat_members(client: Client, message: Message):
     me = await client.get_me()
@@ -19,23 +38,8 @@ async def on_new_chat_members(client: Client, message: Message):
         chat_title = message.chat.title
         chat_id = message.chat.id
 
-        # Fallback for member count
-        member_count = 0
-        try:
-            member_count = await client.get_chat_members_count(chat_id)
-        except Exception as e:
-            print(f"Error getting member count: {e}")
-
-        # Generate invite link
-        try:
-            if message.chat.username:
-                chat_link = f"https://t.me/{message.chat.username}"
-            else:
-                invite_link = await client.create_chat_invite_link(chat_id)
-                chat_link = invite_link.invite_link if invite_link else "Invite link not available."
-        except Exception as e:
-            chat_link = "Invite link not available due to an error."
-            print(f"Error creating invite link: {e}")
+        member_count = await get_member_count(client, chat_id)
+        chat_link = await get_chat_link(client, chat_id)
 
         lemda_text = (
             f"<b>🏠 Added To Group</b>\n\n"
@@ -56,23 +60,8 @@ async def on_left_chat_member(client: Client, message: Message):
         chat_title = message.chat.title
         chat_id = message.chat.id
 
-        # Fallback for member count
-        member_count = 0
-        try:
-            member_count = await client.get_chat_members_count(chat_id)
-        except Exception as e:
-            print(f"Error getting member count: {e}")
-
-        # Generate invite link
-        try:
-            if message.chat.username:
-                chat_link = f"https://t.me/{message.chat.username}"
-            else:
-                invite_link = await client.create_chat_invite_link(chat_id)
-                chat_link = invite_link.invite_link if invite_link else "Invite link not available."
-        except Exception as e:
-            chat_link = "Invite link not available due to an error."
-            print(f"Error creating invite link: {e}")
+        member_count = await get_member_count(client, chat_id)
+        chat_link = await get_chat_link(client, chat_id)
 
         left_text = (
             f"<b>🚪 User Left Group</b>\n\n"
