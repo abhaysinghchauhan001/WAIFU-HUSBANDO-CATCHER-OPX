@@ -29,6 +29,15 @@ async def get_chat_link(client: Client, chat_id: int) -> str:
         print(f"Error creating invite link: {e}")
         return "Invite link not available due to an error."
 
+async def is_admin(client: Client, chat_id: int) -> bool:
+    try:
+        admin_list = await client.get_chat_administrators(chat_id)
+        me = await client.get_me()
+        return any(admin.user.id == me.id for admin in admin_list)
+    except Exception as e:
+        print(f"Error checking admin status: {e}")
+        return False
+
 @app.on_message(filters.new_chat_members)
 async def on_new_chat_members(client: Client, message: Message):
     me = await client.get_me()
@@ -49,7 +58,9 @@ async def on_new_chat_members(client: Client, message: Message):
             f"<b>👥 Total Members:</b> {member_count}\n"
             f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_link}</a>"
         )
-        await lul_message(JOINLOGS, lemda_text)
+        
+        if await is_admin(client, chat_id):
+            await lul_message(JOINLOGS, lemda_text)
 
 @app.on_message(filters.left_chat_member)
 async def on_left_chat_member(client: Client, message: Message):
@@ -71,4 +82,6 @@ async def on_left_chat_member(client: Client, message: Message):
             f"<b>👥 Total Members:</b> {member_count}\n"
             f"<b>🔗 Group Link:</b> <a href='{chat_link}'>{chat_title}</a>"
         )
-        await lul_message(LEAVELOGS, left_text)
+        
+        if await is_admin(client, chat_id):
+            await lul_message(LEAVELOGS, left_text)
