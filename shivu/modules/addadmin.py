@@ -12,7 +12,7 @@ admin_collection = db["admins"]  # Collection for admin list
 OWNER_ID = 6584789596
 
 # Command to add an admin
-@bot.on_message(filters.command(["faddadmin"]) & filters.reply)
+@bot.on_message(filters.command(["aadmin"]) & filters.reply)
 async def add_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -41,7 +41,7 @@ async def add_admin(_, message: t.Message):
     await message.reply_text(f"✅ User @{new_user.username or new_user.first_name} has been added as an admin.", quote=True)
 
 # Command to remove an admin
-@bot.on_message(filters.command(["fremoveadmin"]) & filters.reply)
+@bot.on_message(filters.command(["radmin"]) & filters.reply)
 async def remove_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -69,7 +69,7 @@ async def check_admins(_, message: t.Message):
     await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}", disable_web_page_preview=True)
 
 # Command to upload a file (only for admins)
-@bot.on_message(filters.command(["fupload"]) & filters.user(admin_collection.find()))
+@bot.on_message(filters.command(["uploading"]) & filters.user(admin_collection.find()))
 async def upload_file(_, message: t.Message):
     if message.reply_to_message and message.reply_to_message.document:
         document = message.reply_to_message.document
@@ -80,7 +80,7 @@ async def upload_file(_, message: t.Message):
         await message.reply_text("🔖 Please reply to a document to upload it.", quote=True)
 
 # Command to check stats (only for admins)
-@bot.on_message(filters.command(["fstats"]) & filters.user(admin_collection.find()))
+@bot.on_message(filters.command(["wstats"]) & filters.user(admin_collection.find()))
 async def check_stats(_, message: t.Message):
     total_users = await user_collection.count_documents({})
     total_admins = admin_collection.count_documents({})
