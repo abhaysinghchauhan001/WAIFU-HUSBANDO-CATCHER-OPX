@@ -102,7 +102,7 @@ async def upload_file(_, message: t.Message):
     else:
         await message.reply_text("🔖 Please reply to a document to upload it.", quote=True)
 
-@bot.on_message(filters.command(["stats"]) & filters.user(sudo_ids))
+@bot.on_message(filters.command(["bstats"]) & filters.user(sudo_ids))
 async def check_stats(_, message: t.Message):
     total_users = await user_collection.count_documents({})
     total_admins = len(admin_ids)
