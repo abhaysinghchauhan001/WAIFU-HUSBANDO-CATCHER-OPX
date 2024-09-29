@@ -5,8 +5,6 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from shivu import shivuu as bot
 from shivu import user_collection, collection
 
-OWNER_ID = 6584789596
-
 
 # Tag mappings
 tag_mappings = {
@@ -112,19 +110,3 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
     except Exception as e:
         print(f"Error in show_top_users: {e}")
         await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
-
-#tags
-@bot.on_message(filters.command("tags") & filters.user(OWNER_ID))
-async def list_tags(_, message: t.Message):
-    if not tag_mappings:
-        return await message.reply_text("⚠️ No tags available at the moment.", quote=True)
-
-    tags_list = "\n".join([f"<b>{tag}</b>: <i>{description}</i>" for tag, description in tag_mappings.items()])
-    
-    response = (
-        "🔖 <b>Available Tags:</b>\n\n" +
-        tags_list + 
-        "\n\n✨ Use these tags to enhance your search experience!"
-    )
-    
-    await message.reply_text(response, quote=True)
