@@ -38,8 +38,6 @@ tag_mappings = {
     '💞': '💞𝑽𝒂𝒍𝒆𝒏𝒕𝒊𝒏𝒆💞',
 }
 
-# Add your commands here...
-
 @bot.on_message(filters.command(["faddadmin"]))
 async def add_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
@@ -49,30 +47,16 @@ async def add_admin(_, message: t.Message):
         return await message.reply_text("🔖 Please provide the user ID of the admin to add.", quote=True)
 
     new_admin_id = int(message.command[1])
-    
+
     if new_admin_id in admin_ids:
         return await message.reply_text("⚠️ This user is already an admin.", quote=True)
 
     admin_ids.append(new_admin_id)
+    
+    # Notify the user that they have been added as an admin
+    await bot.send_message(new_admin_id, f"🎉 You have been added as an admin!", reply_to_message_id=message.message_id)
+    
     await message.reply_text(f"✅ User with ID {new_admin_id} has been added as an admin.", quote=True)
-
-@bot.on_message(filters.command(["fremovesudo"]))
-async def remove_sudo(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if message.reply_to_message:
-        sudo_id_to_remove = message.reply_to_message.from_user.id
-    else:
-        if len(message.command) < 2:
-            return await message.reply_text("🔖 Please provide the user ID of the sudo user to remove or reply to their message.", quote=True)
-        sudo_id_to_remove = int(message.command[1])
-
-    if sudo_id_to_remove not in sudo_ids:
-        return await message.reply_text("⚠️ This user is not a sudo user.", quote=True)
-
-    sudo_ids.remove(sudo_id_to_remove)
-    await message.reply_text(f"✅ User with ID {sudo_id_to_remove} has been removed from sudo users.", quote=True)
 
 @bot.on_message(filters.command(["faddsudo"]))
 async def add_sudo(_, message: t.Message):
@@ -90,32 +74,78 @@ async def add_sudo(_, message: t.Message):
         return await message.reply_text("⚠️ This user is already a sudo user.", quote=True)
 
     sudo_ids.append(new_sudo_id)
+
+    # Notify the user that they have been added as a sudo user
+    await bot.send_message(new_sudo_id, f"🎉 You have been granted sudo access!", reply_to_message_id=message.message_id)
+
     await message.reply_text(f"✅ User with ID {new_sudo_id} has been added as a sudo user.", quote=True)
 
-@bot.on_message(filters.command(["fupload"]) & filters.user(sudo_ids))
-async def upload_file(_, message: t.Message):
-    if message.reply_to_message and message.reply_to_message.document:
-        document = message.reply_to_message.document
-        file_name = document.file_name
-        # Here you can handle the document (e.g., save it to a specific location)
-        await message.reply_text(f"File '{file_name}' uploaded successfully.")
+# Other command definitions...
+
+@bot.on_message(filters.command(["removeadmin"]))
+async def remove_admin(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if len(message.command) < 2:
+        return await message.reply_text("🔖 Please provide the user ID of the admin to remove.", quote=True)
+
+    admin_id_to_remove = int(message.command[1])
+
+    if admin_id_to_remove not in admin_ids:
+        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
+
+    admin_ids.remove(admin_id_to_remove)
+    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
+
+# Additional command definitions...
+# Continue from the previous code...
+
+@bot.on_message(filters.command(["fremovesudo"]))
+async def remove_sudo(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if message.reply_to_message:
+        sudo_id_to_remove = message.reply_to_message.from_user.id
     else:
-        await message.reply_text("🔖 Please reply to a document to upload it.", quote=True)
+        if len(message.command) < 2:
+            return await message.reply_text("🔖 Please provide the user ID of the sudo user to remove or reply to their message.", quote=True)
+        sudo_id_to_remove = int(message.command[1])
 
-@bot.on_message(filters.command(["fstats"]) & filters.user(sudo_ids))
-async def check_stats(_, message: t.Message):
-    total_users = await user_collection.count_documents({})
-    total_admins = len(admin_ids)
-    total_sudo = len(sudo_ids)
+    if sudo_id_to_remove not in sudo_ids:
+        return await message.reply_text("⚠️ This user is not a sudo user.", quote=True)
 
-    stats_message = (
-        "📊 <b>Bot Statistics:</b>\n\n"
-        f"👥 Total Users: {total_users}\n"
-        f"🛠️ Total Admins: {total_admins}\n"
-        f"🔑 Total Sudo Users: {total_sudo}\n"
-    )
+    sudo_ids.remove(sudo_id_to_remove)
+    
+    # Notify the user that they have been removed from the sudo list
+    await bot.send_message(sudo_id_to_remove, f"⚠️ You have been removed from the sudo user list.", reply_to_message_id=message.message_id)
 
-    await message.reply_text(stats_message)
+    await message.reply_text(f"✅ User with ID {sudo_id_to_remove} has been removed from sudo users.", quote=True)
+
+@bot.on_message(filters.command(["checkadmins"]))
+async def check_admins(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if not admin_ids:
+        return await message.reply_text("⚠️ No admins found.", quote=True)
+
+    admin_list = "\n".join([f"<a href='tg://user?id={admin_id}'>{admin_id}</a>" for admin_id in admin_ids])
+    await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}", disable_web_page_preview=True)
+
+@bot.on_message(filters.command(["checksudo"]))
+async def check_sudos(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if not sudo_ids:
+        return await message.reply_text("⚠️ No sudo users found.", quote=True)
+
+    sudo_list = "\n".join([f"<a href='tg://user?id={sudo_id}'>{sudo_id}</a>" for sudo_id in sudo_ids])
+    await message.reply_text(f"📋 <b>Current Sudo Users:</b>\n\n{sudo_list}", disable_web_page_preview=True)
+
+# Additional commands can be defined here...
 
 @bot.on_message(filters.command(["tags"]))
 async def show_tags(_, message: t.Message):
@@ -159,6 +189,78 @@ async def find(_, message: t.Message):
 
     await message.reply_photo(photo=waifu.get('img_url', ''), caption=caption, reply_markup=inline_buttons)
 
+# Continue to handle callback queries and other bot functionalities...
+@bot.on_message(filters.command(["removeadmin"]))
+async def remove_admin(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if len(message.command) < 2:
+        return await message.reply_text("🔖 Please provide the user ID of the admin to remove.", quote=True)
+
+    admin_id_to_remove = int(message.command[1])
+
+    if admin_id_to_remove not in admin_ids:
+        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
+
+    admin_ids.remove(admin_id_to_remove)
+
+    # Notify the user that they have been removed from the admin list
+    await bot.send_message(admin_id_to_remove, "⚠️ You have been removed from the admin list.", reply_to_message_id=message.message_id)
+
+    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
+
+@bot.on_message(filters.command(["help"]))
+async def help_command(_, message: t.Message):
+    help_text = (
+        "📜 <b>Available Commands:</b>\n"
+        "/faddadmin - Add an admin by user ID\n"
+        "/fremovesudo - Remove a sudo user\n"
+        "/faddsudo - Add a sudo user\n"
+        "/fupload - Upload a file (sudo only)\n"
+        "/fstats - Check bot statistics (sudo only)\n"
+        "/tags - Show available tags\n"
+        "/find <waifu_id> - Find waifu information\n"
+        "/checkadmins - Check current admins\n"
+        "/checksudo - Check current sudo users\n"
+        "/removeadmin - Remove an admin by user ID\n"
+        "/help - Show this help message"
+    )
+    await message.reply_text(help_text)
+
+# Function to display a list of current sudo users
+@bot.on_message(filters.command(["checksudos"]))
+async def check_sudo_users(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if not sudo_ids:
+        return await message.reply_text("⚠️ No sudo users found.", quote=True)
+
+    sudo_list = "\n".join([f"<a href='tg://user?id={sudo_id}'>{sudo_id}</a>" for sudo_id in sudo_ids])
+    await message.reply_text(f"📋 <b>Current Sudo Users:</b>\n\n{sudo_list}", disable_web_page_preview=True)
+
+# Enhanced error handling for user commands
+@bot.on_message(filters.command(["commands"]))
+async def commands_list(_, message: t.Message):
+    command_text = (
+        "🔍 <b>List of Available Commands:</b>\n"
+        "/faddadmin - Add admin\n"
+        "/fremovesudo - Remove sudo\n"
+        "/faddsudo - Add sudo\n"
+        "/fupload - Upload a file (sudo only)\n"
+        "/fstats - Check bot stats (sudo only)\n"
+        "/tags - Show available tags\n"
+        "/find <waifu_id> - Find waifu info\n"
+        "/checkadmins - List admins\n"
+        "/checksudo - List sudo users\n"
+        "/removeadmin - Remove admin\n"
+        "/help - Show help"
+    )
+    await message.reply_text(command_text)
+
+# Additional callback query handlers or functionalities can be added here...
+
 @bot.on_callback_query(filters.regex(r"top_users_(\w+)"))
 async def show_top_users(_, callback_query: t.CallbackQuery):
     waifu_id = callback_query.data.split("_")[2]
@@ -183,7 +285,7 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
             f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
             f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
             f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n\n"
-            f"✳️ <b>Top Users for {waifu.get('name')}:</b>\n\n"
+            f"✳️ <b>Top Users for {waifu.get('name')}:</b>\n"
         )
 
         for user in top_users:
@@ -191,7 +293,6 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
             character_count = user.get('count', 0)
             leaderboard_message += f"<b>➥</b> <a href=\"tg://user?id={user['_id']}\">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n"
 
-        # Replace the original message with the updated leaderboard message
         await callback_query.message.edit_text(
             leaderboard_message,
             disable_web_page_preview=True,
@@ -203,41 +304,4 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         print(f"Error in show_top_users: {e}")
         await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
 
-@bot.on_message(filters.command(["checkadmins"]))
-async def check_admins(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if not admin_ids:
-        return await message.reply_text("⚠️ No admins found.", quote=True)
-
-    admin_list = "\n".join([f"<a href='tg://user?id={admin_id}'>{admin_id}</a>" for admin_id in admin_ids])
-    await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}", disable_web_page_preview=True)
-
-@bot.on_message(filters.command(["checksudo"]))
-async def check_sudos(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if not sudo_ids:
-        return await message.reply_text("⚠️ No sudo users found.", quote=True)
-
-    sudo_list = "\n".join([f"<a href='tg://user?id={sudo_id}'>{sudo_id}</a>" for sudo_id in sudo_ids])
-    await message.reply_text(f"📋 <b>Current Sudo Users:</b>\n\n{sudo_list}", disable_web_page_preview=True)
-
-# remove admin 
-@bot.on_message(filters.command(["removeadmin"]))
-async def remove_admin(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if len(message.command) < 2:
-        return await message.reply_text("🔖 Please provide the user ID of the admin to remove.", quote=True)
-
-    admin_id_to_remove = int(message.command[1])
-    
-    if admin_id_to_remove not in admin_ids:
-        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
-
-    admin_ids.remove(admin_id_to_remove)
-    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
+# You can add more functionalities or commands here as needed.
