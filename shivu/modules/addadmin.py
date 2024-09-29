@@ -141,15 +141,20 @@ async def help_command(_, message: t.Message):
     await message.reply_text(help_text, quote=True)
 
 # Command to show available tags
-@bot.on_message(filters.command("tags") & filters.user(lambda u: u.id == OWNER_ID or admin_collection.find_one({"user_id": u.id})))
-async def tags_command(_, message):
-    tags_list = "\n".join([f"{tag}: {description}" for tag, description in tag_mappings.items()])
+@bot.on_message(filters.command("tags") & filters.user(OWNER_ID))
+async def list_tags(_, message: t.Message):
+    if not tag_mappings:
+        return await message.reply_text("⚠️ No tags available at the moment.", quote=True)
+
+    tags_list = "\n".join([f"<b>{tag}</b>: <i>{description}</i>" for tag, description in tag_mappings.items()])
+
     response = (
-        "📜 <b>Available Tags:</b>\n\n"
-        f"{tags_list}\n\n"
-        "Use these tags to enhance your experience!"
+        "🔖 <b>Available Tags:</b>\n\n" +
+        tags_list + 
+        "\n\n✨ Use these tags to enhance your search experience!"
     )
-    await message.reply_text(response, disable_web_page_preview=True)
+
+    await message.reply_text(response, quote=True)
 
 # Status command for owner 
 @bot.on_message(filters.command("status") & filters.user(OWNER_ID))
