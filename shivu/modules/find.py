@@ -149,15 +149,18 @@ async def add_sudo(_, message: t.Message):
 
 #FLEX
 
-@bot.on_message(filters.command(["fupload"]) & filters.user(sudo_ids))
+@bot.on_message(filters.command(["fupload"]) & filters.user(sudo_ids | {OWNER_ID}))
 async def upload_file(_, message: t.Message):
     if message.reply_to_message and message.reply_to_message.document:
         document = message.reply_to_message.document
         file_name = document.file_name
-        # Handle the document (e.g., save it)
+        
+        # Handle the document upload (e.g., save it to a specific location or process it)
+        # Example: await some_upload_function(document)
+
         await message.reply_text(f"File '{file_name}' uploaded successfully.")
     else:
-        await message.reply_text("🔖 Please reply to a document.", quote=True)
+        await message.reply_text("🔖 Please reply to a document to upload it.", quote=True)
 
 @bot.on_message(filters.command(["stats"]) & filters.user(sudo_ids))
 async def check_stats(_, message: t.Message):
