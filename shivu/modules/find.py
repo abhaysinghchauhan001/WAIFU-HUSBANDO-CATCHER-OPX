@@ -5,6 +5,9 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from shivu import shivuu as bot
 from shivu import user_collection, collection
 
+OWNER_ID = 6584789596
+
+
 # Tag mappings
 tag_mappings = {
     '👘': '👘𝑲𝒊𝒎𝒐𝒏𝒐👘',
