@@ -161,7 +161,7 @@ async def find(_, message: t.Message):
     await message.reply_photo(photo=waifu.get('img_url', ''), caption=caption, reply_markup=inline_buttons)
 
 # Continue to handle callback queries and other bot functionalities...
-@bot.on_message(filters.command(["removeadmin"]))
+@bot.on_message(filters.command(["fradmin"]))
 async def remove_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
