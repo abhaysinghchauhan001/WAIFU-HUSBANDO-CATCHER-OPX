@@ -83,7 +83,7 @@ async def add_sudo(_, message: t.Message):
 # Other command definitions...
 # Continue from the previous code...
 
-@bot.on_message(filters.command(["fremovesudo"]))
+@bot.on_message(filters.command(["frsudo"]))
 async def remove_sudo(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
