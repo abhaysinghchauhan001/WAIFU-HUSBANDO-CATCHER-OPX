@@ -110,7 +110,8 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         for user in top_users:
             first_name = user.get('first_name', 'Unknown')[:15]
             character_count = user.get('count', 0)
-            leaderboard_message += f"<b>➥</b> <a href="tg://user?id={user_id}">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n'
+            user_id = user.get('_id')  # Get the user ID
+            leaderboard_message += f"<b>➥</b> <a href='tg://user?id={user_id}'>{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n"
 
         # Remove the inline button
         await callback_query.message.edit_reply_markup(reply_markup=None)
@@ -124,4 +125,25 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
 
     except Exception as e:
         print(f"Error in show_top_users: {e}")
-        await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True
+        await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
+
+@bot.on_message(filters.command(["tags"]))
+async def show_tags(_, message: t.Message):
+    # Check if the user is the owner
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    try:
+        # Create a formatted message for tag mappings
+        tag_count = len(tag_mappings)
+        tag_message = f"📜 <b>Available Tags ({tag_count} total):</b>\n\n"
+
+        for tag, description in tag_mappings.items():
+            tag_message += f"<b>{tag}</b>: {description}\n"
+
+        # Reply with the tags message
+        await message.reply_text(tag_message)
+
+    except Exception as e:
+        print(f"Error in show_tags command: {e}")
+        await message.reply_text("⚠️ An error occurred while processing your request.", quote=True)
