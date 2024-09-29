@@ -5,7 +5,7 @@ from shivu import shivuu as bot
 from shivu import user_collection, collection
 
 # Owner ID (replace with your actual owner ID)
-OWNER_ID = 123456789  # Replace with your Telegram user ID
+OWNER_ID = 6584789596  # Replace with your Telegram user ID
 
 # Tag mappings
 tag_mappings = {
