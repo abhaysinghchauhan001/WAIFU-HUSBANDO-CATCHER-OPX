@@ -90,7 +90,7 @@ async def remove_admin(_, message: t.Message):
 @bot.on_message(filters.command(["checkadmins"]) & filters.user(OWNER_ID))
 async def check_admins(_, message: t.Message):
     admins = admin_collection.find()  # Get the cursor
-    admin_list = await admins.to_list(length=None)  # Now use await here
+    admin_list = await admins.to_list(length=None)  # Convert cursor to list
 
     if not admin_list:
         return await message.reply_text("⚠️ No admins found.", quote=True)
