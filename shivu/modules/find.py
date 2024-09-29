@@ -261,3 +261,24 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
     except Exception as e:
         print(f"Error in show_top_users: {e}")
         await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
+
+# tags 
+
+@bot.on_message(filters.command(["tags"]))
+async def show_tags(_, message: t.Message):
+    if message.from_user.id not in admin_ids and message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    tag_count = len(tag_mappings)
+    tag_message = (
+        "📜 <b>Available Tags:</b>\n"
+        f"Total: <b>{tag_count}</b>\n\n"
+        "<b>Tag List:</b>\n"
+    )
+
+    for tag, description in tag_mappings.items():
+        tag_message += f"<b>{tag}</b>: {description}\n"
+
+    tag_message += "\n🔗 Use these tags to enhance your experience!"
+
+    await message.reply_text(tag_message, disable_web_page_preview=True)
