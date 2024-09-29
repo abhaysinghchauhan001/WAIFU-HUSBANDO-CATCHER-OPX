@@ -89,13 +89,14 @@ async def remove_admin(_, message: t.Message):
 # Command to check current admins
 @bot.on_message(filters.command(["checkadmins"]) & filters.user(OWNER_ID))
 async def check_admins(_, message: t.Message):
-    admins = await admin_collection.find().to_list(length=None)
+    admins = admin_collection.find()  # Get the cursor
+    admin_list = await admins.to_list(length=None)  # Now use await here
 
-    if len(admins) == 0:
+    if not admin_list:
         return await message.reply_text("⚠️ No admins found.", quote=True)
 
-    admin_list = "\n".join([f"<a href='tg://user?id={admin['user_id']}'>{admin['first_name']} (ID: {admin['user_id']})</a>" for admin in admins])
-    await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}", disable_web_page_preview=True)
+    admin_list_text = "\n".join([f"<a href='tg://user?id={admin['user_id']}'>{admin['first_name']} (ID: {admin['user_id']})</a>" for admin in admin_list])
+    await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list_text}", disable_web_page_preview=True)
 
 # Command to upload a file (only for admins)
 @bot.on_message(filters.command(["uploading"]) & filters.user(admin_ids))
