@@ -98,3 +98,45 @@ async def check_stats(_, message: t.Message):
 async def shutdown(_, message: t.Message):
     await message.reply_text("🔒 Shutting down the bot...")
     await bot.stop()
+
+#Help Command for owner 
+@bot.on_message(filters.command("help") & filters.user(OWNER_ID))
+async def help_command(_, message: t.Message):
+    help_text = (
+        "🆘 Available Commands:\n"
+        "/faddadmin - Add an admin user.\n"
+        "/fremovesudo - Remove a sudo user.\n"
+        "/faddsudo - Add a sudo user.\n"
+        "/fremoveadmin - Remove an admin user.\n"
+        "/fupload - Upload a file (sudo only).\n"
+        "/fstats - Show bot statistics (sudo only).\n"
+        "/shutdown - Shutdown the bot.\n"
+        "/checkadmins - List all admins.\n"
+        "/checksudo - List all sudo users.\n"
+    )
+    await message.reply_text(help_text, quote=True)
+
+# commands for owner 
+@bot.on_message(filters.command("commands") & filters.user(OWNER_ID))
+async def commands_command(_, message: t.Message):
+    commands_text = (
+        "📋 Owner Commands:\n"
+        "/help - Show available commands.\n"
+        "/status - Check the bot's status.\n"
+        "/shutdown - Shut down the bot.\n"
+        "/checkadmins - List all admins.\n"
+        "/checksudo - List all sudo users.\n"
+    )
+    await message.reply_text(commands_text, quote=True)
+
+#status command for owner 
+@bot.on_message(filters.command("status") & filters.user(OWNER_ID))
+async def status_command(_, message: t.Message):
+    status_text = (
+        "🔍 Bot Status:\n"
+        f"🔧 Current Status: Running\n"
+        f"👥 Total Admins: {len(admin_ids)}\n"
+        f"🔑 Total Sudo Users: {len(sudo_ids)}\n"
+        f"🗓️ Last Restart: <insert last restart time here>\n"
+    )
+    await message.reply_text(status_text, quote=True)
