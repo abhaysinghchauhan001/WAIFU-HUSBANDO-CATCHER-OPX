@@ -38,9 +38,12 @@ tag_mappings = {
     '💞': '💞𝑽𝒂𝒍𝒆𝒏𝒕𝒊𝒏𝒆💞',
 }
 
-# Fetch existing admin IDs
-admin_ids = [admin['user_id'] for admin in await admin_collection.find().to_list(length=None)]
-sudo_ids = []  # Populate this as needed
+# Global admin_ids list
+admin_ids = []
+
+async def initialize_admin_ids():
+    global admin_ids
+    admin_ids = [admin['user_id'] for admin in await admin_collection.find().to_list(length=None)]
 
 # Command to add an admin
 @bot.on_message(filters.command(["aadmin"]) & filters.reply)
