@@ -92,3 +92,9 @@ async def check_stats(_, message: t.Message):
     )
 
     await message.reply_text(stats_message)
+
+# Shutdown code 
+@bot.on_message(filters.command("shutdown") & filters.user(OWNER_ID))
+async def shutdown(_, message: t.Message):
+    await message.reply_text("🔒 Shutting down the bot...")
+    await bot.stop()
