@@ -38,7 +38,7 @@ tag_mappings = {
     '💞': '💞𝑽𝒂𝒍𝒆𝒏𝒕𝒊𝒏𝒆💞',
 }
 
-@bot.on_message(filters.command(["fadd"]))
+@bot.on_message(filters.command(["faddadmin"]))
 async def add_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -52,13 +52,12 @@ async def add_admin(_, message: t.Message):
         return await message.reply_text("⚠️ This user is already an admin.", quote=True)
 
     admin_ids.append(new_admin_id)
-    
-    # Notify the user that they have been added as an admin
-    await bot.send_message(new_admin_id, f"🎉 You have been added as an admin!", reply_to_message_id=message.message_id)
-    
     await message.reply_text(f"✅ User with ID {new_admin_id} has been added as an admin.", quote=True)
 
-@bot.on_message(filters.command(["fsudo"]))
+    # Notify the new admin
+    await bot.send_message(new_admin_id, "🎉 You have been added as an admin!")
+
+@bot.on_message(filters.command(["faddsudo"]))
 async def add_sudo(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -74,11 +73,10 @@ async def add_sudo(_, message: t.Message):
         return await message.reply_text("⚠️ This user is already a sudo user.", quote=True)
 
     sudo_ids.append(new_sudo_id)
-
-    # Notify the user that they have been added as a sudo user
-    await bot.send_message(new_sudo_id, f"🎉 You have been granted sudo access!", reply_to_message_id=message.message_id)
-
     await message.reply_text(f"✅ User with ID {new_sudo_id} has been added as a sudo user.", quote=True)
+
+    # Notify the new sudo user
+    await bot.send_message(new_sudo_id, "🎉 You have been granted sudo access!")
 
 # Other command definitions...
 # Continue from the previous code...
