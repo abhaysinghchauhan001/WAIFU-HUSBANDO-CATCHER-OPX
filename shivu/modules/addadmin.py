@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from shivu import shivuu as bot 
 
 # Database setup
-client = MongoClient("")
+client = MongoClient("mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority")
 db = client["character_catcherr"]  # Replace with your DB name
 admin_collection = db["admins"]  # Collection for admin list
 
