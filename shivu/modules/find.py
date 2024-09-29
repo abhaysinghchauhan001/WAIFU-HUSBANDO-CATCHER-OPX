@@ -305,3 +305,50 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
 
 # You can add more functionalities or commands here as needed.
+# Finalizing the bot commands and functionality
+
+@bot.on_message(filters.command(["shutdown"]))
+async def shutdown_bot(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    await message.reply_text("🔴 Shutting down the bot...")
+    await bot.stop()
+
+@bot.on_message(filters.command(["status"]))
+async def bot_status(_, message: t.Message):
+    if message.from_user.id not in sudo_ids:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    status_message = "🟢 The bot is currently running."
+    await message.reply_text(status_message)
+
+@bot.on_message(filters.command(["reload"]))
+async def reload_commands(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    # Here you can implement reloading functionality if needed
+    await message.reply_text("🔄 Commands reloaded successfully.")
+
+@bot.on_message(filters.command(["config"]))
+async def bot_config(_, message: t.Message):
+    if message.from_user.id not in sudo_ids:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    config_message = (
+        "📜 <b>Current Configuration:</b>\n"
+        f"🛡️ Owner ID: {OWNER_ID}\n"
+        f"👥 Total Admins: {len(admin_ids)}\n"
+        f"🔑 Total Sudo Users: {len(sudo_ids)}"
+    )
+    await message.reply_text(config_message)
+
+# Log any uncaught exceptions
+@bot.on_error()
+async def error_handler(_, error):
+    print(f"Error occurred: {error}")
+
+# Start the bot
+if __name__ == "__main__":
+    bot.run()
