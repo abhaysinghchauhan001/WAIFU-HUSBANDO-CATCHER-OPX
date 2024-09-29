@@ -92,7 +92,7 @@ async def add_sudo(_, message: t.Message):
     sudo_ids.append(new_sudo_id)
     await message.reply_text(f"✅ User with ID {new_sudo_id} has been added as a sudo user.", quote=True)
 
-@bot.on_message(filters.command(["upload"]) & filters.user(sudo_ids))
+@bot.on_message(filters.command(["wupload"]) & filters.user(sudo_ids))
 async def upload_file(_, message: t.Message):
     if message.reply_to_message and message.reply_to_message.document:
         document = message.reply_to_message.document
