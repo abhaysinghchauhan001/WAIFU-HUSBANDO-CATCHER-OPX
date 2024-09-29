@@ -159,20 +159,20 @@ async def upload_file(_, message: t.Message):
     else:
         await message.reply_text("🔖 Please reply to a document.", quote=True)
 
-@bot.on_message(filters.command(["fstats"]) & filters.user(sudo_ids))
+@bot.on_message(filters.command(["stats"]) & filters.user(sudo_ids))
 async def check_stats(_, message: t.Message):
     total_users = await user_collection.count_documents({})
     total_admins = len(admin_ids)
     total_sudo = len(sudo_ids)
 
     stats_message = (
-        "📊 <b>Bot Statistics:</b>\n\n"
+        "📊 Bot Statistics:\n\n"
         f"👥 Total Users: {total_users}\n"
         f"🛠️ Total Admins: {total_admins}\n"
         f"🔑 Total Sudo Users: {total_sudo}\n"
     )
 
-    await message.reply_text(stats_message)
+    await message.reply_text(stats_message, parse_mode="markdown")
 
 @bot.on_message(filters.command(["shutdown"]) & filters.user(OWNER_ID))
 async def shutdown(_, message: t.Message):
