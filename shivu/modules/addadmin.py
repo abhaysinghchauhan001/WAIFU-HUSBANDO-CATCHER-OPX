@@ -170,7 +170,3 @@ async def status_command(_, message: t.Message):
         f"🗓️ Last Restart: <insert last restart time here>\n"
     )
     await message.reply_text(status_text, quote=True)
-
-# Main function to run the bot
-if __name__ == "__main__":
-    bot.run()
