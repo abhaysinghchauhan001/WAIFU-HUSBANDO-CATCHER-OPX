@@ -65,7 +65,7 @@ async def find(_, message: t.Message):
             first_name = user.get('first_name', 'Unknown')[:15]
             character_count = user.get('count', 0)
             user_id = user.get('_id')
-            leaderboard_message += f'<b>➥</b> <a href="tg://user?id={user_id}"> {first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n'
+            leaderboard_message += f'<b>➥</b> <a href="tg://user?id={user_id}">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n'
 
         # Construct the caption
         caption = (
@@ -79,7 +79,7 @@ async def find(_, message: t.Message):
         # Append special tags if present
         matching_tags = [description for tag, description in tag_mappings.items() if tag in waifu.get('name', '')]
         if matching_tags:
-            caption += "<b>🧩 event:</b>join(matching_tags) + "\n\n"
+            caption += f"<b>🧩 event:</b> {' '.join(matching_tags)}\n\n"
 
         caption += (
             f"✳️ <b>ʜᴇʀᴇ ɪs ᴛʜᴇ ʟɪsᴛ ᴏғ ᴜsᴇʀs ᴡʜᴏ ʜᴀᴠᴇ ᴛʜɪs ᴄʜᴀʀᴀᴄᴛᴇʀ 〽️</b>:\n\n"
