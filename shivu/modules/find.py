@@ -7,6 +7,9 @@ from shivu import user_collection, collection
 # Owner ID (replace with your actual owner ID)
 OWNER_ID = 6584789596  # Replace with your Telegram user ID
 
+# List of admin IDs
+admin_ids = []
+
 # Tag mappings
 tag_mappings = {
     '👘': '👘𝑲𝒊𝒎𝒐𝒏𝒐👘',
@@ -34,25 +37,79 @@ tag_mappings = {
     '💞': '💞𝑽𝒂𝒍𝒆𝒏𝒕𝒊𝒏𝒆💞',
 }
 
+@bot.on_message(filters.command(["addadmin"]))
+async def add_admin(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if len(message.command) < 2:
+        return await message.reply_text("🔖 Please provide the user ID of the admin to add.", quote=True)
+
+    new_admin_id = int(message.command[1])
+    
+    if new_admin_id in admin_ids:
+        return await message.reply_text("⚠️ This user is already an admin.", quote=True)
+
+    admin_ids.append(new_admin_id)
+    await message.reply_text(f"✅ User with ID {new_admin_id} has been added as an admin.", quote=True)
+
+@bot.on_message(filters.command(["removeadmin"]))
+async def remove_admin(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if len(message.command) < 2:
+        return await message.reply_text("🔖 Please provide the user ID of the admin to remove.", quote=True)
+
+    admin_id_to_remove = int(message.command[1])
+    
+    if admin_id_to_remove not in admin_ids:
+        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
+
+    admin_ids.remove(admin_id_to_remove)
+    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
+
+@bot.on_message(filters.command(["checkadmins"]))
+async def check_admins(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if not admin_ids:
+        return await message.reply_text("⚠️ No admins found.", quote=True)
+
+    admin_list = "\n".join([str(admin_id) for admin_id in admin_ids])
+    await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}")
+
+@bot.on_message(filters.command(["tags"]))
+async def show_tags(_, message: t.Message):
+    if message.from_user.id not in admin_ids and message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    try:
+        tag_count = len(tag_mappings)
+        tag_message = f"📜 <b>Available Tags ({tag_count} total):</b>\n\n"
+
+        for tag, description in tag_mappings.items():
+            tag_message += f"<b>{tag}</b>: {description}\n"
+
+        await message.reply_text(tag_message)
+
+    except Exception as e:
+        print(f"Error in show_tags command: {e}")
+        await message.reply_text("⚠️ An error occurred while processing your request.", quote=True)
+
 @bot.on_message(filters.command(["find"]))
 async def find(_, message: t.Message):
     if len(message.command) < 2:
-        return await message.reply_text(
-            "🔖<b>𝖯𝗅𝖺𝗌𝖾 𝗉𝗋𝗈𝗏𝗂𝖽𝖾 𝗍𝗁𝖺𝗍 𝖭𝖽 </b>☘️", 
-            quote=True
-        )
+        return await message.reply_text("🔖<b>Please provide the waifu ID.</b>☘️", quote=True)
 
     waifu_id = message.command[1]
     waifu = await collection.find_one({'id': waifu_id})
 
     if not waifu:
-        return await message.reply_text(
-            "𝖭𝗈 𝗐𝖺𝗂𝖿𝗎 𝖿𝗈𝗎𝗻𝖽 𝗐𝗂𝗍𝗁 𝗍𝗁𝖺𝗍 𝖭𝖽 ❌", 
-            quote=True
-        )
+        return await message.reply_text("𝖭𝗈 𝗐𝖺𝗂𝖿𝗎 𝖿𝗈𝗎𝗻𝖽 𝗐𝗂𝗍𝗁 𝗍𝗁𝖺𝗍 𝖭𝖽 ❌", quote=True)
 
     try:
-        # Construct the caption for waifu information
         caption = (
             f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
             f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
@@ -61,17 +118,14 @@ async def find(_, message: t.Message):
             f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n"
         )
 
-        # Append special tags if present
         matching_tags = [description for tag, description in tag_mappings.items() if tag in waifu.get('name', '')]
         if matching_tags:
             caption += f"<b>🧩 event:</b> {' '.join(matching_tags)}\n\n"
 
-        # Add an inline button to view the leaderboard
         inline_buttons = InlineKeyboardMarkup([
             [InlineKeyboardButton("🏆 View Top 10 Users", callback_data=f"top_users_{waifu_id}")]
         ])
 
-        # Reply with the waifu information
         await message.reply_photo(photo=waifu.get('img_url', ''), caption=caption, reply_markup=inline_buttons)
 
     except Exception as e:
@@ -87,7 +141,6 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         return await callback_query.answer("No data found for this waifu.", show_alert=True)
 
     try:
-        # Get the top users
         top_users = await user_collection.aggregate([
             {'$match': {'characters.id': waifu_id}},
             {'$unwind': '$characters'},
@@ -97,7 +150,6 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
             {'$limit': 10}
         ]).to_list(length=10)
 
-        # Create the leaderboard message
         leaderboard_message = (
             f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
             f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
@@ -110,13 +162,9 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         for user in top_users:
             first_name = user.get('first_name', 'Unknown')[:15]
             character_count = user.get('count', 0)
-            user_id = user.get('_id')  # Get the user ID
-            leaderboard_message += f"<b>➥</b> <a href='tg://user?id={user_id}'>{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n"
+            leaderboard_message += f"<b>➥</b> <a href=\"tg://user?id={user['_id']}\">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n"
 
-        # Remove the inline button
         await callback_query.message.edit_reply_markup(reply_markup=None)
-
-        # Reply to the callback query with the leaderboard in a new message
         await callback_query.answer()
         await callback_query.message.reply_text(
             leaderboard_message,
@@ -126,24 +174,3 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
     except Exception as e:
         print(f"Error in show_top_users: {e}")
         await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
-
-@bot.on_message(filters.command(["tags"]))
-async def show_tags(_, message: t.Message):
-    # Check if the user is the owner
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    try:
-        # Create a formatted message for tag mappings
-        tag_count = len(tag_mappings)
-        tag_message = f"📜 <b>Available Tags ({tag_count} total):</b>\n\n"
-
-        for tag, description in tag_mappings.items():
-            tag_message += f"<b>{tag}</b>: {description}\n"
-
-        # Reply with the tags message
-        await message.reply_text(tag_message)
-
-    except Exception as e:
-        print(f"Error in show_tags command: {e}")
-        await message.reply_text("⚠️ An error occurred while processing your request.", quote=True)
