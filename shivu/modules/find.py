@@ -55,7 +55,7 @@ async def find(_, message: t.Message):
         # Construct the caption for waifu information
         caption = (
             f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
-            f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b>\n"
+            f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
             f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
             f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
             f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n"
@@ -87,7 +87,7 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         return await callback_query.answer("No data found for this waifu.", show_alert=True)
 
     try:
-        # Get the top users again
+        # Get the top users
         top_users = await user_collection.aggregate([
             {'$match': {'characters.id': waifu_id}},
             {'$unwind': '$characters'},
@@ -98,35 +98,30 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
         ]).to_list(length=10)
 
         # Create the leaderboard message
-        leaderboard_message = ""
+        leaderboard_message = (
+            f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
+            f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
+            f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
+            f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
+            f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n\n"
+            f"✳️ <b>Top Users for {waifu.get('name')}:</b>\n\n"
+        )
+
         for user in top_users:
             first_name = user.get('first_name', 'Unknown')[:15]
             character_count = user.get('count', 0)
-            user_id = user.get('_id')
-            leaderboard_message += f'<b>➥</b> <a href="tg://user?id={user_id}">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n'
+            leaderboard_message += f"<b>➥</b> <a href="tg://user?id={user_id}">{first_name}...</a> <b>→</b> <b>≺ {character_count} ≻</b>\n'
+
+        # Remove the inline button
+        await callback_query.message.edit_reply_markup(reply_markup=None)
 
         # Reply to the callback query with the leaderboard in a new message
         await callback_query.answer()
         await callback_query.message.reply_text(
-            f"✳️ <b>Top Users for {waifu.get('name')}:</b>\n\n{leaderboard_message}",
+            leaderboard_message,
             disable_web_page_preview=True
         )
 
     except Exception as e:
         print(f"Error in show_top_users: {e}")
-        await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True)
-
-@bot.on_message(filters.command(["tags"]))
-async def show_tags(_, message: t.Message):
-    # Check if the user is the owner
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    # Create a formatted message for tag mappings
-    tag_message = "📜 <b>Available Tags:</b>\n\n"
-    
-    for tag, description in tag_mappings.items():
-        tag_message += f"<b>{tag}</b>: {description}\n"
-
-    # Reply with the tags message using markdownv2
-    await message.reply_text(tag_message, parse_mode="markdownv2")
+        await callback_query.answer("⚠️ An error occurred while processing your request.", show_alert=True
