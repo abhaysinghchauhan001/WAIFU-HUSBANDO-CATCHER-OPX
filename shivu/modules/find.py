@@ -314,8 +314,3 @@ async def bot_config(_, message: t.Message):
         f"🔑 Total Sudo Users: {len(sudo_ids)}"
     )
     await message.reply_text(config_message)
-
-# Log any uncaught exceptions
-@bot.on_error()
-async def error_handler(_, error):
-    print(f"Error occurred: {error}")
