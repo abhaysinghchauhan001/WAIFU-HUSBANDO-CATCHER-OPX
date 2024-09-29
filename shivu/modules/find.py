@@ -77,55 +77,75 @@ async def status_command(_, message: t.Message):
     )
     await message.reply_text(status_text, disable_web_page_preview=True)
 
-@bot.on_message(filters.command(["faddadmin"]))
+@bot.on_message(filters.command(["faddadmin"]) & filters.reply)
 async def add_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission.", quote=True)
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
 
-    if len(message.command) < 2:
-        return await message.reply_text("🔖 Please provide the user ID.", quote=True)
-
-    new_admin_id = int(message.command[1])
+    new_user = message.reply_to_message.from_user  # Get the user info from the replied message
+    new_admin_id = new_user.id
 
     if new_admin_id in admin_ids:
-        return await message.reply_text("⚠️ Already an admin.", quote=True)
+        return await message.reply_text("⚠️ This user is already an admin.", quote=True)
 
     admin_ids.append(new_admin_id)
-    await message.reply_text(f"✅ Added as admin: {new_admin_id}", quote=True)
-    await bot.send_message(new_admin_id, "🎉 You have been added as an admin!")
+    
+    # Notify the user that they have been added as admin
+    try:
+        await bot.send_message(new_admin_id, "🎉 You have been added as an admin!", disable_notification=True)
+    except Exception as e:
+        print(f"Failed to notify the user: {e}")
 
-@bot.on_message(filters.command(["fremovesudo"]))
+    # Reply to the user who issued the command
+    await message.reply_text(f"✅ User @{new_user.username or new_user.first_name} has been added as an admin.", quote=True)
+
+@bot.on_message(filters.command(["fremovesudo"]) & filters.reply)
 async def remove_sudo(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission.", quote=True)
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
 
-    if len(message.command) < 2:
-        return await message.reply_text("🔖 Please provide the user ID.", quote=True)
-
-    sudo_id_to_remove = int(message.command[1])
+    if message.reply_to_message:
+        sudo_id_to_remove = message.reply_to_message.from_user.id
+    else:
+        if len(message.command) < 2:
+            return await message.reply_text("🔖 Please reply to a user's message to remove them from sudo.", quote=True)
+        sudo_id_to_remove = int(message.command[1])
 
     if sudo_id_to_remove not in sudo_ids:
-        return await message.reply_text("⚠️ Not a sudo user.", quote=True)
+        return await message.reply_text("⚠️ This user is not a sudo user.", quote=True)
 
     sudo_ids.remove(sudo_id_to_remove)
-    await message.reply_text(f"✅ Removed from sudo users: {sudo_id_to_remove}", quote=True)
 
-@bot.on_message(filters.command(["faddsudo"]))
+    # Notify the user that they have been removed from sudo access
+    try:
+        await bot.send_message(sudo_id_to_remove, "🚫 You have been removed from sudo access.", disable_notification=True)
+    except Exception as e:
+        print(f"Failed to notify the user: {e}")
+
+    # Reply to the user who issued the command
+    await message.reply_text(f"✅ User with ID {sudo_id_to_remove} has been removed from sudo users.", quote=True)
+
+@bot.on_message(filters.command(["faddsudo"]) & filters.reply)
 async def add_sudo(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission.", quote=True)
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
 
-    if len(message.command) < 2:
-        return await message.reply_text("🔖 Please provide the user ID.", quote=True)
-
-    new_sudo_id = int(message.command[1])
+    new_user = message.reply_to_message.from_user  # Get the user info from the replied message
+    new_sudo_id = new_user.id
 
     if new_sudo_id in sudo_ids:
-        return await message.reply_text("⚠️ Already a sudo user.", quote=True)
+        return await message.reply_text("⚠️ This user is already a sudo user.", quote=True)
 
     sudo_ids.append(new_sudo_id)
-    await message.reply_text(f"✅ Added as sudo user: {new_sudo_id}", quote=True)
-    await bot.send_message(new_sudo_id, "🎉 You have been granted sudo access!")
+
+    # Notify the user that they have been granted sudo access
+    try:
+        await bot.send_message(new_sudo_id, "🎉 You have been granted sudo access!", disable_notification=True)
+    except Exception as e:
+        print(f"Failed to notify the user: {e}")
+
+    # Reply to the user who issued the command
+    await message.reply_text(f"✅ User @{new_user.username or new_user.first_name} has been added as a sudo user.", quote=True)
 
 #FLEX
 
@@ -282,3 +302,29 @@ async def show_tags(_, message: t.Message):
     tag_message += "\n🔗 Use these tags to enhance your experience!"
 
     await message.reply_text(tag_message, disable_web_page_preview=True)
+
+@bot.on_message(filters.command(["removeadmin"]) & filters.reply)
+async def remove_admin(_, message: t.Message):
+    if message.from_user.id != OWNER_ID:
+        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
+
+    if message.reply_to_message:
+        admin_id_to_remove = message.reply_to_message.from_user.id
+    else:
+        if len(message.command) < 2:
+            return await message.reply_text("🔖 Please reply to a user's message to remove them from admin.", quote=True)
+        admin_id_to_remove = int(message.command[1])
+
+    if admin_id_to_remove not in admin_ids:
+        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
+
+    admin_ids.remove(admin_id_to_remove)
+
+    # Notify the user that they have been removed from admin access
+    try:
+        await bot.send_message(admin_id_to_remove, "🚫 You have been removed from admin access.", disable_notification=True)
+    except Exception as e:
+        print(f"Failed to notify the user: {e}")
+
+    # Reply to the user who issued the command
+    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
