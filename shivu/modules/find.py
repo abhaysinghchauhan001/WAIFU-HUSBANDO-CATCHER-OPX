@@ -46,7 +46,7 @@ async def find(_, message: t.Message):
 
     caption = (
         f"🧩 <b>Waifu Information:</b>\n\n"
-        f"🪭 <b>Name:</b> <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
+        f"🪭 <b>Name:</b> <b><i>{waifu.get('name')}</i></b>\n"
         f"⚕️ <b>Rarity:</b> <b><i>{waifu.get('rarity')}</i></b>\n"
         f"⚜️ <b>Anime:</b> <b><i>{waifu.get('anime')}</i></b>\n"
         f"🪅 <b>ID:</b> <b><i>{waifu.get('id')}</i></b>\n"
@@ -82,7 +82,7 @@ async def show_top_users(_, callback_query: t.CallbackQuery):
 
         leaderboard_message = (
             f"🧩 <b>Waifu Information:</b>\n\n"
-            f"🪭 <b>Name:</b> <b><i>{waifu.get('name')}</i></b> [{waifu.get('tag', '')}]\n"
+            f"🪭 <b>Name:</b> <b><i>{waifu.get('name')}</i></b>\n"
             f"⚕️ <b>Rarity:</b> <b><i>{waifu.get('rarity')}</i></b>\n"
             f"⚜️ <b>Anime:</b> <b><i>{waifu.get('anime')}</i></b>\n"
             f"🪅 <b>ID:</b> <b><i>{waifu.get('id')}</i></b>\n\n"
