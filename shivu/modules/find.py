@@ -69,13 +69,12 @@ async def find(_, message: t.Message):
 
         # Construct the caption
         caption = (
-            f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
-            f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i><b
-/b>\n"
-            f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
-            f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i><b>\n"
-            f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i><b>\n"
-        )
+    f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
+    f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b>\n"
+    f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
+    f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
+    f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n"
+)
 
         # Append special tags if present
         for tag, description in tag_mappings.items():
