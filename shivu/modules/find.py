@@ -128,5 +128,5 @@ async def show_tags(_, message: t.Message):
     for tag, description in tag_mappings.items():
         tag_message += f"<b>{tag}</b>: {description}\n"
 
-    # Reply with the tags message
-    await message.reply_text(tag_message, parse_mode="html")
+    # Reply with the tags message using markdownv2
+    await message.reply_text(tag_message, parse_mode="markdownv2")
