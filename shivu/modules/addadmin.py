@@ -141,7 +141,7 @@ async def help_command(_, message: t.Message):
     await message.reply_text(help_text, quote=True)
 
 # Command to show available tags
-@bot.on_message(filters.command("tags") & filters.user(OWNER_ID))
+@bot.on_message(filters.command("tags") & filters.user(lambda u: u.id == OWNER_ID or admin_collection.find_one({"user_id": u.id})))
 async def list_tags(_, message: t.Message):
     if not tag_mappings:
         return await message.reply_text("⚠️ No tags available at the moment.", quote=True)
