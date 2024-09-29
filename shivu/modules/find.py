@@ -38,7 +38,7 @@ tag_mappings = {
     '💞': '💞𝑽𝒂𝒍𝒆𝒏𝒕𝒊𝒏𝒆💞',
 }
 
-@bot.on_message(filters.command(["faddadmin"]))
+@bot.on_message(filters.command(["fadd"]))
 async def add_admin(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -58,7 +58,7 @@ async def add_admin(_, message: t.Message):
     
     await message.reply_text(f"✅ User with ID {new_admin_id} has been added as an admin.", quote=True)
 
-@bot.on_message(filters.command(["faddsudo"]))
+@bot.on_message(filters.command(["fsudo"]))
 async def add_sudo(_, message: t.Message):
     if message.from_user.id != OWNER_ID:
         return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
@@ -81,24 +81,6 @@ async def add_sudo(_, message: t.Message):
     await message.reply_text(f"✅ User with ID {new_sudo_id} has been added as a sudo user.", quote=True)
 
 # Other command definitions...
-
-@bot.on_message(filters.command(["removeadmin"]))
-async def remove_admin(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if len(message.command) < 2:
-        return await message.reply_text("🔖 Please provide the user ID of the admin to remove.", quote=True)
-
-    admin_id_to_remove = int(message.command[1])
-
-    if admin_id_to_remove not in admin_ids:
-        return await message.reply_text("⚠️ This user is not an admin.", quote=True)
-
-    admin_ids.remove(admin_id_to_remove)
-    await message.reply_text(f"✅ User with ID {admin_id_to_remove} has been removed from admins.", quote=True)
-
-# Additional command definitions...
 # Continue from the previous code...
 
 @bot.on_message(filters.command(["fremovesudo"]))
@@ -133,17 +115,6 @@ async def check_admins(_, message: t.Message):
 
     admin_list = "\n".join([f"<a href='tg://user?id={admin_id}'>{admin_id}</a>" for admin_id in admin_ids])
     await message.reply_text(f"📋 <b>Current Admins:</b>\n\n{admin_list}", disable_web_page_preview=True)
-
-@bot.on_message(filters.command(["checksudo"]))
-async def check_sudos(_, message: t.Message):
-    if message.from_user.id != OWNER_ID:
-        return await message.reply_text("⚠️ You do not have permission to access this command.", quote=True)
-
-    if not sudo_ids:
-        return await message.reply_text("⚠️ No sudo users found.", quote=True)
-
-    sudo_list = "\n".join([f"<a href='tg://user?id={sudo_id}'>{sudo_id}</a>" for sudo_id in sudo_ids])
-    await message.reply_text(f"📋 <b>Current Sudo Users:</b>\n\n{sudo_list}", disable_web_page_preview=True)
 
 # Additional commands can be defined here...
 
@@ -348,7 +319,3 @@ async def bot_config(_, message: t.Message):
 @bot.on_error()
 async def error_handler(_, error):
     print(f"Error occurred: {error}")
-
-# Start the bot
-if __name__ == "__main__":
-    bot.run()
