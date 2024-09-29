@@ -35,7 +35,7 @@ tag_mappings = {
 async def find(_, message: t.Message):
     if len(message.command) < 2:
         return await message.reply_text(
-            "🔖<b>𝖯𝗅𝖺𝗌𝖾 𝗉𝗋𝗈𝗏𝗂𝖽𝖾 𝗍𝗁𝖺𝗍 𝖨𝖣 </b>☘️", 
+            "🔖<b>𝖯𝗅𝖺𝗌𝖾 𝗉𝗋𝗈𝗏𝗂𝖽𝖾 𝗍𝗁𝖺𝗍 𝖭𝖽 </b>☘️", 
             quote=True
         )
 
@@ -44,7 +44,7 @@ async def find(_, message: t.Message):
 
     if not waifu:
         return await message.reply_text(
-            "𝖭𝗈 𝗐𝖺𝗂𝖿𝗎 𝖿𝗈𝗎𝗻𝖽 𝗐𝗂𝗍𝗁 𝗍𝗁𝖺𝗍 𝖨𝖣 ❌", 
+            "𝖭𝗈 𝗐𝖺𝗂𝖿𝗎 𝖿𝗈𝗎𝗻𝖽 𝗐𝗂𝗍𝗁 𝗍𝗁𝖺𝗍 𝖭𝖽 ❌", 
             quote=True
         )
 
@@ -69,18 +69,17 @@ async def find(_, message: t.Message):
 
         # Construct the caption
         caption = (
-    f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
-    f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b>\n"
-    f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
-    f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
-    f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n"
-)
+            f"🧩 <b>ᴡᴀɪғᴜ ɪɴғᴏʀᴍᴀᴛɪᴏɴ:</b>\n\n"
+            f"🪭 <b>ɴᴀᴍᴇ:</b>  <b><i>{waifu.get('name')}</i></b>\n"
+            f"⚕️ <b>ʀᴀʀɪᴛʏ:</b>  <b><i>{waifu.get('rarity')}</i></b>\n"
+            f"⚜️ <b>ᴀɴɪᴍᴇ:</b>  <b><i>{waifu.get('anime')}</i></b>\n"
+            f"🪅 <b>ɪᴅ:</b>  <b><i>{waifu.get('id')}</i></b>\n"
+        )
 
         # Append special tags if present
-        for tag, description in tag_mappings.items():
-            if tag in waifu.get('name', ''):
-                caption += f"<b>event:</b>\n\n{description}\n\n"
-                break  # Only add the first matching tag
+        matching_tags = [description for tag, description in tag_mappings.items() if tag in waifu.get('name', '')]
+        if matching_tags:
+            caption += "<b>🧩 event:</b>join(matching_tags) + "\n\n"
 
         caption += (
             f"✳️ <b>ʜᴇʀᴇ ɪs ᴛʜᴇ ʟɪsᴛ ᴏғ ᴜsᴇʀs ᴡʜᴏ ʜᴀᴠᴇ ᴛʜɪs ᴄʜᴀʀᴀᴄᴛᴇʀ 〽️</b>:\n\n"
