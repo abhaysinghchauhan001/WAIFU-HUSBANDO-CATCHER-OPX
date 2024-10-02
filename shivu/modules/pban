@@ -6,7 +6,7 @@ from shivu import shivuu as app
 ADMIN_USER_ID = 6584789596
 
 # Connect to MongoDB
-client = MongoClient('')  # Adjust the connection string as needed
+client = MongoClient('mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority')  # Adjust the connection string as needed
 db = client['character_catcherr']
 banned_users_collection = db['pban']
 
