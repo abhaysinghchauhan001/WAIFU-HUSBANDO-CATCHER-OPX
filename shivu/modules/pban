@@ -7,7 +7,7 @@ ADMIN_USER_ID = 6584789596
 
 # Connect to MongoDB
 client = MongoClient('')  # Adjust the connection string as needed
-db = client['']
+db = client['character_catcherr']
 banned_users_collection = db['pban']
 
 def load_banned_users():
