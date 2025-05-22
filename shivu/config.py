@@ -2,19 +2,19 @@ class Config(object):
     LOGGER = True
 
     # Get this value from my.telegram.org/apps
-    OWNER_ID = "6584789596"
-    sudo_users = "6584789596", "2010819209", "5702598840", "6764240805", "6101457748", "6154972031", "6100011620", "6412447141", "1643054031"
-    GROUP_ID = -1002214016605
-    TOKEN = "6639816047:AAFwzilYfHCrnIuyBFdJZjvBJn09hfHJ_WY"
-    mongo_url = "mongodb+srv://Epic2:w85NP8dEHmQxA5s7@cluster0.tttvsf9.mongodb.net/?retryWrites=true&w=majority"
-    PHOTO_URL = ["https://telegra.ph/file/ed23556d07d33db18402d.jpg", "https://telegra.ph//file/e64337bbc6cdac7e6b178.jpg"]
-    SUPPORT_CHAT = "Grabbing_Your_WH_Group"
-    UPDATE_CHAT = "FLEX_BOTS_NEWS"
-    BOT_USERNAME = "Grabbing_Your_Waifu_XBot"
-    BOT_NAME = "˹𝐆ʀᴀʙʙɪɴɢ 𝐘ᴏᴜʀ 𝐖ᴀɪғᴜ˼ 🥀"
-    CHARA_CHANNEL_ID = "-1002031911980"
-    api_id = 24089031
-    api_hash = "0615e3afe13ddaaf8e9ddbd3977d35ff"
+    OWNER_ID = "5536473064"
+    sudo_users = "5536473064", "6382664842",
+    GROUP_ID = -1002559277065
+    TOKEN = "7556031866:AAFRrkLSeK23mne7AqlNjV-Z4eFmJzuWi3M"
+    mongo_url = "mongodb+srv://iamnobita1:nobitamusic1@cluster0.k08op.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    PHOTO_URL = ["https://files.catbox.moe/ttk2n4.jpg", "https://files.catbox.moe/g8rtaj.jpg"]
+    SUPPORT_CHAT = "https://t.me/+wPjAlUcObehiZDM1"
+    UPDATE_CHAT = "NOBITA_MUSIC_SUPPORT"
+    BOT_USERNAME = "NobitaGrabberBot"
+    BOT_NAME = "『 𝐍𝐎𝐁𝐈𝐓𝐀 ✘ 𝐂𝐀𝐓𝐂𝐇𝐄𝐑 』"
+    CHARA_CHANNEL_ID = "-1002559277065"
+    api_id = 28269355
+    api_hash = "805b8c6577a8c30db439d901af544cac"
 
     STRICT_GBAN = True
     ALLOW_CHATS = True
