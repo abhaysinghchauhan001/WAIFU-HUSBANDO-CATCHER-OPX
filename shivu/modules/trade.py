@@ -164,7 +164,7 @@ async def gift(client, message):
         ]
     )
 
-    await message.reply_photo(photo=character["img_url"], caption=f' <b>ᴅᴏ Yᴏᴜ Rᴇᴀʟʟʏ Wᴀɴɴᴀ Gɪғᴛ </b><code><b>{character["name"]}</b></code> <b>ᴛᴏ</b> <b>{message.reply_to_message.from_user.mention}</b>   ', reply_markup=keyboard)
+    await message.reply_photo(photo=character["img_url"], caption=f' <b>『 𝐍𝐎𝐁𝐈𝐓𝐀 ✘ 𝐂𝐀𝐓𝐂𝐇𝐄𝐑 』 </b><code><b>{character["name"]}</b></code> <b>ᴛᴏ</b> <b>{message.reply_to_message.from_user.mention}</b>   ', reply_markup=keyboard)
 
 @shivuu.on_callback_query(filters.create(lambda _, __, query: query.data in ["confirm_gift", "cancel_gift"]))
 async def on_callback_query(client, callback_query):
